@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme {
+  --light: #ffffff;
+  --text-light: #1f2328;
+  --border-light: #d0d7de;
+  --text-gray: #656d76; 
+  --text-gray-dark: #848d97;
+  --dark-bg: #0d1117;
+  --dark-text: #e6edf3;
+  --dark-border: #30363d;
+  --sucess: #0969da;
+  --animate-spin-slow: spin 0.5s ease-in-out;
+  --pixel: #ebedf0;
+  --pixel-hover: #d0d7de;
+  --sucess-hover: #085dc3;
+}
+.dark {
+  --sucess: #3fb950;
+  --pixel: #161b22;
+  --light: #0d1117;
+  --text-light: #e6edf3;
+  --border-light: #30363d;
+  --pixel-hover: #30363d;
+  --sucess-hover: #46c95a;
+}
+
+@layer components {
+  .header-border {
+    @apply border-b border-(--border-light) dark:border-(--dark-border);
+  }
+  .icon-button {
+    @apply p-2 rounded-md text-(--text-light) dark:text-(--dark-text) hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200;
+  }
+  .seperator {
+    @apply w-0.25 h-5 bg-(--border-light) dark:bg-(--dark-border) mx-1;
+  }
+  body {
+    @apply bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text);
+  }
+  .nav-link {
+  @apply relative flex flex-col items-center justify-center px-1 py-2 transition-colors duration-200;
+  }
+
+  /* The Trick: Reserve space for bold text to prevent jumping */
+  .nav-link::before {
+    display: block;
+    content: attr(data-text);
+    font-weight: 500; /* font-medium */
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+
+  /* The GitHub-style sliding underline */
+  .nav-link::after {
+    content: '';
+    @apply absolute -bottom-[1px] left-0 h-[2px] w-full bg-orange-500 scale-x-0 transition-transform duration-300 origin-right;
+  }
+
+  /* Hover & Active States */
+  .nav-link:hover::after, 
+  .active.nav-link::after {
+    @apply scale-x-100 origin-left;
+  }
+
+  .active {
+    @apply text-(--text-light) dark:text-(--dark-text);
+  }
+
+  .inactive {
+    @apply text-gray-500 hover:text-gray-700 dark:hover:text-gray-300;
+  }
+
+  .github-scrollbar {
+    /* Standard for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #30363d transparent;
+
+    /* Webkit (Brave/Chrome/Safari) */
+    &::-webkit-scrollbar {
+      width: 6px;
+      display: block;
+    }
+
+    /* This removes the white/gray track background */
+    &::-webkit-scrollbar-track {
+      background: #161b22; /* Must match dropdown bg exactly */
+    }
+
+    /* The draggable handle */
+    &::-webkit-scrollbar-thumb {
+      background-color: #30363d;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #484f58;
+    }
+
+    /* CRITICAL: This hides the arrows seen in your screenshot */
+    &::-webkit-scrollbar-button {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    /* Fixes the corner piece if it appears */
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+}
