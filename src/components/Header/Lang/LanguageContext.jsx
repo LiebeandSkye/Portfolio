@@ -196,7 +196,7 @@ export const LanguageProvider = ({ children }) => {
             randomizeBtn: 'ランダム',
             viewDemo: "デモを見る",
             sourceCode: "ソースコード",
-            share: "シェアする :",
+            share: 'ェアすシる : ',
             pinned: 'ピン留め',
             bot: {
                 whatIsAbout: 'このプロジェクトについては?',
