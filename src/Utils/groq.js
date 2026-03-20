@@ -1,6 +1,6 @@
 export const getGroqResponse = async (userInput, chatHistory, projectContext = null) => {
     try {
-        const response = await fetch('/backend/api.js', {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
