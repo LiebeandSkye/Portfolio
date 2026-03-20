@@ -1,19 +1,6 @@
-import Groq from "groq-sdk";
-
-const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-
-if (!apiKey) {
-    console.error("Critical: VITE_GROQ_API_KEY is not defined. Check Vercel Settings bro plsss");
-}
-
-const groq = new Groq({
-    apiKey: apiKey || "dummy_key_to_prevent_crash",
-    dangerouslyAllowBrowser: true
-});
-
 export const getGroqResponse = async (userInput, chatHistory, projectContext = null) => {
     try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/backend/api.js', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
