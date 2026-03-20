@@ -194,7 +194,6 @@ export const LanguageProvider = ({ children }) => {
             aboutWebsite: 'このウェブサイトについて',
             inspiration: 'このサイトはGitHubのデザインからインスピレーションを受けています。ぜひポートフォリオを見たり、SakuPilot AIとチャットして、僕についてもっと知ってください。🌟🌐🤖',
             randomizeBtn: 'ランダム',
-            share: "共有:",
             viewDemo: "デモを見る",
             sourceCode: "ソースコード",
             share: "シェアする :",
