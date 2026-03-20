@@ -2,15 +2,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Kry_rithisak from '../assets/Kry_Rithisak.jpg';
 import Information from '../Data/Contacts';
-import Notification from './ui/Notifcation';
+import Toast from './ui/Toast';
 import CopyButton from './ui/CopyButton';
+import { useNotification } from './context/NotificationContext';
 import { useLanguage } from './Header/Lang/LanguageContext';
 import { FaRandom } from "react-icons/fa";
 import { IoCopySharp } from "react-icons/io5";
 
 const Info = () => {
     const { t } = useLanguage();
-    const [notification, setNotification] = useState({ show: false, message: '' });
+    const { addNotification } = useNotification();
     const [quote, setQuote] = useState({ text: '', author: '' });
 
     // randomize quote
@@ -28,15 +29,9 @@ const Info = () => {
 
     return (
         <>
-            {notification.show && (
-                <Notification
-                    message={t('copyMessage')}
-                    onClose={() => setNotification({ show: false, message: '' })}
-                />
-            )}
-            <div className='w-[25%] h-full px-6 hidden md:block'>
+            <div className='w-full md:w-[280px] px-4 md:px-6 flex-shrink-0 hidden md:block'>
                 <div className='flex flex-col justify-center gap-5'>
-                    <div className='w-64 h-64 rounded-full overflow-hidden mx-1'>
+                    <div className='w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden mx-auto md:mx-1'>
                         <img src={Kry_rithisak} className='w-full h-full object-cover' />
                     </div>
                     <div className='flex flex-col gap-1'>
@@ -55,8 +50,7 @@ const Info = () => {
                                         <span className="text-(--text-light)">{info.name}</span>
                                         <CopyButton
                                             text={info.name}
-                                            isNotificationActive={notification.show}
-                                            onCopy={() => setNotification({ show: true, message: t('copyMessage') })}
+                                            onCopy={() => addNotification(t('copyMessage'), "success")}
                                         />
                                     </div>
                                 ) : (

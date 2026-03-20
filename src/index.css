@@ -4,7 +4,7 @@
   --light: #ffffff;
   --text-light: #1f2328;
   --border-light: #d0d7de;
-  --text-gray: #656d76; 
+  --text-gray: #656d76;
   --text-gray-dark: #848d97;
   --dark-bg: #0d1117;
   --dark-text: #e6edf3;
@@ -12,41 +12,73 @@
   --sucess: #0969da;
   --animate-spin-slow: spin 0.5s ease-in-out;
   --pixel: #ebedf0;
+  --pixel2: #f6f8fa;
   --pixel-hover: #d0d7de;
   --sucess-hover: #085dc3;
+  --scrollbar-track: #f6f8fa;
+  /* Light mode track (GitHub light) */
+  --scrollbar-thumb: #d0d7de;
+  /* Light mode thumb */
+  --scrollbar-thumb-hover: #afb8c1;
+  /* Light mode thumb hover */
+  --main-scrollbar-track: #f6f8fa;
+  --main-scrollbar-thumb: #c1c9d2;
+  --main-scrollbar-thumb-hover: #8c959f;
+  --code-inline-text: #3fb950; 
+  --code-block-bg: #010409; 
+  --highlight-blue: #58a6ff;
 }
+
 .dark {
   --sucess: #3fb950;
   --pixel: #161b22;
+  --pixel2: #0d1117;
   --light: #0d1117;
   --text-light: #e6edf3;
   --border-light: #30363d;
   --pixel-hover: #30363d;
   --sucess-hover: #46c95a;
+  --scrollbar-track: #161b22;
+  /* Dark mode track (GitHub dark) */
+  --scrollbar-thumb: #30363d;
+  /* Dark mode thumb */
+  --scrollbar-thumb-hover: #484f58;
+  --main-scrollbar-track: #0d1117;
+  --main-scrollbar-thumb: #30363d;
+  --main-scrollbar-thumb-hover: #484f58;
 }
 
 @layer components {
   .header-border {
     @apply border-b border-(--border-light) dark:border-(--dark-border);
   }
+
   .icon-button {
     @apply p-2 rounded-md text-(--text-light) dark:text-(--dark-text) hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200;
   }
+
   .seperator {
     @apply w-0.25 h-5 bg-(--border-light) dark:bg-(--dark-border) mx-1;
   }
+
   body {
     @apply bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text);
   }
+
   .nav-link {
-  @apply relative flex flex-col items-center justify-center px-1 py-2 transition-colors duration-200;
+    @apply relative flex flex-col items-center justify-center px-1 py-2 transition-colors duration-200;
   }
+
+  .chat-chip {
+  @apply flex items-center gap-2 border border-(--border-light) rounded-lg px-3 py-2 text-left text-xs text-white hover:bg-[#1d2128] transition-colors w-fit;
+}
 
   /* The Trick: Reserve space for bold text to prevent jumping */
   .nav-link::before {
     display: block;
     content: attr(data-text);
-    font-weight: 500; /* font-medium */
+    font-weight: 500;
+    /* font-medium */
     height: 0;
     overflow: hidden;
     visibility: hidden;
@@ -59,7 +91,7 @@
   }
 
   /* Hover & Active States */
-  .nav-link:hover::after, 
+  .nav-link:hover::after,
   .active.nav-link::after {
     @apply scale-x-100 origin-left;
   }
@@ -75,7 +107,7 @@
   .github-scrollbar {
     /* Standard for Firefox */
     scrollbar-width: thin;
-    scrollbar-color: #30363d transparent;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
 
     /* Webkit (Brave/Chrome/Safari) */
     &::-webkit-scrollbar {
@@ -85,17 +117,19 @@
 
     /* This removes the white/gray track background */
     &::-webkit-scrollbar-track {
-      background: #161b22; /* Must match dropdown bg exactly */
+      background: var(--scrollbar-track);
     }
 
     /* The draggable handle */
     &::-webkit-scrollbar-thumb {
-      background-color: #30363d;
+      background-color: var(--scrollbar-thumb);
       border-radius: 10px;
+      /* Optional: add a border to make it look "sunken" in light mode */
+      border: 1px solid var(--scrollbar-track);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background-color: #484f58;
+      background-color: var(--scrollbar-thumb-hover);
     }
 
     /* CRITICAL: This hides the arrows seen in your screenshot */
@@ -111,13 +145,93 @@
     }
   }
 }
-html {
-  scroll-behavior: smooth;
-}
+
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(180deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
+@keyframes rotate-gradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-rotate-gradient {
+  animation: rotate-gradient 4s linear infinite;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+
+@keyframes thinking-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-thinking {
+  background: linear-gradient(90deg, #3fb950, #ab7df8, #2f81f7, #3fb950);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: thinking-shimmer 2s linear infinite;
+  font-weight: 500;
+}
+/* ========================= */
+/* 🌍 MAIN GLOBAL SCROLLBAR */
+/* ========================= */
+
+/* Firefox */
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: var(--main-scrollbar-thumb) var(--main-scrollbar-track);
+}
+
+/* Webkit browsers (Chrome, Edge, Safari) */
+html::-webkit-scrollbar {
+  width: auto;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--main-scrollbar-track);
+}
+
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg,
+      var(--main-scrollbar-thumb),
+      var(--main-scrollbar-thumb-hover));
+  border-radius: 999px;
+  border: 2px solid var(--main-scrollbar-track);
+  transition: all 0.3s ease;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--main-scrollbar-thumb-hover);
+}
+
+html::-webkit-scrollbar-thumb:active {
+  background: var(--sucess);
+}
+
+/* Remove arrows */
+html::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Corner fix */
+html::-webkit-scrollbar-corner {
+  background: transparent;
 }

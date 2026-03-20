@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'; // Added useRef
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../components/Header/Lang/LanguageContext'; // Ensure this path is correct
+import { useLanguage } from '../components/Header/Lang/LanguageContext';
 import Projects from '../Data/Projects';
 import Kry_rithisak from '../assets/Kry_Rithisak.jpg';
-import Notification from '../components/ui/Notifcation';
+import { useNotification } from '../components/context/NotificationContext';
 import CopyButton from '../components/ui/CopyButton';
 // Icons
 import { FaArrowLeft, FaFacebook, FaLinkedin } from "react-icons/fa6";
@@ -16,11 +16,11 @@ import { RiTwitterXFill, RiWhatsappFill } from "react-icons/ri";
 import languages from '../Data/Language';
 
 const AboutProject = () => {
+    const { addNotification } = useNotification();
     const { t } = useLanguage(); // Fixed: initialized translation hook
     const { projectId } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('readme');
-    const [notification, setNotification] = useState({ show: false, message: '' });
 
     const project = Projects.find(p => String(p.id) === String(projectId));
 
@@ -40,17 +40,11 @@ const AboutProject = () => {
     };
 
     return (
-        <div className="min-h-screen text-(--text-light) font-sans relative px-20">
-            {notification.show && (
-                <Notification
-                    message={notification.message}
-                    onClose={() => setNotification({ show: false, message: '' })}
-                />
-            )}
+        <div className="min-h-screen text-(--text-light) font-sans relative px-0 sm:px-0 md:px-20">
 
             {/* Top Nav */}
             <div className="flex items-center gap-3 px-4 md:px-8 py-3 text-sm text-(--text-gray)">
-                <button onClick={() => navigate('/portfolio')} className="flex items-center gap-1 hover:text-c hover:underline cursor-pointer">
+                <button onClick={() => navigate('/portfolio')} className="flex items-center gap-1 hover:text-[#388bfd] hover:underline cursor-pointer">
                     <FaArrowLeft size={10} /> Go Back
                 </button>
             </div>
@@ -58,7 +52,7 @@ const AboutProject = () => {
             {/* Header Area */}
             <div className="px-4 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                    <img src={Kry_rithisak} alt="Profile" className="w-9 h-9 rounded-full border border-(--border-light) object-cover" />
+                    <img src={Kry_rithisak} loading='lazy' alt="Profile" className="w-9 h-9 rounded-full border border-(--border-light) object-cover" />
                     <h1 className="text-xl font-semibold flex items-center gap-2">
                         <span className="text-(--text-light) hover:underline cursor-pointer">{project.title}</span>
                         <span className="text-[12px] border border-(--border-light) text-(--text-gray) px-2 py-0.5 rounded-full items-center flex">Public</span>
@@ -66,7 +60,7 @@ const AboutProject = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <span className="text-xs text-(--text-gray)">Share:</span>
+                    <span className="text-xs text-(--text-gray)">{t('share')}</span>
                     <SocialAction href={shareLinks.twitter} icon={<RiTwitterXFill />} />
                     <SocialAction href={shareLinks.whatsapp} icon={<RiWhatsappFill />} />
                     <SocialAction href={shareLinks.facebook} icon={<FaFacebook />} />
@@ -74,8 +68,7 @@ const AboutProject = () => {
                     <CopyButton
                         className="border border-(--border-light) rounded-full"
                         text={window.location.href}
-                        isNotificationActive={notification.show}
-                        onCopy={() => setNotification({ show: true, message: t('copyMessage') })}
+                        onCopy={() => addNotification(t('copyMessage'), "success")}
                     />
                 </div>
             </div>
@@ -83,14 +76,14 @@ const AboutProject = () => {
             {/* Action Bar */}
             <div className="px-4 md:px-8 flex items-center gap-3 mb-8">
                 <a href={project.demo} target="_blank" rel="noreferrer" className="bg-[#1f6feb] hover:bg-[#388bfd] text-white px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-all">
-                    <BsLayersHalf /> View Demo
+                    <BsLayersHalf /> {t('viewDemo')}
                 </a>
                 <a href={project.code} target="_blank" rel="noreferrer" className="bg-[#238636] hover:bg-[#2ea043] text-white px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-all">
-                    <FiCode /> Source Code
+                    <FiCode /> {t('sourceCode')}
                 </a>
             </div>
 
-            <div className="px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
+            <div className="px-0 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
 
                 {/* LEFT CONTENT */}
                 <div className="lg:col-span-8">
@@ -106,17 +99,25 @@ const AboutProject = () => {
                             {activeTab === 'readme' ? (
                                 <div className="space-y-10">
                                     <section>
-                                        <h2 className="text-3xl font-bold pb-4">{info.title} Website</h2>
-                                        <p className="text-(--text-light) text-lg leading-relaxed pb-10 md:pb-14 border-b border-(--border-light)">{info.description}</p>
+                                        <h2 className="text-3xl font-bold pb-4">{t(`projects.${project.langKey}.Information.title`)}</h2>
+                                        <p className="text-(--text-light) text-lg leading-relaxed pb-10 md:pb-14 border-b border-(--border-light)">{t(`projects.${project.langKey}.Information.description`)}</p>
                                     </section>
 
                                     <section>
-                                        <h3 className="text-2xl font-bold mb-6">{info.coreFeatures.title}</h3>
+                                        <h3 className="text-2xl font-bold mb-6">{t('projects.continental.Information.coreFeatures.title')}</h3>
                                         <ul className="space-y-4">
-                                            {Object.values(info.coreFeatures || {}).filter(v => typeof v === 'object').map((f, i) => (
-                                                <li key={i} className="flex gap-2 text-(--text-light)">
-                                                    <span className="mt-1.5 text-(--text-light)">•</span>
-                                                    <span><strong className="text-(--text-light)">{f.title}</strong> – {f.description}</span>
+                                            {Object.keys(info.coreFeatures || {}).filter(key => key !== 'title').map((featureKey, i) => (
+                                                <li key={i} className="flex gap-2 text-(--text-light) items-center">
+                                                    <span className=" text-(--text-light)">•</span>
+                                                    <span>
+                                                        <strong className="text-(--text-light)">
+                                                            {/* Correct Path: projects.continental.Information.coreFeatures.features1.title */}
+                                                            {t(`projects.${project.langKey}.Information.coreFeatures.${featureKey}.title`)}
+                                                        </strong>
+                                                        {" – "}
+                                                        {/* Correct Path: projects.continental.Information.coreFeatures.features1.description */}
+                                                        {t(`projects.${project.langKey}.Information.coreFeatures.${featureKey}.description`)}
+                                                    </span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -124,29 +125,42 @@ const AboutProject = () => {
 
                                     {info.HowItWorks && (
                                         <section>
-                                            <h3 className="text-2xl font-bold mb-6">{info.HowItWorks.title}</h3>
+                                            <h3 className="text-2xl font-bold mb-6">{t('projects.titles.how')}</h3>
                                             <div className="space-y-6">
-                                                {Object.values(info.HowItWorks.steps || {}).map((step, i) => (
+                                                {Object.keys(info.HowItWorks.steps || {}).map((stepKey, i) => (
                                                     <div key={i} className="flex gap-3">
                                                         <span className="font-bold text-(--text-light)">{i + 1}.</span>
                                                         <p className="text-(--text-light)">
-                                                            <strong className="text-(--text-light)">{step.title}</strong> – {step.description}
+                                                            <strong className="text-(--text-light)">
+                                                                {t(`projects.${project.langKey}.Information.howItWorks.${stepKey}.title`)}
+                                                            </strong> – {t(`projects.${project.langKey}.Information.howItWorks.${stepKey}.description`)}
                                                         </p>
                                                     </div>
                                                 ))}
                                             </div>
-                                            {info.HowItWorks.description && (
-                                                <p className="mt-6 text-(--text-gray) italic border-l-2 border-(--border-light) pl-4">{info.HowItWorks.description}</p>
-                                            )}
                                         </section>
                                     )}
 
                                     <section>
-                                        <h3 className="text-2xl font-bold border-b border-(--border-light) pb-4 mb-8">{info.HowIBuiltIt?.title}</h3>
-                                        <div className="space-y-10">
-                                            <BuildSection title="Frameworks & Libraries" items={info.HowIBuiltIt?.frameworks} />
-                                            <BuildSection title="Styling & UI" items={info.HowIBuiltIt?.Styles} />
-                                            <BuildSection title="CMS & APIs" items={info.HowIBuiltIt?.Api} />
+                                        <h3 className="text-2xl font-bold border-b border-(--border-light) pb-4 mb-8">
+                                            {t('projects.titles.built')}
+                                        </h3>
+                                        <div className="space-y-5 md:space-y-10">
+                                            <BuildSection
+                                                title={t('projects.titles.frameworks')}
+                                                items={info.HowIBuiltIt?.frameworks}
+                                                langPath={`projects.${project.langKey}.Information.howIBuiltIt.frameworks`}
+                                            />
+                                            <BuildSection
+                                                title={t('projects.titles.styling')}
+                                                items={info.HowIBuiltIt?.Styles}
+                                                langPath={`projects.${project.langKey}.Information.howIBuiltIt.styles`}
+                                            />
+                                            <BuildSection
+                                                title={t('projects.titles.api')}
+                                                items={info.HowIBuiltIt?.Api}
+                                                langPath={`projects.${project.langKey}.Information.howIBuiltIt.api`}
+                                            />
                                         </div>
                                     </section>
                                 </div>
@@ -176,8 +190,8 @@ const AboutProject = () => {
                             ))}
                         </div>
                         <div className="space-y-2">
-                            <StatusItem label="Designed" />
-                            <StatusItem label="Developed" />
+                            {project.designed && <StatusItem label="Designed" />}
+                            {project.developed && <StatusItem label="Developed" />}
                         </div>
                     </div>
 
@@ -227,23 +241,36 @@ const TabBtn = ({ active, onClick, icon, label }) => (
     </button>
 );
 
-const BuildSection = ({ title, items }) => {
+const BuildSection = ({ title, items, langPath }) => {
+    const { t } = useLanguage();
     if (!items) return null;
+
     return (
-        <div>
+        <div className="mt-8">
             <h4 className="text-md font-semibold mb-4 text-(--text-light)">{title}</h4>
-            <div className="space-y-3">
-                {Object.values(items).map((item, i) => (
-                    <div key={i} className="flex items-center bg-(--pixel) p-2  rounded-lg">
-                        <div className="w-10 h-10 flex items-center justify-center rounded text-xl">
-                            {typeof item.icon === 'string' ? <img src={item.icon} alt="" className="w-6 h-6 object-contain" /> : <item.icon className="text-[#58a6ff]" />}
+            <div className="space-y-4">
+                {Object.keys(items).map((itemKey) => {
+                    const item = items[itemKey];
+                    return (
+                        <div key={itemKey} className="flex items-center gap-4 p-3 rounded-lg border border-(--border-light) bg-(--pixel)">
+                            <div className="text-2xl text-[#388bfd]">
+                                {typeof item.icon === 'function' ? (
+                                    <item.icon />
+                                ) : (
+                                    <img src={item.icon} alt="" className="w-8 h-8" />
+                                )}
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold">
+                                    {t(`${langPath}.${itemKey}.name`)}
+                                </p>
+                                <p className="text-xs text-[#8b949e]">
+                                    {t(`${langPath}.${itemKey}.description`)}
+                                </p>
+                            </div>
                         </div>
-                        <div className="text-sm">
-                            <span className="font-semibold text-(--text-light)">{item.name}:</span>
-                            <span className="text-[#8b949e] ml-2">{item.description}</span>
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

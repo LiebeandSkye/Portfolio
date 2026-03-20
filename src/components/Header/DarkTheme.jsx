@@ -1,42 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
 import { useLanguage } from './Lang/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
-export default function DarkTheme() {
+export default function DarkTheme({ variant = 'icon' }) {
   const { t } = useLanguage();
-  const [isDark, setIsDark] = useState(() => {
-    return (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    );
-  });
+  const { isDark, toggleTheme } = useTheme();
 
   const [rotating, setRotating] = useState(false);
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDark) {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDark]);
-
   const handleToggle = () => {
     setRotating(true);
-    setIsDark(!isDark);
+    toggleTheme();
     setTimeout(() => setRotating(false), 300);
   };
 
+  // --- TOGGLE VERSION ---
+  if (variant === 'toggle') {
+    return (
+      <div className="flex items-center justify-between w-full py-2 ">
+        <span className="text-sm text-(--text-light)">
+          {isDark ? t('themeTooltipLight') : t('themeTooltipDark')}
+        </span>
+
+        <button
+          onClick={handleToggle}
+          className={`cursor-pointer relative w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+            isDark ? 'bg-green-600' : 'bg-gray-300'
+          }`}
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center ${
+              isDark ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          >
+            {isDark ? (
+              <MdDarkMode size={10} className="text-gray-800" />
+            ) : (
+              <MdLightMode size={10} className="text-orange-500" />
+            )}
+          </div>
+        </button>
+      </div>
+    );
+  }
+
+  // --- ICON VERSION ---
   return (
-    <div className="relative group">
+    <div className="relative group hidden md:block">
       <button
         onClick={handleToggle}
-        className="icon-button border border-(--border-light) transition-all"
+        className="icon-button border border-(--border-light)"
       >
-        <div className={`transform transition-transform duration-300 ${rotating ? 'rotate-180' : ''}`}>
+        <div className={`transition-transform duration-300 ${rotating ? 'rotate-180' : ''}`}>
           {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
         </div>
       </button>

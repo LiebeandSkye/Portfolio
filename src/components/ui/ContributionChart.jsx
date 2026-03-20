@@ -80,9 +80,9 @@ const ContributionChart = ({ word = '' }) => {
   const isActive = (x, y) => activeSquares.some(sq => sq.x === x && sq.y === y);
 
   return (
-    <div className="flex items-center justify-center font-sans text-gray-300 p-4 md:p-0 lg:p-0">
+    <div className="flex items-center font-sans text-gray-300 p-4 md:p-0 lg:p-0 github-scrollbar">
       {/* Container: Stacked on mobile, side-by-side on LG screens */}
-      <div className="flex flex-col lg:flex-row gap-6 md:gap-10 max-w-6xl w-full">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-10 max-w-6xl w-full flex-shrink-0">
         
         {/* Main Content Area */}
         <div className="flex-1 space-y-4 min-w-0"> {/* min-w-0 prevents flex items from overflowing */}

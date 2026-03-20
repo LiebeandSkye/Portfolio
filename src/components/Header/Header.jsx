@@ -4,6 +4,7 @@ import DarkTheme from './DarkTheme';
 import Search from './Search';
 import BotButton from './BotButton';
 import Language from './Lang/Language';
+import Navigation from './Navigation';
 import { useLanguage } from './Lang/LanguageContext';
 
 const Header = () => {
@@ -15,15 +16,18 @@ const Header = () => {
                 <div className="border border-(--text-light) rounded-md w-10 h-9 flex items-center justify-center font-bold text-(--text-light)">
                     <a href='/'>K</a>
                 </div>
-                <span className="font-semibold text-(--text-light) text-md">{t('name')}</span>
+                <span className="font-semibold text-(--text-light) text-md hidden md:block">{t('name')}</span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
                 <Search />
-                <div className="seperator"></div>
+                <div className="seperator hidden md:block"></div>
                 <BotButton />
-                <div className="seperator"></div>
+                <div className="seperator hidden md:block"></div>
                 <DarkTheme />
-                <Language />
+                <div className='hidden md:block'>
+                    <Language />
+                </div>
+                <Navigation />
             </div>
         </div>
     );

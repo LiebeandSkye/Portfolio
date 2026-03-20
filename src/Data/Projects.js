@@ -1,6 +1,7 @@
 import continentalThumb from '../assets/Continental/WebsiteThumbnail.png';
 import cambodiaThumb from '../assets/DiscoverCambodia/WebsiteThumbnail.png';
-import groq from '../assets/Tools/groq.webp';
+import groq from '../assets/Tools/groq.png';
+import None from '../assets/Tools/None.png';
 import continentalScreenshot1 from '../assets/Continental/Screenshot1.png';
 import continentalScreenshot2 from '../assets/Continental/Screenshot2.png';
 import continentalScreenshot3 from '../assets/Continental/Screenshot3.png';
@@ -11,6 +12,8 @@ import continentalScreenshot7 from '../assets/Continental/Screenshot7.png';
 import continentalScreenshot8 from '../assets/Continental/Screenshot8.png';
 import continentalScreenshot9 from '../assets/Continental/Screenshot9.png';
 import continentalScreenshot10 from '../assets/Continental/Screenshot10.png';
+import OpenWeather from '../assets/Tools/OpenWeather.png';
+import googleMap from '../assets/Tools/googleMap.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
@@ -20,16 +23,17 @@ const Projects = [
     {
         id: 1,
         title: 'Continental',
+        langKey: "continental",
         public: true,
         red: true,
         description: 'A car e-commerce website with virtual assistant and clean images of cars at affordable prices.',
         bread: '/portfolio',
         code: 'https://github.com/LiebeandSkye/Continental',
         demo: 'https://continental-neon.vercel.app/',
-        design: true,
+        designed: true,
         developed: true,
         thumbnail: continentalThumb,
-        tags: ['React', 'Tailwind CSS', 'JavaScript', 'API', 'E-commerce', 'Virtual Assistant'],
+        tags: ['React.js', 'Tailwind CSS', 'JavaScript', 'API', 'E-commerce', 'Virtual Assistant'],
         summary: {
             title: 'Development Summary',
             framework: 'React',
@@ -99,7 +103,7 @@ const Projects = [
                 },
                 Api: {
                     api1: {
-                        icon: SiGooglemaps,
+                        icon: googleMap,
                         name: 'Google Maps',
                         description: 'Location services integration.',
                     },
@@ -120,7 +124,7 @@ const Projects = [
                 screenshot7: continentalScreenshot7,
                 screenshot8: continentalScreenshot8,
                 screenshot9: continentalScreenshot9,
-            },  
+            },
         },
     },
 
@@ -131,6 +135,7 @@ const Projects = [
     {
         id: 2,
         title: 'Discover Cambodia',
+        langKey: "cambodia",
         public: true,
         red: true,
         description: 'An informative tourism website about Cambodia featuring weather tools, tourist destinations, and educational content.',
@@ -144,7 +149,7 @@ const Projects = [
         summary: {
             framework: 'None (Vanilla)',
             style: 'Tailwind CSS',
-            API: 'Weather API',
+            API: 'OpenWeatherMap API',
         },
         percent: { javascript: 50, html: 25, css: 15, python: 10 },
         languages: { javascript: 'JavaScript', html: 'HTML', css: 'CSS', python: 'Python' },
@@ -194,7 +199,13 @@ const Projects = [
             },
             HowIBuiltIt: {
                 title: 'How I Built this Project',
-                frameworks: {},
+                frameworks: {
+                    framework1: {
+                        icon: None,
+                        name: 'None (Vanilla)',
+                        description: 'HTML CSS and Javascript.',
+                    },
+                },
                 Styles: {
                     style1: {
                         icon: RiTailwindCssFill,
@@ -204,8 +215,8 @@ const Projects = [
                 },
                 Api: {
                     api1: {
-                        icon: SiGooglemaps,
-                        name: 'Weather API',
+                        icon: OpenWeather,
+                        name: 'OpenWeatherMap API',
                         description: 'Used to fetch real-time weather data.',
                     },
                 },
@@ -220,14 +231,17 @@ const Projects = [
     {
         id: 3,
         title: 'Electronics E-commerce',
+        langKey: "electronics",
         public: true,
         red: false,
         description: 'An experimental e-commerce platform built for learning purposes, focused on product listings, authentication, and cart systems.',
         bread: '/incomplete',
         thumbnail: null,
-        design: true,
+        designed: false,
         developed: false,
-        tags: ['React', 'Firebase', 'JavaScript', 'E-commerce'],
+        demo: 'https://electronicshop-nine.vercel.app/',
+        code: 'https://github.com/LiebeandSkye/electronic_shop',
+        tags: ['Vanilla', 'Vercel', 'HTML', 'CSS', 'JavaScript', 'E-commerce'],
         summary: {
             framework: 'React',
             style: 'CSS / Tailwind',
@@ -249,12 +263,8 @@ const Projects = [
                     description: '– Add and remove items from shopping cart.'
                 },
                 features3: {
-                    title: 'User Authentication',
-                    description: '– Firebase authentication system.'
-                },
-                features4: {
                     title: 'Database Integration',
-                    description: '– Products stored and fetched from Firebase Firestore.'
+                    description: '– Products stored and fetched from Pinterest (lol).'
                 }
             },
             WhyThisProject: {
@@ -283,18 +293,24 @@ const Projects = [
                 title: 'How I Built this Project',
                 frameworks: {
                     framework1: {
-                        icon: FaReact,
-                        name: 'React.js',
-                        description: 'Component-based architecture.',
+                        icon: None,
+                        name: 'None (Vanilla)',
+                        description: 'HTML CSS and Javascript.',
                     },
                 },
-                Styles: {},
+                Styles: {
+                    style1: {
+                        icon: RiTailwindCssFill,
+                        name: 'Tailwind CSS',
+                        description: 'Utility-first CSS framework.',
+                    },
+                },
                 Api: {
                     api1: {
-                        icon: null,
-                        name: 'Firebase',
-                        description: 'Authentication and database services.',
-                    },
+                        icon: None,
+                        name: 'None',
+                        description: 'No API integration.',
+                    }
                 },
             },
         },
