@@ -3,6 +3,7 @@
 @theme {
   --light: #ffffff;
   --text-light: #1f2328;
+  --text-dark: #e6edf3;
   --border-light: #d0d7de;
   --text-gray: #656d76;
   --text-gray-dark: #848d97;
@@ -14,6 +15,7 @@
   --pixel: #ebedf0;
   --pixel2: #f6f8fa;
   --pixel-hover: #d0d7de;
+  --pixel-hover2: #30363d;
   --sucess-hover: #085dc3;
   --scrollbar-track: #f6f8fa;
   /* Light mode track (GitHub light) */
@@ -35,8 +37,10 @@
   --pixel2: #0d1117;
   --light: #0d1117;
   --text-light: #e6edf3;
+  --text-dark: #1f2328;
   --border-light: #30363d;
   --pixel-hover: #30363d;
+  --pixel-hover2: #d0d7de;
   --sucess-hover: #46c95a;
   --scrollbar-track: #161b22;
   /* Dark mode track (GitHub dark) */

@@ -10,8 +10,7 @@ import { useLanguage } from '../Header/Lang/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
 import Kry_Rithisak from '../../assets/Kry_Rithisak.jpg';
 import Tooltip from '../ui/Tooltip';
-import NotificationManager from '../ui/NotificationManager';
-import { cleanMarkdown } from '../../Utils/markdown';
+import Textarea from 'react-textarea-autosize';
 const SakuPilot = ({ isOpen, onClose }) => {
     const { t } = useLanguage();
     const [view, setView] = useState('home');
@@ -28,14 +27,23 @@ const SakuPilot = ({ isOpen, onClose }) => {
     const [stagedFiles, setStagedFiles] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
     const { addNotification } = useNotification();
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const textareaRef = useRef(null);
+    const [typingIndex, setTypingIndex] = useState(null);
+    const [typedText, setTypedText] = useState("");
 
     const filteredProjects = Projects.filter(p =>
         t(`projects.${p.langKey}.title`).toLowerCase().includes(searchQuery.toLowerCase())
     );
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
     };
+    const isNearBottom = () => {
+        const container = messagesEndRef.current?.parentElement;
+        if (!container) return true;
 
+        return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+    };
     useEffect(() => {
         scrollToBottom();
     }, [messages, isThinking]);
@@ -55,29 +63,66 @@ const SakuPilot = ({ isOpen, onClose }) => {
             );
             fileContext = "\n\nAttached Files:\n" + fileContents.join("\n\n");
         }
+
         const fullMessageContent = `${inputValue}${fileContext}`;
+
         const userDisplayMessage = {
             role: "user",
             content: inputValue || `Uploaded ${attachedFiles.length} file(s)`
         };
 
         setMessages(prev => [...prev, userDisplayMessage]);
+
         setInputValue("");
         setAttachedFiles([]);
 
-        // 3. Prepare Project Context
         const projectContext = selectedProject ? {
             title: t(`projects.${selectedProject.langKey}.title`),
             tech: selectedProject.tech?.join(", "),
             role: "Developer"
         } : null;
 
-        // 4. Call API with the combined content
+        // Api calling
         const response = await getGroqResponse(fullMessageContent, messages, projectContext);
 
         setIsThinking(false);
-        setMessages(prev => [...prev, { role: "assistant", content: response }]);
+
+        setMessages(prev => {
+            const newIndex = prev.length;
+
+            setTypingIndex(newIndex);
+            setTypedText("");
+
+            return [...prev, { role: "assistant", content: response }];
+        });
     };
+
+    useEffect(() => {
+        if (typingIndex === null) return;
+
+        const fullText = messages[typingIndex]?.content;
+        if (!fullText) return;
+
+        let currentIndex = 0;
+        const chunkSize = 2; // increase for faster speed
+        const intervalTime = 20; // ms per tick
+
+        const interval = setInterval(() => {
+            currentIndex += chunkSize;
+            setTypedText(fullText.slice(0, currentIndex));
+
+            if (isNearBottom()) {
+                messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+            }
+
+            if (currentIndex >= fullText.length) {
+                clearInterval(interval);
+                setTypingIndex(null);
+            }
+        }, intervalTime);
+
+        return () => clearInterval(interval);
+    }, [typingIndex, messages]);
 
     const startChat = (project) => {
         setSelectedProject(project);
@@ -140,7 +185,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
             document.body.style.overflow = 'unset';
         }
         return () => { document.body.style.overflow = 'unset'; };
-    }, [isModalOpen, isFileModalOpen]); // Added isFileModalOpen here
+    }, [isModalOpen, isFileModalOpen]); // FileModal
     const readFileContent = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -148,6 +193,20 @@ const SakuPilot = ({ isOpen, onClose }) => {
             reader.onerror = (e) => reject(e);
             reader.readAsText(file);
         });
+    };
+    const handleStartNewChat = () => {
+        if (messages.length > 0) {
+            setIsConfirmModalOpen(true);
+        } else {
+            setView('home');
+        }
+    };
+
+    const confirmNewChat = () => {
+        setMessages([]);
+        setSelectedProject(null);
+        setView('home');
+        setIsConfirmModalOpen(false);
     };
     return (
         <>
@@ -165,7 +224,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                             <span className="text-sm font-semibold text-(--text-light)">Quick chat</span>
                             <div className="flex items-center gap-1">
                                 <Tooltip text='Start a new conversation'>
-                                    <button onClick={() => setView('home')} className="p-1.5 hover:bg-(--pixel-hover) rounded-md transition-colors cursor-pointer text-(--text-light)">
+                                    <button onClick={handleStartNewChat} className="p-1.5 hover:bg-(--pixel-hover) rounded-md transition-colors cursor-pointer text-(--text-light)">
                                         <IoAddOutline size={20} />
                                     </button>
                                 </Tooltip>
@@ -212,7 +271,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                                 <button key={p.id} onClick={() => startChat(p)} className="w-full flex items-center justify-between px-4 py-2 hover:bg-(--pixel-hover) group cursor-pointer">
                                                     <div className="flex items-center gap-3 text-sm">
                                                         <div className='w-7 h-7 rounded-full flex items-center justify-center'>
-                                                        <img src={Kry_Rithisak} className="w-full h-full rounded-full object-cover" />
+                                                            <img src={Kry_Rithisak} className="w-full h-full rounded-full object-cover" />
                                                         </div>
                                                         <span className='text-(--text-light)'>Kry-Rithisak/<span className="text-(--text-light)">{t(`projects.${p.langKey}.title`)}</span></span>
                                                     </div>
@@ -238,13 +297,22 @@ const SakuPilot = ({ isOpen, onClose }) => {
 
                                     <div className="flex flex-col gap-4 px-4">
                                         {/* Render Messages */}
-                                        {messages.map((msg, i) => (
-                                            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`max-w-[85%] p-3 rounded-lg text-sm space-y-1.5 prose prose-invert prose-headings:text-(--text-light) prose-strong:text-white prose-code:text-(--text-light) ${msg.role === 'user' ? 'bg-(--pixel) text-white prose-a:text-white' : ''}`}>
-                                                    <MessageContent content={cleanMarkdown(msg.content)} />
+                                        {messages.map((msg, i) => {
+                                            const isTyping = i === typingIndex;
+
+                                            return (
+                                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                                    <div className={`max-w-[85%] p-3 rounded-lg text-sm space-y-1.5 break-words min-h-[1.5em] ${msg.role === 'user' ? 'bg-(--pixel)' : ''}`}>
+
+                                                        {/* Always use MessageContent so it formats LIVE! */}
+                                                        <MessageContent
+                                                            content={isTyping ? typedText + "▌" : msg.content}
+                                                        />
+
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
 
                                         {/* Thinking State */}
                                         {isThinking && (
@@ -278,12 +346,12 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                                     <span className="text-[11px] font-bold text-(--text-gray) truncate max-w-[80px]">{file.name}</span>
                                                     <span className="text-[9px] text-gray-500 uppercase">File</span>
                                                 </div>
-                                                    <button
-                                                        onClick={() => removeFile(idx)}
-                                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                                                    >
-                                                        <IoClose size={12} />
-                                                    </button>
+                                                <button
+                                                    onClick={() => removeFile(idx)}
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                >
+                                                    <IoClose size={12} />
+                                                </button>
                                             </div>
                                         ))}
                                     </div>
@@ -300,13 +368,19 @@ const SakuPilot = ({ isOpen, onClose }) => {
 
                                 {/* Input Bar */}
                                 <div className="relative flex items-center bg-(--pixel) border border-(--border-light) rounded-xl px-3 py-3 focus-within:ring-1 ring-blue-500 transition-all">
-                                    <input
+                                    <Textarea
+                                        ref={textareaRef}
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
                                         placeholder="Ask SakuPilot"
-                                        className="bg-transparent w-full text-sm outline-none placeholder:text-(--text-gray)"
+                                        className="bg-transparent w-full text-sm outline-none overflow-y-auto github-scrollbar resize-none"
+                                        minRows={1}
+                                        maxRows={10}
                                         onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleSendMessage();
+                                            if (e.key === "Enter" && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleSendMessage();
+                                            }
                                         }}
                                     />
                                     <div className="flex items-center gap-3 text-[#8b949e]">
@@ -374,7 +448,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <div className='w-8 h-8 flex items-center justify-center'>
-                                                        <img src={Kry_Rithisak} className="w-full h-full rounded-full border border-(--border-light) object-cover" alt="" />
+                                                            <img src={Kry_Rithisak} className="w-full h-full rounded-full border border-(--border-light) object-cover" alt="" />
                                                         </div>
                                                         <span className="text-sm">Kry-Rithisak/<span className="text-(--text-light) font-medium">{t(`projects.${p.langKey}.title`)}</span></span>
                                                     </div>
@@ -486,6 +560,39 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                         {isUploading ? 'Uploading...' : 'Upload'}
                                     </button>
                                 </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+            {/* --- start new chat or nah --- */}
+            <AnimatePresence>
+                {isConfirmModalOpen && (
+                    <div className="fixed inset-0 z-[130] flex items-center justify-center bg-black/80 backdrop-blur-[2px]">
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="w-[90%] max-w-[400px] bg-(--pixel2) border border-(--border-light) rounded-xl shadow-2xl p-6"
+                        >
+                            <h3 className="text-xl font-bold text-(--text-light) mb-4">Are you sure?</h3>
+                            <p className="text-(--text-light) text-sm mb-8 leading-relaxed">
+                                Your current conversation with SakuPilot will be lost and cannot be recovered.
+                            </p>
+
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={() => setIsConfirmModalOpen(false)}
+                                    className="px-5 py-2.5 rounded-lg text-sm font-semibold border border-(--border-light) text-(--text-light) hover:bg-(--pixel-hover) transition-colors cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmNewChat}
+                                    className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-(--text-light) text-(--text-dark)  hover:bg-(--pixel-hover2) transition-colors cursor-pointer"
+                                >
+                                    I'm sure
+                                </button>
                             </div>
                         </motion.div>
                     </div>

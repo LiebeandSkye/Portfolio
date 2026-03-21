@@ -7,7 +7,12 @@ import { oneDark, prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '../context/ThemeContext';
 
 const MessageContent = ({ content }) => {
-    const processedContent = content.replace(/•/g, '\n•');
+    const isString = typeof content === "string";
+
+    const processedContent = isString
+        ? content.replace(/•/g, '\n•')
+        : content;
+
     const { isDark } = useTheme();
     
     return (
@@ -18,7 +23,6 @@ const MessageContent = ({ content }) => {
                 code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '');
                     
-                    // Inline code: Removed background/border to "go with the flow"
                     if (inline || !match) {
                         return (
                             <code 
@@ -90,12 +94,12 @@ const MessageContent = ({ content }) => {
                 ),
             }}
         >
-            {processedContent}
+            {content}
         </ReactMarkdown>
     );
 };
 
-function CodeBlock({ language, code, isDark }) { // Add isDark here!
+function CodeBlock({ language, code, isDark }) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
