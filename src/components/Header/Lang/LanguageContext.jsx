@@ -6,7 +6,6 @@ const LanguageContext = createContext();
 export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider = ({ children }) => {
-    // Check local storage for saved language or default to English
     const [currentLang, setCurrentLang] = useState(() => {
         const saved = localStorage.getItem('app_lang');
         return languages.find(l => l.code === saved) || languages[0];
@@ -35,8 +34,8 @@ export const LanguageProvider = ({ children }) => {
             pinned: "Pinned",
             bot: {
                 whatIsAbout: 'What is this project about?',
-                techStack: 'What kind of techStacks do you use?',
-                role: 'What role were you when you take this project?',
+                techStack: 'What kind of tech stacks do you use?',
+                role: 'What was your role in this project?',
             },
             contact: {
                 name: 'Name',
@@ -53,7 +52,7 @@ export const LanguageProvider = ({ children }) => {
             },
             bio: {
                 title: "Hi 👋, I'm Kry Rithisak",
-                description: 'I’m on a journey to becoming a full-stack developer, building on my background in computer science and hands-on experience in web and mobile development 💻. I enjoy turning ideas into code and code into solutions, and I’m always trying to learn more about software engineering and architecture 💡. At the end of the day, I’m just a guy working towards a goal, driven by creativity and a love for technology. 🚀🚀',
+                description: "I'm on a journey to becoming a full-stack developer, building on my background in computer science and hands-on experience in web and mobile development 💻. I enjoy turning ideas into code and code into solutions, and I'm always trying to learn more about software engineering and architecture 💡. At the end of the day, I'm just a guy working towards a goal, driven by creativity and a love for technology. 🚀🚀",
                 techStack: "Technologies I've Worked With:"
             },
             links: {
@@ -61,11 +60,16 @@ export const LanguageProvider = ({ children }) => {
                 portfolio: 'Portfolio',
                 contact: 'Get in Touch',
             },
+            sakupilot: {
+                drawerLabel: 'SakuPilot',
+                drawerTag: 'AI Chat',
+                drawerDesc: 'Chat with my AI assistant',
+            },
             quotes: [
-                { text: '“Insanity is doing the same thing, over and over again, but expecting different results.”', author: '― Narcotics Anonymous' },
-                { text: '“You only live once, but if you do it right, once is enough.”', author: '― Mae West' },
-                { text: '“Move fast and break things. Unless you are breaking stuff, you are not moving fast enough.”', author: '― Mark Zuckerberg' },
-                { text: '“Talk is cheap. Show me the code.”', author: '― Linus Torvalds' },
+                { text: '"Insanity is doing the same thing, over and over again, but expecting different results."', author: '― Narcotics Anonymous' },
+                { text: '"You only live once, but if you do it right, once is enough."', author: '― Mae West' },
+                { text: '"Move fast and break things. Unless you are breaking stuff, you are not moving fast enough."', author: '― Mark Zuckerberg' },
+                { text: '"Talk is cheap. Show me the code."', author: '― Linus Torvalds' },
                 { text: '"It is better to be hated for what you are than to be loved for what you are not."', author: '― Andre Gide, Autumn Leaves' },
                 { text: '"I may not have gone where I intended to go, but I think I have ended up where I needed to be."', author: '― Douglas Adams' },
                 { text: '"We are what we pretend to be, so we must be careful about what we pretend to be."', author: '― Kurt Vonnegut' },
@@ -79,7 +83,6 @@ export const LanguageProvider = ({ children }) => {
                 btnDemo: 'View Demo',
                 btnCode: 'Source Code',
             },
-            // PROJECTSSSSSS
             projects: {
                 titles: {
                     frameworks: "Frameworks & Libraries",
@@ -92,6 +95,12 @@ export const LanguageProvider = ({ children }) => {
                 continental: {
                     title: 'Continental',
                     description: 'A car e-commerce website with virtual assistant and clean images of cars at affordable prices.',
+                    // 3 quick-tap suggested questions shown when this project is attached
+                    botQuestions: [
+                        'What is the Continental project about?',
+                        'What tech stack was used for Continental?',
+                        'How does the AI virtual assistant work?',
+                    ],
                     Information: {
                         title: 'Continental Website',
                         description: 'Continental is a car e-commerce website located in Phnom Penh, Cambodia. This project was developed as a final project (ETEC II) to provide a modern, user-friendly experience including virtual assistance and simulated payment features. Built with React and Tailwind CSS.',
@@ -124,6 +133,11 @@ export const LanguageProvider = ({ children }) => {
                 cambodia: {
                     title: 'Discover Cambodia',
                     description: 'An informative tourism website about Cambodia featuring weather tools, tourist destinations, and educational content.',
+                    botQuestions: [
+                        'What is Discover Cambodia about?',
+                        'How does the real-time weather feature work?',
+                        'What technologies were used in Discover Cambodia?',
+                    ],
                     Information: {
                         title: 'Discover Cambodia',
                         description: 'Discover Cambodia is a university project built to promote Cambodian tourism. Built with HTML, CSS, JavaScript, and Python.',
@@ -152,6 +166,11 @@ export const LanguageProvider = ({ children }) => {
                 electronics: {
                     title: 'Electronics E-commerce',
                     description: 'An experimental e-commerce platform built for learning purposes, focused on product listings and cart systems.',
+                    botQuestions: [
+                        'What is the Electronics E-commerce project?',
+                        'How does the cart and authentication system work?',
+                        'Why is this project still under development?',
+                    ],
                     Information: {
                         title: 'Electronics E-commerce Website (Incomplete)',
                         description: 'This project was created mainly for learning advanced concepts such as authentication, cart management, and database integration. It is still under development.',
@@ -196,12 +215,12 @@ export const LanguageProvider = ({ children }) => {
             randomizeBtn: 'ランダム',
             viewDemo: "デモを見る",
             sourceCode: "ソースコード",
-            share: 'ェアすシる : ',
-            pinned: 'ピン留め',
+            share: 'シェアする : ',
+            pinned: 'ピン留め',
             bot: {
-                whatIsAbout: 'このプロジェクトについては?',
-                techStack: '技術スタック',
-                role: '役割',
+                whatIsAbout: 'このプロジェクトは何ですか？',
+                techStack: '使用した技術スタックは？',
+                role: 'このプロジェクトでの役割は？',
             },
             contact: {
                 name: '名前',
@@ -226,6 +245,11 @@ export const LanguageProvider = ({ children }) => {
                 portfolio: 'ポートフォリオ',
                 contact: 'お問い合わせ'
             },
+            sakupilot: {
+                drawerLabel: 'サクパイロット',
+                drawerTag: 'AIチャット',
+                drawerDesc: 'AIアシスタントとチャット',
+            },
             quotes: [
                 { text: '「狂気とは、同じことを何度も繰り返しながら、違う結果を期待することだ。」', author: '― Narcotics Anonymous' },
                 { text: '「人生は一度きり。でも正しく生きれば、一度で十分だ。」', author: '― メイ・ウエスト' },
@@ -239,12 +263,11 @@ export const LanguageProvider = ({ children }) => {
                 { text: '「大きく転んで初めて、自分の立ち位置がわかることもある。」', author: '― ヘイリー・ウィリアムス' }
             ],
             portfolio: {
-                noMatches: '該当する作品は見つかりませんでした。',
-                btnDemo: "デモを見る",
+                noMatches: '該当する作品は見つかりませんでした。',
+                btnDemo: "デモを見る",
                 btnCode: "ソースコードを見る",
-                statusPublic: '公開中',                
+                statusPublic: '公開中',
             },
-            // PROJECKUUUU
             projects: {
                 titles: {
                     frameworks: "フレームワーク & ライブラリ",
@@ -257,6 +280,11 @@ export const LanguageProvider = ({ children }) => {
                 continental: {
                     title: 'コンティネンタル',
                     description: 'AIアシスタント付きの車のECサイト。手頃な価格の車のクリーンな画像を提供します。',
+                    botQuestions: [
+                        'コンティネンタルはどんなプロジェクトですか？',
+                        'どの技術スタックを使いましたか？',
+                        'バーチャルアシスタントはどのように動きますか？',
+                    ],
                     Information: {
                         title: 'コンティネンタル ウェブサイト',
                         description: 'Continentalは、カンボジアのプノンペンに拠点を置く自動車のEコマースウェブサイトです。このプロジェクトはETEC IIの最終プロジェクトとして開発され、仮想アシスタントや模擬決済機能を含む、現代的で使いやすい体験を提供することを目的としています。ReactとTailwind CSSを使用して構築されています。',
@@ -289,6 +317,11 @@ export const LanguageProvider = ({ children }) => {
                 cambodia: {
                     title: 'カンボジアを発見',
                     description: 'カンボジアの観光情報サイト。天気ツール、観光地、教育コンテンツを掲載。',
+                    botQuestions: [
+                        'カンボジアを発見はどんなプロジェクトですか？',
+                        '天気統合はどのように機能しますか？',
+                        'どんな技術を使いましたか？',
+                    ],
                     Information: {
                         title: 'カンボジアを発見',
                         description: '大学のプロジェクトとして作成されたカンボジアの観光情報サイト。HTML, CSS, JavaScript, Pythonで構築。',
@@ -317,6 +350,11 @@ export const LanguageProvider = ({ children }) => {
                 electronics: {
                     title: '電子機器 Eコマース',
                     description: '学習目的で構築された実験的なEコマースプラットフォーム。商品リストとカートシステムに重点を置いています。',
+                    botQuestions: [
+                        '電子機器ECサイトについて教えてください。',
+                        'カートシステムはどのように機能しますか？',
+                        'なぜまだ開発中ですか？',
+                    ],
                     Information: {
                         title: '電子機器 Eコマース ウェブサイト (未完成)',
                         description: 'このプロジェクトは、主に認証、カート管理、データベース統合などの高度な概念を学習するために作成されました。現在も開発中です。',
@@ -345,8 +383,6 @@ export const LanguageProvider = ({ children }) => {
         },
     };
 
-
-    // Translation function with English fallback
     const t = (key) => {
         const keys = key.split('.');
         let result = translations[currentLang.code] || translations.en;
@@ -356,7 +392,6 @@ export const LanguageProvider = ({ children }) => {
             if (!result) break;
         }
 
-        // Final fallback to English if key path fails in current language
         if (!result) {
             result = translations.en;
             for (const k of keys) {
@@ -371,11 +406,12 @@ export const LanguageProvider = ({ children }) => {
     const changeLanguage = (langCode) => {
         const lang = languages.find((l) => l.code === langCode) || languages[0];
         setCurrentLang(lang);
-        localStorage.setItem('app_lang', langCode); // Persist language choice
+        localStorage.setItem('app_lang', langCode);
     };
 
     return (
-        <LanguageContext.Provider value={{ currentLang, changeLanguage, t }}>
+        // translations also exposed so chat.js system prompt can consume full portfolio context
+        <LanguageContext.Provider value={{ currentLang, changeLanguage, t, translations }}>
             {children}
         </LanguageContext.Provider>
     );

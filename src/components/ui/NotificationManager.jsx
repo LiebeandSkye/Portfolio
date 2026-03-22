@@ -4,10 +4,9 @@ import Toast from "./Toast";
 const NotificationManager = () => {
     const [notifications, setNotifications] = useState([]);
 
-    // Function to add a new notification to the stack
-    const addNotification = useCallback((message) => {
-        const id = Date.now();
-        setNotifications((prev) => [...prev, { id, message }]);
+    const addNotification = useCallback((message, type = 'info') => {
+        const id = Date.now() + Math.random();
+        setNotifications((prev) => [...prev, { id, message, type }]);
     }, []);
 
     const removeNotification = (id) => {
@@ -15,15 +14,15 @@ const NotificationManager = () => {
     };
 
     return (
-        <div className="fixed top-4 right-6 z-[100] flex flex-col gap-3">
+        <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
             {notifications.map((n) => (
-                <Toast
-                    key={n.id}
-                    message={n.message}
-                    onClose={() => removeNotification(n.id)}
-                    // Pass a prop to handle the "Error" state styling
-                    type="error"
-                />
+                <div key={n.id} className="pointer-events-auto">
+                    <Toast
+                        message={n.message}
+                        type={n.type}
+                        onClose={() => removeNotification(n.id)}
+                    />
+                </div>
             ))}
         </div>
     );
