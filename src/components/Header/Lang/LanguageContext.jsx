@@ -32,6 +32,16 @@ export const LanguageProvider = ({ children }) => {
             sourceCode: "Source Code",
             share: "Share :",
             pinned: "Pinned",
+            search: {
+                placeholder: 'Search this website...',
+                pages: 'Pages',
+                projects: 'Projects',
+                visit: 'Visit',
+                jumpTo: 'Jump to',
+                quickChat: 'Quick Chat',
+                immersive: 'Immersive',
+                startConversation: 'Start conversation',
+            },
             bot: {
                 whatIsAbout: 'What is this project about?',
                 techStack: 'What kind of tech stacks do you use?',
@@ -217,6 +227,16 @@ export const LanguageProvider = ({ children }) => {
             sourceCode: "ソースコード",
             share: 'シェアする : ',
             pinned: 'ピン留め',
+            search: {
+                placeholder: 'このウェブサイトを検索...',
+                pages: 'ページ',
+                projects: 'プロジェクト',
+                visit: '訪問',
+                jumpTo: 'ジャンプ',
+                quickChat: 'クイックチャット',
+                immersive: 'イマーシブ',
+                startConversation: '会話を始める',
+            },
             bot: {
                 whatIsAbout: 'このプロジェクトは何ですか？',
                 techStack: '使用した技術スタックは？',

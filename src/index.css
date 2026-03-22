@@ -26,8 +26,8 @@
   --main-scrollbar-track: #f6f8fa;
   --main-scrollbar-thumb: #c1c9d2;
   --main-scrollbar-thumb-hover: #8c959f;
-  --code-inline-text: #3fb950; 
-  --code-block-bg: #010409; 
+  --code-inline-text: #3fb950;
+  --code-block-bg: #010409;
   --highlight-blue: #58a6ff;
 }
 
@@ -70,12 +70,12 @@
   }
 
   .nav-link {
-    @apply relative flex flex-col items-center justify-center px-1 py-2 transition-colors duration-200;
+    @apply relative flex flex-col items-center justify-center px-4 py-4 transition-colors duration-200 font-semibold;
   }
 
   .chat-chip {
-  @apply flex items-center gap-2 border border-(--border-light) rounded-lg px-3 py-2 text-left text-xs text-white hover:bg-[#1d2128] transition-colors w-fit;
-}
+    @apply flex items-center gap-2 border border-(--border-light) rounded-lg px-3 py-2 text-left text-xs text-white hover:bg-[#1d2128] transition-colors w-fit;
+  }
 
   /* The Trick: Reserve space for bold text to prevent jumping */
   .nav-link::before {
@@ -91,7 +91,7 @@
   /* The GitHub-style sliding underline */
   .nav-link::after {
     content: '';
-    @apply absolute -bottom-[1px] left-0 h-[2px] w-full bg-orange-500 scale-x-0 transition-transform duration-300 origin-right;
+    @apply absolute -bottom-[1px] left-0 h-[1px] w-full bg-orange-500 scale-x-0 transition-transform duration-300 origin-right;
   }
 
   /* Hover & Active States */
@@ -163,9 +163,15 @@
     transform: rotate(180deg);
   }
 }
+
 @keyframes rotate-gradient {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-rotate-gradient {
@@ -175,13 +181,31 @@
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-gray-700 rounded-full;
 }
 
+@keyframes sp-panel {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes thinking-shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .animate-thinking {
@@ -192,6 +216,7 @@
   animation: thinking-shimmer 2s linear infinite;
   font-weight: 500;
 }
+
 /* ========================= */
 /* 🌍 MAIN GLOBAL SCROLLBAR */
 /* ========================= */

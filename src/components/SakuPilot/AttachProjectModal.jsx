@@ -24,7 +24,7 @@ const AttachProjectModal = ({
                 >
                     <div className="p-4 border-b border-(--border-light) flex justify-between items-center">
                         <h3 className="font-semibold text-(--text-light)">Attach a Project</h3>
-                        <IoClose onClick={onClose} className="cursor-pointer text-gray-400 hover:text-white" size={20} />
+                        <IoClose onClick={onClose} className="cursor-pointer text-gray-400 hover:text-(--text-light)" size={20} />
                     </div>
 
                     <div className="p-5">

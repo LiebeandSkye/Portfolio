@@ -12,7 +12,7 @@ const Footer = () => {
     }
     return (
         <div>
-            <div className='w-full flex justify-center items-center px-8 py-3 pb-10 gap-4'>
+            <div className='w-full flex justify-center items-center px-8 py-3 pb-10 gap-4 flex-col-reverse md:flex-row'>
                 <div className="flex items-center gap-2">
                     <div className="border border-(--text-light) rounded-md w-10 h-9 flex items-center justify-center font-bold text-(--text-light)">
                         <a onClick={scrollToTop} href='/'>K</a>
