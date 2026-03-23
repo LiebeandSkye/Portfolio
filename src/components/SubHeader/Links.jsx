@@ -41,7 +41,8 @@ const Links = () => {
 
     return (
         <div className="bg-(--light) border-b border-(--border-light)">
-            <div className="flex items-end px-4 sm:px-6 md:px-10">
+            <div className="flex items-end px-4
+            sm:px-6 md:px-10">
 
                 {/* ── Mobile ────────── */}
                 <div className="flex items-end justify-between w-full md:hidden">

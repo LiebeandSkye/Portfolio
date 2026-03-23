@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { GoDependabot } from 'react-icons/go';
 import { MdFullscreen } from 'react-icons/md';
 import { useLanguage } from './Lang/LanguageContext';
-import { HiOutlineChatAlt2 } from "react-icons/hi";
 import SakuPilot from '../SakuPilot/SakuPilot';
 import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.gif';
 

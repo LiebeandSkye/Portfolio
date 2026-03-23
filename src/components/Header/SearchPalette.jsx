@@ -86,7 +86,7 @@ const SearchPalette = ({
                 <div
                     className="w-[84%] mt-[2vh]
                         bg-(--pixel2) border border-(--border-light)
-                        rounded-xl overflow-hidden flex flex-col h-[80vh] md:h-auto
+                        rounded-xl overflow-hidden flex flex-col h-auto
                         shadow-[0_24px_80px_rgba(0,0,0,0.4)]"
                     style={{ animation:'sp-panel 0.2s cubic-bezier(.16,1,.3,1)', zIndex:9999 }}
                     onMouseDown={(e) => e.stopPropagation()}

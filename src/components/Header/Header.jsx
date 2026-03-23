@@ -26,7 +26,7 @@ const Header = () => {
 
     return (
         <>
-            <div className="bg-(--light) dark:bg-(--dark-bg) px-4 md:px-8 py-3 flex justify-between items-center dark:border-(--dark-border) z-50">
+            <div className="bg-(--light) dark:bg-(--dark-bg) px-6 md:px-8 py-3 flex justify-between items-center dark:border-(--dark-border) z-50">
 
                 {/* Left: logo + name */}
                 <div className="flex items-center gap-4">
@@ -41,12 +41,12 @@ const Header = () => {
                 {/* Right: controls */}
                 <div className="flex items-center gap-2 md:gap-3">
 
-                    {/* Search — stable onOpenChat so Quick Chat always works */}
+                    {/* Search */}
                     <Search onOpenChat={handleOpenChat} />
 
                     <div className="seperator hidden md:block" />
 
-                    {/* Bot button group — open only (no toggle close) */}
+                    {/* Bot button  */}
                     <div className="items-center border border-(--border-light) dark:border-(--dark-border) rounded-md flex">
                         <div className="border-r border-(--border-light) dark:border-(--dark-border)">
                             <Tooltip text={t('botTooltip')}>

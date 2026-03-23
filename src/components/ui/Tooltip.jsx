@@ -65,7 +65,7 @@ const Tooltip = ({ children, text, shortcut }) => {
             }}
         >
             {/* Pill */}
-            <div className="relative flex items-center gap-1.5 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-xs py-1 px-2 rounded whitespace-nowrap shadow-lg">
+            <div className="relative items-center gap-1.5 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-xs py-1 px-2 rounded whitespace-nowrap shadow-lg hidden md:flex">
                 <span className="font-medium">{text}</span>
                 {shortcut && (
                     <span className="text-[#8b949e] dark:text-gray-500 bg-[#161b22] dark:bg-gray-200 px-1 rounded border border-[#30363d] dark:border-gray-300 text-[9px]">

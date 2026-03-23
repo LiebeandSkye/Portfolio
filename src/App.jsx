@@ -5,18 +5,20 @@ import { Outlet } from 'react-router-dom'
 import Footer from './components/Footer/Footer'
 import { ThemeProvider } from './components/context/ThemeContext'
 import { NotificationProvider } from './components/context/NotificationContext'
-import SakuPilot from './components/SakuPilot/SakuPilot'
+import { SakuPilotProvider } from './components/context/SakupilotContext'
 const App = () => {
   return (
     <div>
       <ThemeProvider>
         <NotificationProvider>
-          <Header />
-          <Links />
-          <main className="p-6">
-            <Outlet />
-          </main>
-          <Footer />
+          <SakuPilotProvider>
+            <Header />
+            <Links />
+            <main className="p-6">
+              <Outlet />
+            </main>
+            <Footer />
+          </SakuPilotProvider>
         </NotificationProvider>
       </ThemeProvider>
     </div>
