@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import Footer from './components/Footer/Footer'
 import { ThemeProvider } from './components/context/ThemeContext'
 import { NotificationProvider } from './components/context/NotificationContext'
-import { SakuPilotProvider } from './components/context/SakuPilotContext.jsx'
+import { SakuPilotProvider } from './components/context/SakupilotContext'
 const App = () => {
   return (
     <div>

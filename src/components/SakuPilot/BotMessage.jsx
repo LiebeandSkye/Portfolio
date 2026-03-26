@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import MessageContent from './MessageContent';
 import NavButton from './NavButton';
 
-// Parses [NAV:/path]Label[/NAV] and [NAV:/path|Label] tokens out of bot response text
-const parseNavTokens = (content) => {
+const NAV_REGEX = /\[NAV:([^\]|]+)\]([^\[]*)\[\/NAV\]|\[NAV:([^\]|]+)\|([^\]]+)\]/g;
+
+function parseNavTokens(content) {
     if (typeof content !== 'string') return [{ type: 'text', value: String(content) }];
 
     const parts = [];
-    const navRegex = /\[NAV:([^\]|]+)\]([^\[]*)\[\/NAV\]|\[NAV:([^\]|]+)\|([^\]]+)\]/g;
     let lastIndex = 0;
     let match;
+    NAV_REGEX.lastIndex = 0; // reset since it's module-level with /g flag
 
-    while ((match = navRegex.exec(content)) !== null) {
+    while ((match = NAV_REGEX.exec(content)) !== null) {
         if (match.index > lastIndex) {
             const chunk = content.slice(lastIndex, match.index).trim();
             if (chunk) parts.push({ type: 'text', value: chunk });
         }
-        const path = match[1] || match[3];
+        const path  = match[1] || match[3];
         const label = (match[2] || match[4] || '').trim();
         if (path && label) parts.push({ type: 'nav', path, label });
         lastIndex = match.index + match[0].length;
@@ -29,10 +30,14 @@ const parseNavTokens = (content) => {
 
     if (parts.length === 0) parts.push({ type: 'text', value: content });
     return parts;
-};
+}
 
-const BotMessage = ({ content, onNavigate }) => {
-    const parts = parseNavTokens(content);
+// memo — for committed messages this never re-renders after initial paint.
+// For the typing message (in TypingMessage.jsx) it re-renders each tick,
+// but only the single small bubble, not the whole list.
+const BotMessage = memo(function BotMessage({ content, onNavigate }) {
+    // Parse once per content value change
+    const parts = useMemo(() => parseNavTokens(content), [content]);
 
     return (
         <div className="flex flex-col gap-1 overflow-x-hidden w-full min-w-0">
@@ -49,6 +54,6 @@ const BotMessage = ({ content, onNavigate }) => {
             )}
         </div>
     );
-};
+});
 
 export default BotMessage;

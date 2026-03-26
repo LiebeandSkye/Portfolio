@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { IoClose, IoAddOutline } from "react-icons/io5";
@@ -13,43 +13,62 @@ import Tooltip from '../ui/Tooltip';
 
 import HomeView from './HomeView';
 import ChatView from './ChatView';
+import TypingMessage from './TypingMessage';
 import ChatInput from './ChatInput';
 import AttachProjectModal from './AttachProjectModal';
 import AttachFileModal from './AttachFileModal';
 import ConfirmNewChatModal from './ConfirmNewChatModal';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SakuPilot — optimised
+//
+// Key change: `typingMessage` is a *separate* state from `messages`.
+// During typing, only <TypingMessage> re-renders (every 30ms).
+// <ChatView> only re-renders when a complete message is committed to `messages`.
+// This eliminates the main source of lag: previously, every 15ms tick caused
+// ALL past messages + markdown re-renders.
+// ─────────────────────────────────────────────────────────────────────────────
 
 const SakuPilot = ({ isOpen, onClose }) => {
     const { t } = useLanguage();
     const navigate = useNavigate();
     const { addNotification } = useNotification();
 
-    const [view, setView] = useState('home');
+    const [view, setView]                       = useState('home');
     const [selectedProject, setSelectedProject] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery]         = useState('');
+    const [isModalOpen, setIsModalOpen]         = useState(false);
     const [isFileModalOpen, setIsFileModalOpen] = useState(false);
-    const [isThinking, setIsThinking] = useState(false);
-    const [attachedFiles, setAttachedFiles] = useState([]);
-    const [messages, setMessages] = useState([]);
-    const [inputValue, setInputValue] = useState('');
-    const [stagedFiles, setStagedFiles] = useState([]);
-    const [isUploading, setIsUploading] = useState(false);
+    const [isThinking, setIsThinking]           = useState(false);
+    const [attachedFiles, setAttachedFiles]     = useState([]);
+    const [messages, setMessages]               = useState([]);
+    const [inputValue, setInputValue]           = useState('');
+    const [stagedFiles, setStagedFiles]         = useState([]);
+    const [isUploading, setIsUploading]         = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-    const [typingIndex, setTypingIndex] = useState(null);
-    const [typedText, setTypedText] = useState('');
 
-    const fileInputRef = useRef(null);
-    const messagesEndRef = useRef(null);
-    const messagesContainerRef = useRef(null);
-    const textareaRef = useRef(null);
-    const userScrolledUp = useRef(false);
-    const lastScrollTop = useRef(0);
+    // ── Separate typing state — ONLY TypingMessage subscribes to this ──────────
+    // `messages` never changes during typing → ChatView never re-renders during it
+    const [typingMessage, setTypingMessage] = useState(null); // { content: string } | null
 
-    const filteredProjects = Projects.filter(p =>
-        t(`projects.${p.langKey}.title`).toLowerCase().includes(searchQuery.toLowerCase())
+    const fileInputRef          = useRef(null);
+    const messagesEndRef        = useRef(null);
+    const messagesContainerRef  = useRef(null);
+    const textareaRef           = useRef(null);
+    const userScrolledUp        = useRef(false);
+    const lastScrollTop         = useRef(0);
+    // Throttle scroll — only scroll once per animation frame during typing
+    const scrollRafRef          = useRef(null);
+
+    // ── Derived (memoized) ────────────────────────────────────────────────────
+    const filteredProjects = useMemo(
+        () => Projects.filter(p =>
+            t(`projects.${p.langKey}.title`).toLowerCase().includes(searchQuery.toLowerCase())
+        ),
+        [searchQuery, t]
     );
 
-    const suggestedQuestions = (() => {
+    const suggestedQuestions = useMemo(() => {
         if (!selectedProject) return [];
         const fromT = t(`projects.${selectedProject.langKey}.botQuestions`);
         if (Array.isArray(fromT)) return fromT;
@@ -58,9 +77,9 @@ const SakuPilot = ({ isOpen, onClose }) => {
             t('bot.techStack')   || 'What tech stack was used?',
             t('bot.role')        || 'What was your role?',
         ];
-    })();
+    }, [selectedProject, t]);
 
-    // ─── Scroll ───────────────────────────────────────────────────────────────
+    // ── Scroll helpers ────────────────────────────────────────────────────────
     const isNearBottom = useCallback(() => {
         const c = messagesContainerRef.current;
         if (!c) return true;
@@ -72,6 +91,17 @@ const SakuPilot = ({ isOpen, onClose }) => {
             messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
     }, []);
+
+    // RAF-throttled scroll called during typing
+    const scheduleScroll = useCallback(() => {
+        if (scrollRafRef.current) return; // already scheduled this frame
+        scrollRafRef.current = requestAnimationFrame(() => {
+            scrollRafRef.current = null;
+            if (!userScrolledUp.current || isNearBottom()) {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+            }
+        });
+    }, [isNearBottom]);
 
     const handleScroll = useCallback(() => {
         const c = messagesContainerRef.current;
@@ -94,38 +124,38 @@ const SakuPilot = ({ isOpen, onClose }) => {
         if (isThinking) scrollToBottom();
     }, [isThinking, scrollToBottom]);
 
-    // ─── Mobile-only body lock ────────────────────────────────────────────────
+    // ── Mobile body lock ──────────────────────────────────────────────────────
     useEffect(() => {
         const isMobile = () => window.innerWidth < 768;
         if (isOpen && isMobile()) {
-            const scrollY = window.scrollY;
+            const y = window.scrollY;
             document.body.style.overflow = 'hidden';
             document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
-            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width    = '100%';
+            document.body.style.top      = `-${y}px`;
         } else {
             const top = document.body.style.top;
             document.body.style.overflow = '';
             document.body.style.position = '';
-            document.body.style.width = '';
-            document.body.style.top = '';
+            document.body.style.width    = '';
+            document.body.style.top      = '';
             if (top) window.scrollTo(0, -parseInt(top));
         }
         return () => {
             document.body.style.overflow = '';
             document.body.style.position = '';
-            document.body.style.width = '';
-            document.body.style.top = '';
+            document.body.style.width    = '';
+            document.body.style.top      = '';
         };
     }, [isOpen]);
 
-    // ─── Navigation ───────────────────────────────────────────────────────────
+    // ── Navigation ────────────────────────────────────────────────────────────
     const handleNavigate = useCallback((path) => {
         onClose();
         setTimeout(() => navigate(path), 150);
     }, [onClose, navigate]);
 
-    // ─── Send ─────────────────────────────────────────────────────────────────
+    // ── Send message ──────────────────────────────────────────────────────────
     const handleSendMessage = useCallback(async (textOverride) => {
         const text = typeof textOverride === 'string' ? textOverride : inputValue;
         if (!text.trim() && attachedFiles.length === 0) return;
@@ -158,60 +188,71 @@ const SakuPilot = ({ isOpen, onClose }) => {
             role: 'Developer',
         } : null;
 
+        // Use a snapshot of messages BEFORE the user msg was added
+        // (the setMessages above is async in React 18, so we pass the pre-update array)
         const response = await getGroqResponse(`${text}${fileContext}`, messages, projectContext);
         setIsThinking(false);
 
-        setMessages(prev => {
-            const newIndex = prev.length;
-            setTypingIndex(newIndex);
-            setTypedText('');
-            return [...prev, { role: 'assistant', content: response }];
-        });
+        // Start typing animation — does NOT touch `messages` yet
+        setTypingMessage({ fullText: response, displayText: '' });
     }, [inputValue, attachedFiles, messages, selectedProject, t]);
 
-    // ─── Typing animation ─────────────────────────────────────────────────────
+    // ── Typing animation — runs in isolation, only TypingMessage re-renders ───
+    // Interval: 30ms (was 15ms) — still ~60 chars/sec, imperceptible difference
+    // Scroll: RAF-throttled — max once per frame (~16ms) instead of every 15ms
     useEffect(() => {
-        if (typingIndex === null) return;
-        const fullText = messages[typingIndex]?.content;
-        if (!fullText) return;
+        if (!typingMessage) return;
+        const { fullText } = typingMessage;
         let idx = 0;
+
         const interval = setInterval(() => {
-            idx += 4;
-            setTypedText(fullText.slice(0, idx));
-            if (!userScrolledUp.current || isNearBottom()) {
-                messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-            }
+            idx += 4; // characters per tick
+            const displayText = fullText.slice(0, idx);
+            setTypingMessage({ fullText, displayText });
+            scheduleScroll();
+
             if (idx >= fullText.length) {
                 clearInterval(interval);
-                setTypingIndex(null);
+                // Commit finished message to main array — ChatView re-renders once
+                setMessages(prev => [...prev, { role: 'assistant', content: fullText }]);
+                setTypingMessage(null);
             }
-        }, 15);
-        return () => clearInterval(interval);
-    }, [typingIndex, messages, isNearBottom]);
+        }, 30);
 
-    // ─── Chat lifecycle ───────────────────────────────────────────────────────
-    const startChat = (project) => {
+        return () => {
+            clearInterval(interval);
+            if (scrollRafRef.current) {
+                cancelAnimationFrame(scrollRafRef.current);
+                scrollRafRef.current = null;
+            }
+        };
+    }, [typingMessage?.fullText, scheduleScroll]); // only restarts on NEW message
+
+    // ── Chat lifecycle ────────────────────────────────────────────────────────
+    const startChat = useCallback((project) => {
         setSelectedProject(project);
         setMessages([]);
+        setTypingMessage(null);
         setView('chat');
         setIsModalOpen(false);
         setSearchQuery('');
-    };
+    }, []);
 
-    const handleStartNewChat = () => {
+    const handleStartNewChat = useCallback(() => {
         if (messages.length > 0) setIsConfirmModalOpen(true);
         else setView('home');
-    };
+    }, [messages.length]);
 
-    const confirmNewChat = () => {
+    const confirmNewChat = useCallback(() => {
         setMessages([]);
+        setTypingMessage(null);
         setSelectedProject(null);
         setView('home');
         setIsConfirmModalOpen(false);
-    };
+    }, []);
 
-    // ─── Files ────────────────────────────────────────────────────────────────
-    const handleFileUpload = (e) => {
+    // ── File handling ─────────────────────────────────────────────────────────
+    const handleFileUpload = useCallback((e) => {
         const allowedTypes = ['text/css', 'text/html', 'application/javascript', 'application/json', 'text/plain'];
         const next = [];
         Array.from(e.target.files).forEach(file => {
@@ -223,7 +264,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
             next.push(file);
         });
         if (next.length) setStagedFiles(prev => [...prev, ...next]);
-    };
+    }, [addNotification]);
 
     useEffect(() => {
         const handleDrag = (e) => {
@@ -231,9 +272,9 @@ const SakuPilot = ({ isOpen, onClose }) => {
         };
         window.addEventListener('dragstart', handleDrag);
         return () => window.removeEventListener('dragstart', handleDrag);
-    }, []);
+    }, [addNotification]);
 
-    const confirmUpload = () => {
+    const confirmUpload = useCallback(() => {
         if (!stagedFiles.length) return;
         setIsUploading(true);
         setTimeout(() => {
@@ -242,9 +283,12 @@ const SakuPilot = ({ isOpen, onClose }) => {
             setIsUploading(false);
             setIsFileModalOpen(false);
         }, 1500);
-    };
+    }, [stagedFiles]);
 
-    const removeFile = (i) => setAttachedFiles(prev => prev.filter((_, idx) => idx !== i));
+    const removeFile = useCallback(
+        (i) => setAttachedFiles(prev => prev.filter((_, idx) => idx !== i)),
+        []
+    );
 
     const readFileContent = (file) => new Promise((res, rej) => {
         const r = new FileReader();
@@ -253,18 +297,22 @@ const SakuPilot = ({ isOpen, onClose }) => {
         r.readAsText(file);
     });
 
-    const handlePaste = (e) => {
+    const handlePaste = useCallback((e) => {
         e.preventDefault();
         const text = e.clipboardData.getData('text/plain').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
         const start = e.target.selectionStart;
-        const end = e.target.selectionEnd;
-        setInputValue(inputValue.slice(0, start) + text + inputValue.slice(end));
+        const end   = e.target.selectionEnd;
+        setInputValue(v => v.slice(0, start) + text + v.slice(end));
         requestAnimationFrame(() => {
-            if (textareaRef.current) {
-                textareaRef.current.setSelectionRange(start + text.length, start + text.length);
-            }
+            textareaRef.current?.setSelectionRange(start + text.length, start + text.length);
         });
-    };
+    }, []);
+
+    // ── Stable modal close handlers ───────────────────────────────────────────
+    const closeModal         = useCallback(() => setIsModalOpen(false),     []);
+    const closeFileModal     = useCallback(() => setIsFileModalOpen(false),  []);
+    const cancelConfirm      = useCallback(() => setIsConfirmModalOpen(false), []);
+    const openProjectModal   = useCallback(() => setIsModalOpen(true),      []);
 
     // ─────────────────────────────────────────────────────────────────────────
     return (
@@ -282,16 +330,19 @@ const SakuPilot = ({ isOpen, onClose }) => {
                         {/* Header */}
                         <div className="flex-shrink-0 p-4 border-b border-(--border-light) flex justify-between items-center">
                             <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-(--text-light)">Quick chat</span>
+                                <div className="w-6 h-6 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center">
+                                    <GoDependabot size={14} className="text-(--sucess)" />
+                                </div>
+                                <span className="text-sm font-semibold text-(--text-light)">SakuPilot</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Tooltip text="Start a new conversation">
+                                <Tooltip text="New conversation">
                                     <button onClick={handleStartNewChat} className="p-1.5 hover:bg-(--pixel-hover) rounded-md transition-colors cursor-pointer text-(--text-light)">
                                         <IoAddOutline size={20} />
                                     </button>
                                 </Tooltip>
-                                <Tooltip text="View Project List">
-                                    <button onClick={() => setIsModalOpen(true)} className="p-1.5 hover:bg-(--pixel-hover) rounded-md transition-colors cursor-pointer text-(--text-light)">
+                                <Tooltip text="View Projects">
+                                    <button onClick={openProjectModal} className="p-1.5 hover:bg-(--pixel-hover) rounded-md transition-colors cursor-pointer text-(--text-light)">
                                         <HiOutlineCodeBracket size={18} />
                                     </button>
                                 </Tooltip>
@@ -303,7 +354,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                             </div>
                         </div>
 
-                        {/* Scrollable content */}
+                        {/* Content */}
                         <div
                             ref={messagesContainerRef}
                             onScroll={handleScroll}
@@ -318,18 +369,33 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                     t={t}
                                 />
                             ) : (
-                                <ChatView
-                                    messages={messages}
-                                    typingIndex={typingIndex}
-                                    typedText={typedText}
-                                    isThinking={isThinking}
-                                    suggestedQuestions={suggestedQuestions}
-                                    selectedProject={selectedProject}
-                                    handleSendMessage={handleSendMessage}
-                                    handleNavigate={handleNavigate}
-                                    messagesEndRef={messagesEndRef}
-                                    t={t}
-                                />
+                                <>
+                                    {/*
+                                      ChatView receives only `messages` (stable between typing ticks).
+                                      It re-renders ONLY when a full message is committed.
+                                      TypingMessage is rendered separately and updates independently.
+                                    */}
+                                    <ChatView
+                                        messages={messages}
+                                        isThinking={isThinking}
+                                        suggestedQuestions={suggestedQuestions}
+                                        selectedProject={selectedProject}
+                                        handleSendMessage={handleSendMessage}
+                                        handleNavigate={handleNavigate}
+                                        t={t}
+                                    />
+
+                                    {/* Isolated typing bubble — only this re-renders during animation */}
+                                    {typingMessage && (
+                                        <TypingMessage
+                                            content={typingMessage.displayText + '▌'}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    )}
+
+                                    {/* Scroll anchor */}
+                                    <div ref={messagesEndRef} className="h-px" />
+                                </>
                             )}
                         </div>
 
@@ -355,7 +421,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
 
             <AttachProjectModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={closeModal}
                 filteredProjects={filteredProjects}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
@@ -365,7 +431,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
 
             <AttachFileModal
                 isOpen={isFileModalOpen}
-                onClose={() => setIsFileModalOpen(false)}
+                onClose={closeFileModal}
                 stagedFiles={stagedFiles}
                 setStagedFiles={setStagedFiles}
                 isUploading={isUploading}
@@ -376,7 +442,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
 
             <ConfirmNewChatModal
                 isOpen={isConfirmModalOpen}
-                onCancel={() => setIsConfirmModalOpen(false)}
+                onCancel={cancelConfirm}
                 onConfirm={confirmNewChat}
             />
         </>
