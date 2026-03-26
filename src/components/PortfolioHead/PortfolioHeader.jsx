@@ -6,6 +6,7 @@ import { FaCaretDown, FaCheck, FaSearch, FaRandom } from 'react-icons/fa';
 import { HiOutlineSparkles } from "react-icons/hi2";
 import Projects from '../../Data/Projects';
 import TagFilter from './TagFilter';
+import { useSakuPilot } from '../context/SakupilotContext';
 
 const PortfolioHeader = memo(function PortfolioHeader({
     allTags,
@@ -143,7 +144,7 @@ const PortfolioHeader = memo(function PortfolioHeader({
                     </button>
                 </div>
 
-                {/* Ask SakuPilot */}
+                {/* Ask SakuPilot — calls global context directly */}
                 <button
                     onClick={openChat}
                     className="flex items-center gap-2 bg-(--sucess) text-white border border-(--sucess) rounded-md px-4 py-1.5
