@@ -6,7 +6,7 @@ import { FaCaretDown, FaCheck, FaSearch, FaRandom } from 'react-icons/fa';
 import { HiOutlineSparkles } from "react-icons/hi2";
 import Projects from '../../Data/Projects';
 import TagFilter from './TagFilter';
-import { useSakuPilot } from './context/SakupilotContext';
+import { useSakuPilot } from '../context/SakupilotContext';
 
 const PortfolioHeader = memo(function PortfolioHeader({
     allTags,
