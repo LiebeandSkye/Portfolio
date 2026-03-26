@@ -13,7 +13,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 // openChat() and the single SakuPilot instance in the provider opens.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import SakuPilot from '../SakuPilot/SakuPilot.jsx'; // adjust path if needed
+import SakuPilot from '../SakuPilot/SakuPilot.jsx';
 
 const SakuPilotContext = createContext(null);
 
