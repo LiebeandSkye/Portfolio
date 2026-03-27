@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "description": "Contact form backend — sends email + Telegram notification",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-fetch": "^2.7.0",
+    "nodemailer": "^8.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.3"
+  }
+}
