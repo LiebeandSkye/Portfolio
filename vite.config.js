@@ -8,9 +8,4 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss(),
   ],
-  base: '/kryrithisak.github.io/', 
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-  }
 })
