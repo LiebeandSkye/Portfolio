@@ -1,5 +1,3 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-
 // ─────────────────────────────────────────────────────────────────────────────
 // SakuPilotContext
 //First u need to
@@ -12,8 +10,8 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 // No prop drilling needed — PortfolioHeader, Drawer, Search all just call
 // openChat() and the single SakuPilot instance in the provider opens.
 // ─────────────────────────────────────────────────────────────────────────────
-
-import SakuPilot from '../SakuPilot/SakuPilot.jsx'; // adjust path if needed
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import SakuPilot from '../SakuPilot/SakuPilot.jsx'; 
 
 const SakuPilotContext = createContext(null);
 
@@ -25,14 +23,21 @@ export const useSakuPilot = () => {
 
 export const SakuPilotProvider = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
+    // 1. Track if the chat has ever been opened
+    const [hasMounted, setHasMounted] = useState(false);
 
-    const openChat  = useCallback(() => setIsOpen(true),  []);
+    const openChat = useCallback(() => {
+        setHasMounted(true); // Mount it forever once opened
+        setIsOpen(true);
+    }, []);
+    
     const closeChat = useCallback(() => setIsOpen(false), []);
 
     return (
         <SakuPilotContext.Provider value={{ openChat, closeChat, isOpen }}>
             {children}
-            <SakuPilot isOpen={isOpen} onClose={closeChat} />
+            {/* 2. Only render SakuPilot if it has been opened at least once */}
+            {hasMounted && <SakuPilot isOpen={isOpen} onClose={closeChat} />}
         </SakuPilotContext.Provider>
     );
 };

@@ -34,17 +34,25 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
 
     // Body scroll lock
     useEffect(() => {
-        const body = document.body;
-        if (isOpen) {
-            const sw = window.innerWidth - document.documentElement.clientWidth;
-            body.style.overflow    = 'hidden';
+    const body = document.body;
+
+    if (isOpen) {
+        const sw = window.innerWidth - document.documentElement.clientWidth;
+
+        requestAnimationFrame(() => {
+            body.style.overflow = 'hidden';
             body.style.paddingRight = `${sw}px`;
-        } else {
-            body.style.overflow    = '';
-            body.style.paddingRight = '';
-        }
-        return () => { body.style.overflow = ''; body.style.paddingRight = ''; };
-    }, [isOpen]);
+        });
+    } else {
+        body.style.overflow = '';
+        body.style.paddingRight = '';
+    }
+
+    return () => {
+        body.style.overflow = '';
+        body.style.paddingRight = '';
+    };
+}, [isOpen]);
 
     const randomizeQuote = useCallback(() => {
         const quotes = t('quotes');
@@ -72,7 +80,8 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text)
                 shadow-2xl z-[99999] border-l border-(--border-light)
                 overflow-y-auto github-scrollbar
-                transition-transform duration-300 ease-in-out will-change-transform
+                transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+                will-change-transform transform-gpu
                 ${isOpen ? 'translate-x-0' : 'translate-x-full'}
             `}>
                 {/* Close */}
