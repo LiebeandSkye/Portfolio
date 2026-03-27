@@ -4,7 +4,7 @@ import DarkTheme from './DarkTheme';
 import Search from './Search';
 import Language from './Lang/Language';
 import Navigation from './Navigation';
-import { useLanguage } from './Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import SakuPilot from '../SakuPilot/SakuPilot';
 import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.gif';
 import { GoDependabot } from 'react-icons/go';

@@ -3,7 +3,7 @@ import Kry_rithisak from '../assets/Kry_Rithisak.jpg';
 import Information from '../Data/Contacts';
 import CopyButton from './ui/CopyButton';
 import { useNotification } from './context/NotificationContext';
-import { useLanguage } from './Header/Lang/LanguageContext';
+import { useLanguage } from './context/LanguageContext';
 import { FaRandom } from "react-icons/fa";
 
 // ─── Info sidebar  ────

@@ -5,7 +5,7 @@ import { FaHome } from 'react-icons/fa';
 import { MdOutlineCode, MdFullscreen } from 'react-icons/md';
 import { RiMessage2Line } from 'react-icons/ri';
 import { GoDependabot } from 'react-icons/go';
-import { useLanguage } from './Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import Projects from '../../Data/Projects';
 import Kry_Rithisak from '../../assets/Kry_Rithisak.jpg';
 import SearchPalette from './SearchPalette';

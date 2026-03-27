@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLanguage } from '../Header/Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import { NavLink } from 'react-router-dom';
 const Footer = () => {
     const { t } = useLanguage();

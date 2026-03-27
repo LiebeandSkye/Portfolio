@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 
 const ThemeContext = createContext();
 
@@ -25,10 +25,14 @@ export const ThemeProvider = ({ children }) => {
         }
     }, [isDark]);
 
-    const toggleTheme = () => setIsDark(prev => !prev);
+    // 1. Memoize the function so it doesn't get recreated on every render
+    const toggleTheme = useCallback(() => setIsDark(prev => !prev), []);
+
+    // 2. Memoize the value object so consumers don't randomly re-render
+    const contextValue = useMemo(() => ({ isDark, toggleTheme }), [isDark, toggleTheme]);
 
     return (
-        <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+        <ThemeContext.Provider value={contextValue}>
             {children}
         </ThemeContext.Provider>
     );

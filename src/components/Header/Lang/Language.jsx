@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import languages from '../../../Data/Language';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from '../../context/LanguageContext';
 import "flag-icons/css/flag-icons.min.css";
 const Language = ({ variant = 'dropdown' }) => {
     const { currentLang, changeLanguage, t } = useLanguage();

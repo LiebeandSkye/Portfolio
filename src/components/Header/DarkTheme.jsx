@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
-import { useLanguage } from './Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
 export default function DarkTheme({ variant = 'icon' }) {
@@ -8,12 +8,24 @@ export default function DarkTheme({ variant = 'icon' }) {
   const { isDark, toggleTheme } = useTheme();
 
   const [rotating, setRotating] = useState(false);
+  const timeoutRef = useRef(null); // Keep track of the timeout
 
   const handleToggle = () => {
     setRotating(true);
     toggleTheme();
-    setTimeout(() => setRotating(false), 300);
+    
+    // If spammed, cancel the old timeout and start a new one
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    
+    timeoutRef.current = setTimeout(() => setRotating(false), 300);
   };
+
+  // Cleanup timeout if component unmounts mid-spin
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   // --- TOGGLE VERSION ---
   if (variant === 'toggle') {

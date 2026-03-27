@@ -4,7 +4,7 @@ import Projects from '../../Data/Projects';
 import { Link } from 'react-router-dom';
 import { BsPinAngleFill } from "react-icons/bs";
 import { FaBook } from "react-icons/fa6";
-import { useLanguage } from '../Header/Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 
 // ─── Single card — memoized so it only re-renders when its own project data
 // or language changes. Without memo, all cards re-render whenever any parent

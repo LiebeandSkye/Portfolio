@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoCopySharp } from "react-icons/io5";
-import { useLanguage } from "../Header/Lang/LanguageContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const CopyButton = ({ text, onCopy, isNotificationActive, className = '' }) => {
     const { t } = useLanguage();

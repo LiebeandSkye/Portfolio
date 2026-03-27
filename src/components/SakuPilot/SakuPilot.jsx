@@ -7,7 +7,7 @@ import { GoDependabot } from "react-icons/go";
 
 import Projects from '../../Data/Projects';
 import { getGroqResponse } from '../../Utils/groq';
-import { useLanguage } from '../Header/Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
 import Tooltip from '../ui/Tooltip';
 

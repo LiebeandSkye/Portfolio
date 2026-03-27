@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { GoDotFill } from "react-icons/go";
 import { IoCodeOutline, IoEyeOutline } from "react-icons/io5";
-import { useLanguage } from '../Header/Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 
 // ─── Single grid card — memoized by project.id + language ────────────────────
 // The Portfolio page may re-render when the user types in a search box.

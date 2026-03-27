@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../components/Header/Lang/LanguageContext';
+import { useLanguage } from '../components/context/LanguageContext';
 import Projects from '../Data/Projects';
 import Kry_rithisak from '../assets/Kry_Rithisak.jpg';
 import { useNotification } from '../components/context/NotificationContext';

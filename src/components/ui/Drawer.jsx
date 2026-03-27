@@ -6,7 +6,7 @@ import CopyButton from './CopyButton';
 import { PiInfoDuotone } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 import { NavLink } from 'react-router-dom';
-import { useLanguage } from '../Header/Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import { FaHome, FaRandom } from "react-icons/fa";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";

@@ -1,6 +1,6 @@
 import React from 'react'
 import Kry_rithisak from '../assets/Kry_Rithisak.jpg'
-import { useLanguage } from './Header/Lang/LanguageContext';
+import { useLanguage } from './context/LanguageContext';
 const InfoMobile = () => {
     const { t } = useLanguage();
     return (

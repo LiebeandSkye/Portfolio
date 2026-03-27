@@ -1,6 +1,6 @@
 import React from 'react'
 import MainLayout from './MainLayout'
-import { useLanguage } from '../components/Header/Lang/LanguageContext'
+import { useLanguage } from '../components/context/LanguageContext';
 import { FaLongArrowAltLeft } from "react-icons/fa";
 
 const Contact = () => {

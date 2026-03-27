@@ -3,7 +3,7 @@ import MainLayout from './MainLayout'
 import TechStacks from '../components/ui/TechStacks'
 import Pinned from '../components/project/Pinned'
 import PersonalisedGraph from '../components/ui/ContributionChart'
-import { useLanguage } from '../components/Header/Lang/LanguageContext'
+import { useLanguage } from '../components/context/LanguageContext'
 import { NavLink } from 'react-router-dom'
 
 const Welcome = () => {

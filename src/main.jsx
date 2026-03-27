@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import router from './router/index';
-import { LanguageProvider } from './components/Header/Lang/LanguageContext';
+import { LanguageProvider } from './components/context/LanguageContext';
 import './index.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
