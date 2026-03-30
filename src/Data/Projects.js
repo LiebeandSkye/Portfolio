@@ -328,7 +328,7 @@ const Projects = [
         red: true,
         description: 'A privacy-first tool to curate, optimize, and transfer chat history between different AI providers using JSON-to-Markdown processing.',
         bread: '/portfolio',
-        thumbnail: null, // Add your screenshot here later
+        thumbnail: Memory1,
         designed: true,
         developed: true,
         demo: 'https://liebeandskye.github.io/AI_MemoryPorter/',
