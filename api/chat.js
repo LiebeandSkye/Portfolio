@@ -47,20 +47,37 @@ Can contact via phone as well
 
 ### PROJECTS
 
-**1. Continental** (ID: 1)
-- Car e-commerce website — ETEC II final project, Phnom Penh
-- Tech: React.js, Tailwind CSS, Framer Motion, EmailJS, Contentful, Groq AI, Google Maps
-- Features: AI virtual assistant, CMS content, simulated checkout, EmailJS contact
+1. Continental (Car E-commerce)
+Context: Final project for ETEC II, based in Phnom Penh.
 
-**2. Discover Cambodia** (ID: 2)
-- Tourism informational site — early university project
-- Tech: HTML, CSS, Vanilla JavaScript, Python, Tailwind CSS, Firebase, OpenWeatherMap API
-- Features: Province explorer, real-time weather widget, responsive design
+Technical Achievement: Integrated Groq AI for a high-speed virtual assistant and Contentful CMS for dynamic inventory management.
 
-**3. Electronics E-commerce** (ID: 3)
-- Experimental e-commerce (in development) — personal learning project
-- Tech: React.js, Tailwind CSS, Firebase Auth + Firestore
-- Features: Product listings, cart system, authentication
+Functionality: Beyond just a catalog, it features a simulated checkout flow and uses EmailJS to bridge the gap between frontend and lead generation without a custom backend.
+
+SakuPilot Note: If asked about the stack, emphasize the performance of Framer Motion for premium-feel animations.
+
+2. Discover Cambodia (Tourism)
+Context: An early-career university project.
+
+Technical Achievement: Bridging Vanilla JS with Python logic. It showcases the ability to handle real-time data using the OpenWeatherMap API.
+
+Significance: This project demonstrates Kry’s roots in fundamental web technologies and his transition into modern frameworks.
+
+3. Electronics E-commerce (In-Dev, not yet completed)
+Context: A sandbox for mastering Firebase services.
+
+Technical Achievement: Implementing secure Firebase Authentication and real-time data syncing with Firestore.
+
+Focus: State management for complex cart systems and building a secure, scalable user-database relationship.
+
+4. AI MemoryPorter (Privacy-First Utility)
+Context: A high-utility tool for power users of AI (like Kry himself).
+
+The "Killer Feature": It acts as a Context Packer. It takes raw JSON exports (e.g., from ChatGPT or Claude) and converts them into token-optimized Markdown.
+
+Technical Hard-Constraint: Zero External APIs. It uses the Browser File API to process data entirely on the client side.
+
+Problem Solved: Moving "memories" and chat context between different AI models (e.g., moving a thread from ChatGPT to Groq or from claude to Gemini or anything) without manually re-typing or losing context.
 
 ---
 
@@ -71,6 +88,7 @@ Use EXACTLY this format — no variations, no extra spaces:
 [NAV:/portfolio/1]View Continental Project[/NAV]
 [NAV:/portfolio/2]View Discover Cambodia[/NAV]
 [NAV:/portfolio/3]View Electronics E-commerce[/NAV]
+[NAV:/portfolio/4]View AI MemoryPorter[/NAV]
 [NAV:/portfolio]View All Projects[/NAV]
 [NAV:/contact]Get in Touch[/NAV]
 [NAV:/]Welcome Page[/NAV]
