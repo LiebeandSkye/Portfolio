@@ -9,12 +9,15 @@ import continentalScreenshot7 from '../assets/Continental/screenshot7.webp';
 import continentalScreenshot8 from '../assets/Continental/screenshot8.webp';
 import continentalScreenshot9 from '../assets/Continental/screenshot9.webp';
 import continentalScreenshot10 from '../assets/Continental/screenshot10.webp';
+import Memory1 from '../assets/AI_MemoryPorter/Memory1.png';
+import Memory2 from '../assets/AI_MemoryPorter/Memory2.png';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiGooglemaps } from "react-icons/si";
+import { LuFileSpreadsheet } from "react-icons/lu";
 
 const Projects = [
     {
@@ -311,7 +314,107 @@ const Projects = [
                 },
             },
         },
-    }
+
+    },
+    // ===========================
+    // AI_MEMORYPORTER (ID:4)
+    // ===========================
+
+    {
+        id: 4,
+        title: 'AI MemoryPorter',
+        langKey: "MemoryPorter",
+        public: true,
+        red: true,
+        description: 'A privacy-first tool to curate, optimize, and transfer chat history between different AI providers using JSON-to-Markdown processing.',
+        bread: '/portfolio',
+        thumbnail: null, // Add your screenshot here later
+        designed: true,
+        developed: true,
+        demo: 'https://liebeandskye.github.io/AI_MemoryPorter/',
+        code: 'https://github.com/LiebeandSkye/AI_MemoryPorter',
+        tags: ['React.js', 'Tailwind CSS v4', 'Vite', 'Git Automation', 'Privacy-Focused'],
+        summary: {
+            framework: 'React 19',
+            style: 'Tailwind CSS v4',
+            API: 'Client-side FileReader',
+        },
+        percent: { javascript: 97.0, html: 2.8, css: 0.2 },
+        languages: { javascript: 'JavaScript', html: 'HTML', css: 'CSS' },
+        Information: {
+            title: 'AI MemoryPorter',
+            description: 'AI MemoryPorter was built to solve the "context loss" problem when switching between AI models. It allows users to upload Claude export files, select specific high-value conversations, and compile them into a token-optimized Markdown file that can be used as a knowledge base for other AIs.',
+            coreFeatures: {
+                title: 'Core Features',
+                features1: {
+                    title: 'Granular Selection',
+                    description: '– Interactive modal allows users to pick specific chats instead of dumping a whole archive.'
+                },
+                features2: {
+                    title: 'Local Processing',
+                    description: '– Uses browser-based file reading so user data never touches a server.'
+                },
+                features3: {
+                    title: 'Multi-File Support',
+                    description: '– Handles conversations.json, users.json, and memories.json simultaneously.'
+                },
+                features4: {
+                    title: 'Token Optimization',
+                    description: '– Converts messy JSON into clean, indexed Markdown for better AI retrieval (RAG).'
+                }
+            },
+            WhyThisProject: {
+                title: 'Why This Project?',
+                description: 'Dumping huge files into AI context windows is expensive and inaccurate. I built this to surgically provide AI with the exact context it needs while maintaining total user privacy.',
+            },
+            HowItWorks: {
+                title: 'How It Works?',
+                steps: {
+                    step1: {
+                        title: 'Upload JSON Export',
+                        description: '– User drops their AI provider data export into the staging area.'
+                    },
+                    step2: {
+                        title: 'Curation & Filtering',
+                        description: '– Select only the conversations relevant to the current work session.'
+                    },
+                    step3: {
+                        title: 'Markdown Generation',
+                        description: '– The app compiles a structured .md file ready for injection into any LLM.'
+                    },
+                },
+                description: 'This project utilizes advanced JavaScript file handling to manage large data sets entirely on the client side.',
+            },
+            HowIBuiltIt: {
+                title: 'How I Built this Project',
+                frameworks: {
+                    framework1: {
+                        icon: FaReact,
+                        name: 'React.js',
+                        description: 'Used for the component-based UI and state management for file staging.',
+                    },
+                },
+                Styles: {
+                    style1: {
+                        icon: RiTailwindCssFill,
+                        name: 'Tailwind CSS v4',
+                        description: 'Leveraging the latest utility-first features for a sleek, dark-mode interface.',
+                    },
+                },
+                Api: {
+                    api1: {
+                        icon: LuFileSpreadsheet,
+                        name: 'Browser File API',
+                        description: 'Client-side processing for maximum data security.',
+                    },
+                },
+            },
+            screenshots: {
+                screenshot1: Memory1,
+                screenshot2: Memory2,
+            }
+        },
+    },
 ];
 
 export default Projects;
