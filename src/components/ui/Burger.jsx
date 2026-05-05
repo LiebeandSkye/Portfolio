@@ -22,11 +22,9 @@ const Navbar = () => {
       </nav>
 
       {/* --- Drawer Logic --- */}
-      {isOpen && (
-        <Suspense fallback={null}>
-          <Drawer isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <Drawer isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      </Suspense>
     </div>
   );
 };

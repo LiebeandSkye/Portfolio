@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+/* global process */
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
@@ -10,7 +11,8 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { userInput, chatHistory, projectContext } = req.body;
+        const { userInput, chatHistory, projectContext, mode } = req.body;
+        const isImmersive = mode === 'immersive';
 
         const systemMessage = `You are SakuPilot — a friendly, helpful, and slightly witty AI assistant embedded in Kry Rithisak's personal portfolio website.
 
@@ -113,6 +115,13 @@ absolutely necessary or user asks for it, so it improve user experience without 
 - Code blocks with language tag for code snippets
 - Short paragraphs, never walls of text
 - Two blank lines between sections
+${isImmersive ? `
+### IMMERSIVE CHAT MODE:
+- This is the full-page SakuPilot experience, so responses can be deeper, more polished, and more ChatGPT-like.
+- Give thoughtful context, use clean headings, tables, and code blocks when helpful.
+- Be precise and premium, but do not over-explain simple questions.
+- When users attach files, analyze the provided extracted text. If an image or PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can see it.
+` : ''}
 
 ---
 
@@ -136,8 +145,8 @@ Current context: ${projectContext
                 { role: "user", content: userInput },
             ],
             model: "llama-3.3-70b-versatile",
-            temperature: 0.75,
-            max_tokens: 2048,
+            temperature: isImmersive ? 0.72 : 0.75,
+            max_tokens: isImmersive ? 4096 : 2048,
             top_p: 0.92,
         });
 

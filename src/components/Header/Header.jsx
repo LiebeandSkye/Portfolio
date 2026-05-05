@@ -10,10 +10,14 @@ import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 import { GoDependabot } from 'react-icons/go';
 import { MdFullscreen } from 'react-icons/md';
 import Tooltip from '../ui/Tooltip';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const { t } = useLanguage();
     const { openChat } = useSakuPilot();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isImmersiveChat = location.pathname === '/sakupilot';
 
     const handleOpenChat = useCallback(() => {
         openChat();
@@ -56,8 +60,8 @@ const Header = () => {
                         <div className="hidden md:block">
                             <Tooltip text={t('fullscreenTooltip')}>
                                 <button
-                                    className="icon-button"
-                                    onClick={openChat}
+                                    className="icon-button flex items-center gap-1.5"
+                                    onClick={() => navigate('/sakupilot')}
                                 >
                                     <MdFullscreen size={18} />
                                 </button>
@@ -66,18 +70,20 @@ const Header = () => {
                     </div>
 
                     {/* Floating sakupilot icon hehe*/}
-                    <button
-                        onClick={openChat}
-                        className="fixed bottom-8 right-4 md:w-24 md:h-24 w-16 h-16 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
-                    >
-                        <img
-                            src={SakuPilotIcon}
-                            alt="SakuPilot"
-                            width="96"
-                            height="96"
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full"
-                        />
-                    </button>
+                    {!isImmersiveChat && (
+                        <button
+                            onClick={openChat}
+                            className="fixed bottom-8 right-4 md:w-24 md:h-24 w-16 h-16 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
+                        >
+                            <img
+                                src={SakuPilotIcon}
+                                alt="SakuPilot"
+                                width="96"
+                                height="96"
+                                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full"
+                            />
+                        </button>
+                    )}
 
                     <div className="seperator hidden md:block" />
                     <DarkTheme />

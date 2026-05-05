@@ -1,6 +1,14 @@
-export const getGroqResponse = async (userInput, chatHistory, projectContext = null) => {
+export const getChatEndpoint = (
+    metaEnv = import.meta.env,
+    env = import.meta.env
+) => {
+    const apiUrl = env?.VITE_CHAT_API_URL?.replace(/\/$/, '');
+    return metaEnv?.DEV && apiUrl ? `${apiUrl}/api/chat` : '/api/chat';
+};
+
+export const getGroqResponse = async (userInput, chatHistory, projectContext = null, options = {}) => {
     try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(getChatEndpoint(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -8,7 +16,8 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
             body: JSON.stringify({
                 userInput,
                 chatHistory,
-                projectContext
+                projectContext,
+                mode: options.mode,
             }),
         });
 

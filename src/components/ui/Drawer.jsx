@@ -61,7 +61,10 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
         }
     }, [t]);
 
-    useEffect(() => { randomizeQuote(); }, [randomizeQuote]);
+    useEffect(() => {
+        const id = setTimeout(randomizeQuote, 0);
+        return () => clearTimeout(id);
+    }, [randomizeQuote]);
 
     // Stable — avoids creating a new arrow function on every render that
     // causes CopyButton to re-render unnecessarily
@@ -72,7 +75,10 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
     return (
         <>
             {isOpen && (
-                <div className="fixed inset-0 bg-black/60 z-40" onClick={toggleSidebar} />
+                <div
+                    className="fixed inset-0 bg-black/65 backdrop-blur-[1px] z-[99990]"
+                    onClick={toggleSidebar}
+                />
             )}
 
             <div className={`
@@ -82,6 +88,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 overflow-y-auto github-scrollbar
                 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
                 will-change-transform transform-gpu
+                ring-1 ring-white/20 dark:ring-white/10
                 ${isOpen ? 'translate-x-0' : 'translate-x-full'}
             `}>
                 {/* Close */}
@@ -134,7 +141,9 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                             )}
                         </NavLink>
                     ))}
-                    <button
+                    <NavLink
+                        to="/sakupilot"
+                        onClick={toggleSidebar}
                         className="group flex items-center justify-between gap-3 py-2.5 px-2 w-full
                             text-sm text-(--text-light) hover:bg-(--pixel-hover) rounded-lg
                             transition-all duration-200 cursor-pointer"
@@ -154,7 +163,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                             transition-all duration-200 whitespace-nowrap">
                             ✦ {t('sakupilot.drawerTag') || 'AI Chat'}
                         </span>
-                    </button>
+                    </NavLink>
                 </div>
 
                 {/* Social */}

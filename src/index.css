@@ -100,7 +100,7 @@
     @apply scale-x-100 origin-left;
   }
 
-  .active {
+  .active.nav-link {
     @apply text-(--text-light) dark:text-(--dark-text);
   }
 
