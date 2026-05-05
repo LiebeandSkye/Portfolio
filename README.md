@@ -1,16 +1,43 @@
-# React + Vite
+# 💻 Kry Rithisak | Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Hi, I'm **Kry Rithisak**, a developer from **Cambodia**. This is my personal portfolio, built with a focus on clean code, modern frontend frameworks, and a design aesthetic inspired by GitHub.
 
-Currently, two official plugins are available:
+> "I believe GitHub is a common place where developers check each other's work. By making this portfolio look and feel like GitHub, I'm creating a user-friendly environment for developers and recruiters alike."
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+### 🚀 Featured Projects
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **[Continental](https://continental-neon.vercel.app/)**
+  - A car e-commerce platform featuring an AI Virtual Assistant (Groq), automated email notifications, and a responsive UI built with Framer Motion.
+  - *Tech: React, Tailwind CSS, Groq API, Contentful.*
 
-## Expanding the ESLint configuration
+- **[AI MemoryPorter](https://liebeandskye.github.io/AI_MemoryPorter/)**
+  - A privacy-first tool to curate and optimize AI chat histories (JSON to Markdown) for better RAG retrieval.
+  - *Tech: React 19, Tailwind CSS v4, Browser File API.*
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **[Discover Cambodia](https://edcambodia-164ed.web.app/)**
+  - A tourism platform built to promote Cambodian culture and provinces, featuring real-time weather integration.
+  - *Tech: Vanilla JS, Tailwind CSS, OpenWeather API.*
+
+---
+
+### 🛠️ Tech Stack & Tools
+
+- **Frontend:** React 19, Vite, Tailwind CSS v4, Styled Components
+- **Animation:** Framer Motion
+- **Backend/API:** Node.js, Express, Groq SDK, Nodemailer
+- **State/Routing:** React Router Dom, Context API
+
+---
+
+### 📫 Connect with Me
+
+- **GitHub:** [@SkyeandLiebe](https://github.com/LiebeandSkye)
+- **LinkedIn:** [Kry Rithisak](https://linkedin.com/in/kry-rithisak-b2b66824a)
+- **Email:** kryrithisak@gmail.com
+- **Instagram:** [@skyeoridk](https://www.instagram.com/skyeoridk)
+- **Discord:** `i_amthe0newhoasked`
+
+---
+*Built with ❤️ using React and Tailwind.*
