@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Textarea from 'react-textarea-autosize';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,6 +21,7 @@ import Projects from '../Data/Projects';
 import { useLanguage } from '../components/context/LanguageContext';
 import { getGroqResponse } from '../Utils/groq';
 import MessageContent from '../components/SakuPilot/MessageContent';
+import BotMessage from '../components/SakuPilot/BotMessage';
 import {
     createConversation,
     loadConversations,
@@ -46,9 +48,16 @@ const ImmersiveSakuPilot = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isThinking, setIsThinking] = useState(false);
     const [attachments, setAttachments] = useState([]);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [projectContext, setProjectContext] = useState(null);
+
+    useEffect(() => {
+        // Close sidebar by default on mobile
+        if (window.innerWidth < 768) {
+            setIsSidebarOpen(false);
+        }
+    }, []);
 
     const filteredConversations = useMemo(() => {
         const query = searchQuery.trim().toLowerCase();
@@ -92,15 +101,19 @@ const ImmersiveSakuPilot = () => {
         setAttachments([]);
         setInputValue('');
         setProjectContext(null);
-        setIsSidebarOpen(false);
+        if (window.innerWidth < 768) setIsSidebarOpen(false);
         setIsSearchOpen(false);
     }, []);
+
+    const handleNavigate = useCallback((path) => {
+        navigate(path);
+    }, [navigate]);
 
     const handleSelectConversation = useCallback((conversation) => {
         setActiveConversation(conversation);
         setAttachments([]);
         setProjectContext(null);
-        setIsSidebarOpen(false);
+        if (window.innerWidth < 768) setIsSidebarOpen(false);
         setIsSearchOpen(false);
     }, []);
 
@@ -118,6 +131,7 @@ const ImmersiveSakuPilot = () => {
             role: 'Developer',
         });
         setInputValue((value) => value || `Let's talk about ${project.displayTitle}.`);
+        if (window.innerWidth < 768) setIsSidebarOpen(false);
     }, []);
 
     const handleAttachmentChange = useCallback(async (event) => {
@@ -181,9 +195,17 @@ const ImmersiveSakuPilot = () => {
     }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext]);
 
     return (
-        <section className="mx-auto flex min-h-[calc(100vh-190px)] max-w-[1360px] overflow-hidden rounded-lg border border-(--border-light) bg-(--pixel2) text-(--text-light)">
-            <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-[80] w-[290px] border-r border-(--border-light) bg-(--pixel2) transition-transform md:static md:translate-x-0`}>
-                <div className="flex h-full flex-col p-3">
+        <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative">
+            <AnimatePresence>
+                {isSidebarOpen && (
+                    <motion.aside
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{ width: 290, opacity: 1 }}
+                        exit={{ width: 0, opacity: 0 }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className="fixed inset-y-0 left-0 z-[80] border-r border-(--border-light) bg-(--pixel2) md:static shadow-xl md:shadow-none overflow-hidden"
+                    >
+                        <div className="w-[290px] h-full flex flex-col p-3">
                     <div className="mb-3 flex items-center justify-between px-2 py-1">
                         <div className="flex items-center gap-2 text-sm font-semibold">
                             <GoDependabot className="text-(--sucess)" />
@@ -249,26 +271,30 @@ const ImmersiveSakuPilot = () => {
                         ))}
                     </div>
                 </div>
-            </aside>
+            </motion.aside>
+                )}
+            </AnimatePresence>
 
             {isSidebarOpen && <button className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
 
             <div className="flex min-w-0 flex-1 flex-col bg-(--light)">
-                <div className="flex items-center justify-between border-b border-(--border-light) px-3 py-3 md:px-5">
+                <div className="flex h-14 shrink-0 items-center justify-between px-3 md:px-5">
                     <div className="flex items-center gap-2">
-                        <button className="rounded-md p-2 hover:bg-(--pixel-hover) md:hidden" onClick={() => setIsSidebarOpen(true)} aria-label="Open sidebar">
-                            <FiMenu />
+                        <button 
+                            className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors" 
+                            onClick={() => setIsSidebarOpen(prev => !prev)} 
+                            aria-label="Toggle sidebar"
+                        >
+                            <FiMenu size={20} />
                         </button>
-                        <button onClick={handleGoBack} className="flex items-center gap-2 rounded-md border border-(--border-light) px-3 py-2 text-sm font-medium hover:bg-(--pixel-hover)">
-                            <FiArrowLeft />
-                            Go back
+                        <button onClick={handleGoBack} className="hidden rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) md:block" aria-label="Go back">
+                            <FiArrowLeft size={20} />
                         </button>
+                        <span className="ml-2 text-sm font-medium text-(--text-light) md:hidden">SakuPilot</span>
                     </div>
-                    <div className="min-w-0 text-center">
-                        <h1 className="truncate text-sm font-semibold md:text-base">Immersive Chat with SakuPilot</h1>
-                        <p className="hidden text-xs text-(--text-gray) sm:block">A deeper AI workspace inside Kry Rithisak's portfolio</p>
-                    </div>
-                    <div className="w-20" />
+                    <button onClick={handleNewChat} className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) md:hidden" aria-label="New chat">
+                        <FiEdit3 size={20} />
+                    </button>
                 </div>
 
                 <div ref={scrollRef} className="github-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6">
@@ -296,7 +322,7 @@ const ImmersiveSakuPilot = () => {
                     ) : (
                         <div className="mx-auto flex max-w-[720px] flex-col gap-7">
                             {activeConversation.messages.map((message, index) => (
-                                <ChatMessage key={`${message.role}-${index}`} message={message} />
+                                <ChatMessage key={`${message.role}-${index}`} message={message} handleNavigate={handleNavigate} />
                             ))}
                             {isThinking && (
                                 <div className="flex items-center gap-3 text-sm text-(--text-gray)">
@@ -308,7 +334,7 @@ const ImmersiveSakuPilot = () => {
                     )}
                 </div>
 
-                <div className="border-t border-(--border-light) bg-(--light) px-3 py-4 sm:px-5">
+                <div className="bg-(--light) px-3 pb-6 pt-2 sm:px-5">
                     <div className="mx-auto max-w-[720px]">
                         {projectContext && (
                             <div className="mb-2 flex w-fit items-center gap-2 rounded-md border border-(--border-light) bg-(--pixel2) px-3 py-1.5 text-xs">
@@ -334,7 +360,7 @@ const ImmersiveSakuPilot = () => {
                             </div>
                         )}
 
-                        <div className="flex items-center gap-2 rounded-2xl border border-(--border-light) bg-(--pixel2) px-3 py-2.5 focus-within:ring-1 focus-within:ring-(--sucess)">
+                        <div className="flex items-end gap-2 rounded-3xl border border-(--border-light) bg-(--pixel) px-4 py-2 focus-within:border-(--sucess) focus-within:ring-1 focus-within:ring-(--sucess)">
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -343,16 +369,16 @@ const ImmersiveSakuPilot = () => {
                                 accept=".txt,.md,.json,.csv,.js,.jsx,.ts,.tsx,.css,.html,.py,.pdf,image/*"
                                 onChange={handleAttachmentChange}
                             />
-                            <button onClick={() => fileInputRef.current?.click()} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)" aria-label="Attach file">
-                                <FiPaperclip />
+                            <button onClick={() => fileInputRef.current?.click()} className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)" aria-label="Attach file">
+                                <FiPaperclip size={18} />
                             </button>
                             <Textarea
                                 value={inputValue}
                                 onChange={(event) => setInputValue(event.target.value)}
                                 minRows={1}
                                 maxRows={8}
-                                placeholder="Ask anything"
-                                className="github-scrollbar min-w-0 flex-1 resize-none bg-transparent py-1.5 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
+                                placeholder="Message SakuPilot..."
+                                className="github-scrollbar min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
                                 onKeyDown={(event) => {
                                     if (event.key === 'Enter' && !event.shiftKey) {
                                         event.preventDefault();
@@ -363,10 +389,10 @@ const ImmersiveSakuPilot = () => {
                             <button
                                 onClick={() => handleSendMessage()}
                                 disabled={isThinking || (!inputValue.trim() && attachments.length === 0)}
-                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--text-light) text-(--light) disabled:cursor-not-allowed disabled:opacity-40"
+                                className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--text-light) text-(--light) transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
                                 aria-label="Send message"
                             >
-                                <FiSend />
+                                <FiSend size={16} className="-ml-0.5" />
                             </button>
                         </div>
                         <p className="mt-2 text-center text-[11px] text-(--text-gray)">SakuPilot can make mistakes. Verify important details.</p>
@@ -423,7 +449,7 @@ const ImmersiveSakuPilot = () => {
     );
 };
 
-const ChatMessage = ({ message }) => {
+const ChatMessage = ({ message, handleNavigate }) => {
     const isUser = message.role === 'user';
     return (
         <article className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -442,7 +468,11 @@ const ChatMessage = ({ message }) => {
                         ))}
                     </div>
                 )}
-                <MessageContent content={message.content} />
+                {isUser ? (
+                    <MessageContent content={message.content} />
+                ) : (
+                    <BotMessage content={message.content} onNavigate={handleNavigate} />
+                )}
             </div>
         </article>
     );

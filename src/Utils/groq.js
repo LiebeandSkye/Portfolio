@@ -3,7 +3,7 @@ export const getChatEndpoint = (
     env = import.meta.env
 ) => {
     const apiUrl = env?.VITE_CHAT_API_URL?.replace(/\/$/, '');
-    return metaEnv?.DEV && apiUrl ? `${apiUrl}/api/chat` : '/api/chat';
+    return metaEnv?.DEV ? '/api/chat' : (apiUrl ? `${apiUrl}/api/chat` : '/api/chat');
 };
 
 export const getGroqResponse = async (userInput, chatHistory, projectContext = null, options = {}) => {
