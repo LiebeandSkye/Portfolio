@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { GoArrowRight, GoDependabot } from "react-icons/go";
 import { IoSearchOutline } from "react-icons/io5";
-import Kry_Rithisak from '../../assets/Kry_Rithisak.jpg';
+import Kry_Rithisak from '../../assets/Kry_Rithisak.optimized.jpg';
 
 // memo — only re-renders when filteredProjects or searchQuery changes
 const HomeView = memo(function HomeView({ filteredProjects, searchQuery, setSearchQuery, startChat, t }) {
@@ -44,6 +44,8 @@ const HomeView = memo(function HomeView({ filteredProjects, searchQuery, setSear
                                         src={Kry_Rithisak}
                                         className="w-full h-full object-cover"
                                         alt=""
+                                        width="28"
+                                        height="28"
                                         loading="lazy"
                                     />
                                 </div>

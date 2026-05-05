@@ -1,10 +1,12 @@
+import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App'; // adjust path as needed
-import Portfolio from '../pages/Portfolio'; // adjust path as needed
-import Welcome from '../pages/Welcome'; // adjust path as needed
-import Contact from '../pages/Contact'; // adjust path as needed
-import AboutProject from '../pages/AboutProject';
 // import other pages/components
+
+const Portfolio = lazy(() => import('../pages/Portfolio'));
+const Welcome = lazy(() => import('../pages/Welcome'));
+const Contact = lazy(() => import('../pages/Contact'));
+const AboutProject = lazy(() => import('../pages/AboutProject'));
 
 const router = createBrowserRouter([
     {
@@ -13,23 +15,23 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true, // This makes Welcome show up by default at "/"
-                element: <Welcome />,
+                element: <Suspense fallback={null}><Welcome /></Suspense>,
             },
             {
                 path: 'welcome',
-                element: <Welcome />,
+                element: <Suspense fallback={null}><Welcome /></Suspense>,
             },
             {
                 path: 'portfolio',
-                element: <Portfolio />,
+                element: <Suspense fallback={null}><Portfolio /></Suspense>,
             },
             {
                 path: 'portfolio/:projectId', 
-                element: <AboutProject />,
+                element: <Suspense fallback={null}><AboutProject /></Suspense>,
             },
             {
                 path: 'contact',
-                element: <Contact />,
+                element: <Suspense fallback={null}><Contact /></Suspense>,
             },
             {
                 path: '*',

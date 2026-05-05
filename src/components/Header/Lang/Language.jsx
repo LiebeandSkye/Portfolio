@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import languages from '../../../Data/Language';
 import { useLanguage } from '../../context/LanguageContext';
-import "flag-icons/css/flag-icons.min.css";
+import gbFlag from 'flag-icons/flags/4x3/gb.svg';
+import jpFlag from 'flag-icons/flags/4x3/jp.svg';
+
 const Language = ({ variant = 'dropdown' }) => {
     const { currentLang, changeLanguage, t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
+    const flags = { en: gbFlag, jp: jpFlag };
 
     const selectLanguage = (langCode) => {
         changeLanguage(langCode);
@@ -27,8 +30,7 @@ const Language = ({ variant = 'dropdown' }) => {
                                 : 'bg-(--pixel) dark:bg-gray-800/50 border-(--border-light) dark:border-(--dark-border) text-gray-500 hover:border-gray-400'
                             }`}
                         >
-                            {/* SVG Flag from flag-icons */}
-                            <span className={`${lang.flagClass} rounded-sm shadow-sm w-5 h-4`} />
+                            <img src={flags[lang.code]} alt="" width="20" height="15" className="rounded-sm shadow-sm w-5 h-4 object-cover" />
                             <span className="text-[11px] font-bold uppercase tracking-tight">{lang.name}</span>
                         </button>
                     );

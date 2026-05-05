@@ -1,28 +1,23 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import '../../index.css';
 import DarkTheme from './DarkTheme';
 import Search from './Search';
 import Language from './Lang/Language';
 import Navigation from './Navigation';
 import { useLanguage } from '../context/LanguageContext';
-import SakuPilot from '../SakuPilot/SakuPilot';
-import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.gif';
+import { useSakuPilot } from '../context/SakuPilotContext';
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 import { GoDependabot } from 'react-icons/go';
 import { MdFullscreen } from 'react-icons/md';
 import Tooltip from '../ui/Tooltip';
 
 const Header = () => {
     const { t } = useLanguage();
-    const [isChatOpen, setIsChatOpen] = useState(false);
+    const { openChat } = useSakuPilot();
 
-    // Stable ref — so Search's useCallback never holds a stale closure
-    const openChatRef = useRef(null);
-    openChatRef.current = () => setIsChatOpen(true);
-
-    // The function passed to Search never changes identity
     const handleOpenChat = useCallback(() => {
-        openChatRef.current?.();
-    }, []);
+        openChat();
+    }, [openChat]);
 
     return (
         <>
@@ -52,7 +47,7 @@ const Header = () => {
                             <Tooltip text={t('botTooltip')}>
                                 <button
                                     className="icon-button"
-                                    onClick={() => setIsChatOpen(true)}
+                                    onClick={openChat}
                                 >
                                     <GoDependabot size={18} />
                                 </button>
@@ -62,7 +57,7 @@ const Header = () => {
                             <Tooltip text={t('fullscreenTooltip')}>
                                 <button
                                     className="icon-button"
-                                    onClick={() => setIsChatOpen(true)}
+                                    onClick={openChat}
                                 >
                                     <MdFullscreen size={18} />
                                 </button>
@@ -72,12 +67,14 @@ const Header = () => {
 
                     {/* Floating sakupilot icon hehe*/}
                     <button
-                        onClick={() => setIsChatOpen(true)}
+                        onClick={openChat}
                         className="fixed bottom-8 right-4 md:w-24 md:h-24 w-16 h-16 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
                     >
                         <img
                             src={SakuPilotIcon}
                             alt="SakuPilot"
+                            width="96"
+                            height="96"
                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full"
                         />
                     </button>
@@ -91,8 +88,6 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Single SakuPilot instance — onClose is the only way to close it */}
-            <SakuPilot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         </>
     );
 };

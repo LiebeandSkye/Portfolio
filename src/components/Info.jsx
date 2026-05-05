@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import Kry_rithisak from '../assets/Kry_Rithisak.jpg';
+import Kry_rithisak from '../assets/Kry_Rithisak.optimized.jpg';
 import Information from '../Data/Contacts';
 import CopyButton from './ui/CopyButton';
 import { useNotification } from './context/NotificationContext';
@@ -33,6 +33,8 @@ const Info = memo(function Info() {
                     <img
                         src={Kry_rithisak}
                         alt="Kry Rithisak"
+                        width="256"
+                        height="256"
                         className="w-full h-full object-cover"
                         loading="lazy"
                     />

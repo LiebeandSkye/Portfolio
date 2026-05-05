@@ -15,8 +15,6 @@ const PortfolioHeader = memo(function PortfolioHeader({
     onClearFilters,
     view,
     setView,
-    handleClearFilters,
-    handleTagChange,
 }) {
     const navigate = useNavigate();
     const { openChat } = useSakuPilot(); //Example here u should tryna use this every file so it works lah
@@ -202,8 +200,8 @@ const PortfolioHeader = memo(function PortfolioHeader({
                 {/* Row 3: Filter by Tag — full width */}
                 <TagFilter
                     selectedTags={selectedTags}
-                    onTagChange={handleTagChange}
-                    onClearFilters={handleClearFilters}
+                    onTagChange={onTagChange}
+                    onClearFilters={onClearFilters}
                 />
             </div>
         </div>

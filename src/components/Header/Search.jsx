@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import { FaHome } from 'react-icons/fa';
@@ -7,8 +7,9 @@ import { RiMessage2Line } from 'react-icons/ri';
 import { GoDependabot } from 'react-icons/go';
 import { useLanguage } from '../context/LanguageContext';
 import Projects from '../../Data/Projects';
-import Kry_Rithisak from '../../assets/Kry_Rithisak.jpg';
-import SearchPalette from './SearchPalette';
+import Kry_Rithisak from '../../assets/Kry_Rithisak.optimized.jpg';
+
+const SearchPalette = lazy(() => import('./SearchPalette'));
 
 const PAGE_DEFS = [
     { id: 'welcome',   path: '/',          icon: <FaHome size={14} />,         labelKey: 'links.welcome',   actionKey: 'search.visit' },
@@ -161,23 +162,27 @@ const Search = ({ onOpenChat }) => {
             </button>
 
             {/* Palette portal */}
-            <SearchPalette
-                isOpen={isOpen}
-                query={query}
-                setQuery={setQuery}
-                handleKeyDown={handleKeyDown}
-                onClose={close}
-                allResults={allResults}
-                filteredPages={filteredPages}
-                filteredProjects={filteredProjects}
-                filteredPilot={filteredPilot}
-                getFlatIndex={getFlatIndex}
-                activeIndex={activeIndex}
-                setActiveIndex={setActive}
-                handleSelect={handleSelect}
-                t={t}
-                Kry_Rithisak={Kry_Rithisak}
-            />
+            {isOpen && (
+                <Suspense fallback={null}>
+                    <SearchPalette
+                        isOpen={isOpen}
+                        query={query}
+                        setQuery={setQuery}
+                        handleKeyDown={handleKeyDown}
+                        onClose={close}
+                        allResults={allResults}
+                        filteredPages={filteredPages}
+                        filteredProjects={filteredProjects}
+                        filteredPilot={filteredPilot}
+                        getFlatIndex={getFlatIndex}
+                        activeIndex={activeIndex}
+                        setActiveIndex={setActive}
+                        handleSelect={handleSelect}
+                        t={t}
+                        Kry_Rithisak={Kry_Rithisak}
+                    />
+                </Suspense>
+            )}
         </>
     );
 };

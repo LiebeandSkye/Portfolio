@@ -11,7 +11,7 @@ import { FaHome, FaRandom } from "react-icons/fa";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { GoDependabot } from 'react-icons/go';
-import profile from '../../assets/Kry_Rithisak.jpg';
+import profile from '../../assets/Kry_Rithisak.optimized.jpg';
 
 const ICON_HOME    = <FaHome />;
 const ICON_CODE    = <MdOutlineCode />;
@@ -94,7 +94,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 {/* Profile */}
                 <div className="px-8 pb-4">
                     <div className="w-28 h-28 overflow-hidden mb-2">
-                        <img src={profile} alt="" className="w-full h-full rounded-full object-cover" loading="lazy" />
+                        <img src={profile} alt="" width="112" height="112" className="w-full h-full rounded-full object-cover" loading="lazy" />
                     </div>
                     <div className="flex flex-col gap-1">
                         <h1 className="font-semibold text-(--text-light) text-xl">{t('name')}</h1>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { RiMenu2Fill } from "react-icons/ri";
-import Drawer from './Drawer';
+
+const Drawer = lazy(() => import('./Drawer'));
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,11 @@ const Navbar = () => {
       </nav>
 
       {/* --- Drawer Logic --- */}
-      <Drawer isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      {isOpen && (
+        <Suspense fallback={null}>
+          <Drawer isOpen={isOpen} toggleSidebar={toggleSidebar} />
+        </Suspense>
+      )}
     </div>
   );
 };

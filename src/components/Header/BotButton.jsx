@@ -3,7 +3,7 @@ import { GoDependabot } from 'react-icons/go';
 import { MdFullscreen } from 'react-icons/md';
 import { useLanguage } from './Lang/LanguageContext';
 import SakuPilot from '../SakuPilot/SakuPilot';
-import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.gif';
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 const BotButton = () => {
     const { t } = useLanguage();

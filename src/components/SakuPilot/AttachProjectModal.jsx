@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { GoArrowRight } from "react-icons/go";
-import Kry_Rithisak from '../../assets/Kry_Rithisak.jpg';
+import Kry_Rithisak from '../../assets/Kry_Rithisak.optimized.jpg';
 
 const AttachProjectModal = ({
     isOpen,
@@ -53,7 +53,7 @@ const AttachProjectModal = ({
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-full overflow-hidden border border-(--border-light)">
-                                                    <img src={Kry_Rithisak} className="w-full h-full object-cover" alt="" />
+                                                    <img src={Kry_Rithisak} className="w-full h-full object-cover" alt="" width="32" height="32" />
                                                 </div>
                                                 <span className="text-sm">
                                                     Kry-Rithisak/<span className="text-(--text-light) font-medium">{t(`projects.${p.langKey}.title`)}</span>

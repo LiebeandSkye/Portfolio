@@ -10,8 +10,9 @@
 // No prop drilling needed — PortfolioHeader, Drawer, Search all just call
 // openChat() and the single SakuPilot instance in the provider opens.
 // ─────────────────────────────────────────────────────────────────────────────
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import SakuPilot from '../SakuPilot/SakuPilot.jsx'; 
+import React, { Suspense, createContext, lazy, useContext, useState, useCallback } from 'react';
+
+const SakuPilot = lazy(() => import('../SakuPilot/SakuPilot.jsx'));
 
 const SakuPilotContext = createContext(null);
 
@@ -36,8 +37,11 @@ export const SakuPilotProvider = ({ children }) => {
     return (
         <SakuPilotContext.Provider value={{ openChat, closeChat, isOpen }}>
             {children}
-            {/* 2. Only render SakuPilot if it has been opened at least once */}
-            {hasMounted && <SakuPilot isOpen={isOpen} onClose={closeChat} />}
+            {hasMounted && (
+                <Suspense fallback={null}>
+                    <SakuPilot isOpen={isOpen} onClose={closeChat} />
+                </Suspense>
+            )}
         </SakuPilotContext.Provider>
     );
 };
