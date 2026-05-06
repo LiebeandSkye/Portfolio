@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import Textarea from 'react-textarea-autosize';
 import { useNavigate } from 'react-router-dom';
+
 import {
     FiArrowLeft,
     FiEdit3,
@@ -14,14 +15,23 @@ import {
     FiSend,
     FiTrash2,
     FiX,
+    FiMoreHorizontal,
+    FiStar,
+    FiEdit2,
+    FiChevronDown,
+    FiCheck
 } from 'react-icons/fi';
 import { GoDependabot } from 'react-icons/go';
+
+import LlamaIcon from '../assets/models/Llama.png';
+import GeminiIcon from '../assets/models/gemini.webp';
 
 import Projects from '../Data/Projects';
 import { useLanguage } from '../components/context/LanguageContext';
 import { getGroqResponse } from '../Utils/groq';
 import MessageContent from '../components/SakuPilot/MessageContent';
 import BotMessage from '../components/SakuPilot/BotMessage';
+import TypingMessage from '../components/SakuPilot/TypingMessage';
 import {
     createConversation,
     loadConversations,
@@ -51,6 +61,26 @@ const ImmersiveSakuPilot = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [projectContext, setProjectContext] = useState(null);
+    const [dropdownOpenId, setDropdownOpenId] = useState(null);
+    const [typingMessage, setTypingMessage] = useState(null);
+    const [editingConversationId, setEditingConversationId] = useState(null);
+    const [editTitleValue, setEditTitleValue] = useState('');
+    const [selectedModel, setSelectedModel] = useState('llama');
+    const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
+    const scrollRafRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.dropdown-container')) {
+                setDropdownOpenId(null);
+            }
+            if (!event.target.closest('.model-switcher-container')) {
+                setIsModelMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         // Close sidebar by default on mobile
@@ -122,7 +152,36 @@ const ImmersiveSakuPilot = () => {
         if (activeConversation.id === conversationId) {
             setActiveConversation(createConversation());
         }
+        setDropdownOpenId(null);
     }, [activeConversation.id]);
+
+    const handlePinConversation = useCallback((conversationId) => {
+        setConversations((prev) => prev.map(c => c.id === conversationId ? { ...c, pinned: !c.pinned } : c));
+        if (activeConversation.id === conversationId) {
+            setActiveConversation((prev) => ({ ...prev, pinned: !prev.pinned }));
+        }
+        setDropdownOpenId(null);
+    }, [activeConversation.id]);
+
+    const handleRenameConversation = useCallback((conversationId, currentTitle) => {
+        setEditingConversationId(conversationId);
+        setEditTitleValue(currentTitle);
+        setDropdownOpenId(null);
+    }, []);
+
+    const handleSaveRename = useCallback((conversationId) => {
+        if (editTitleValue.trim()) {
+            setConversations((prev) => prev.map(c => c.id === conversationId ? { ...c, title: editTitleValue.trim() } : c));
+            if (activeConversation.id === conversationId) {
+                setActiveConversation((prev) => ({ ...prev, title: editTitleValue.trim() }));
+            }
+        }
+        setEditingConversationId(null);
+    }, [activeConversation.id, editTitleValue]);
+
+    const handleCancelRename = useCallback(() => {
+        setEditingConversationId(null);
+    }, []);
 
     const handleProjectSelect = useCallback((project) => {
         setProjectContext({
@@ -155,7 +214,7 @@ const ImmersiveSakuPilot = () => {
         const prompt = [
             text.trim(),
             attachmentText ? `Attached context:\n${attachmentText}` : '',
-            'Respond in an immersive SakuPilot style: thoughtful, premium, well-structured, and detailed when the question deserves depth.',
+            'Respond exactly like Google Gemini 3 Flash. Use clear, concise, and highly direct language. Maintain the fast, informative, and neutral-yet-helpful tone characteristic of Gemini 3 Flash. Avoid unnecessary filler words.',
         ].filter(Boolean).join('\n\n');
 
         const userMessage = {
@@ -188,21 +247,61 @@ const ImmersiveSakuPilot = () => {
                 prompt,
                 apiHistory,
                 projectContext,
-                { mode: 'immersive' }
+                { mode: 'immersive', model: selectedModel }
             );
 
-            persistActiveConversation({
-                ...nextConversation,
-                messages: [...nextConversation.messages, { role: 'assistant', content: response, isNew: true }],
-                updatedAt: new Date().toISOString(),
-            });
-        } finally {
+            setTypingMessage({ fullText: response, displayText: '' });
+        } catch (error) {
+            console.error(error);
             setIsThinking(false);
         }
     }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext]);
 
+    const scheduleScroll = useCallback(() => {
+        if (scrollRafRef.current) return;
+        scrollRafRef.current = requestAnimationFrame(() => {
+            scrollRafRef.current = null;
+            scrollRef.current?.scrollTo({
+                top: scrollRef.current.scrollHeight,
+                behavior: 'auto',
+            });
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!typingMessage) return;
+        const { fullText } = typingMessage;
+        let idx = 0;
+
+        const interval = setInterval(() => {
+            idx += 12; // Fast typing like Gemini Flash
+            const displayText = fullText.slice(0, idx);
+            setTypingMessage({ fullText, displayText });
+            scheduleScroll();
+
+            if (idx >= fullText.length) {
+                clearInterval(interval);
+                persistActiveConversation({
+                    ...activeConversation,
+                    messages: [...activeConversation.messages, { role: 'assistant', content: fullText, isNew: true }],
+                    updatedAt: new Date().toISOString(),
+                });
+                setTypingMessage(null);
+                setIsThinking(false);
+            }
+        }, 15);
+
+        return () => {
+            clearInterval(interval);
+            if (scrollRafRef.current) {
+                cancelAnimationFrame(scrollRafRef.current);
+                scrollRafRef.current = null;
+            }
+        };
+    }, [typingMessage?.fullText, scheduleScroll, activeConversation, persistActiveConversation]);
+
     return (
-        <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative">
+        <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative border-t border-(--border-light) dark:border-(--dark-border)">
             <AnimatePresence>
                 {isSidebarOpen && (
                     <motion.aside
@@ -223,7 +322,12 @@ const ImmersiveSakuPilot = () => {
                         </button>
                     </div>
 
-                    <button onClick={handleNewChat} className="mb-2 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover)">
+                    <button onClick={handleGoBack} className="mb-2 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer">
+                        <FiArrowLeft />
+                        Go Back
+                    </button>
+
+                    <button onClick={handleNewChat} className="mb-2 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer">
                         <FiEdit3 />
                         New Chat
                     </button>
@@ -238,7 +342,7 @@ const ImmersiveSakuPilot = () => {
                                 <button
                                     key={project.id}
                                     onClick={() => handleProjectSelect(project)}
-                                    className="w-full truncate rounded-md px-3 py-2 text-left text-xs text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)"
+                                    className="w-full truncate rounded-md px-3 py-2 text-left text-xs text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) cursor-pointer"
                                 >
                                     {project.displayTitle}
                                 </button>
@@ -248,7 +352,7 @@ const ImmersiveSakuPilot = () => {
 
                     <button
                         onClick={() => setIsSearchOpen(true)}
-                        className="mb-5 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover)"
+                        className="mb-5 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer"
                     >
                         <FiSearch className="text-(--text-gray)" />
                         Search chat
@@ -258,22 +362,75 @@ const ImmersiveSakuPilot = () => {
                     <div className="github-scrollbar flex-1 space-y-1 overflow-y-auto pr-1">
                         {conversations.length === 0 ? (
                             <p className="px-2 py-3 text-xs text-(--text-gray)">No saved conversations yet.</p>
-                        ) : conversations.map((conversation) => (
-                            <div key={conversation.id} className={`group flex items-center gap-1 rounded-md ${activeConversation.id === conversation.id ? 'bg-(--pixel-hover)' : 'hover:bg-(--pixel-hover)'}`}>
-                                <button
-                                    onClick={() => handleSelectConversation(conversation)}
-                                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm"
-                                >
-                                    <FiMessageSquare className="shrink-0 text-(--text-gray)" />
-                                    <span className="truncate">{conversation.title}</span>
-                                </button>
-                                <button
-                                    onClick={() => handleDeleteConversation(conversation.id)}
-                                    className="mr-1 rounded p-1.5 text-(--text-gray) opacity-0 hover:text-red-400 group-hover:opacity-100"
-                                    aria-label={`Delete ${conversation.title}`}
-                                >
-                                    <FiTrash2 size={14} />
-                                </button>
+                        ) : [...conversations].sort((a, b) => {
+                            if (a.pinned && !b.pinned) return -1;
+                            if (!a.pinned && b.pinned) return 1;
+                            return new Date(b.updatedAt || 0) < new Date(a.updatedAt || 0) ? -1 : 1;
+                        }).map((conversation) => (
+                            <div key={conversation.id} className={`group flex items-center gap-1 rounded-md dropdown-container relative ${activeConversation.id === conversation.id ? 'bg-(--pixel-hover)' : 'hover:bg-(--pixel-hover)'}`}>
+                                {editingConversationId === conversation.id ? (
+                                    <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
+                                        <FiMessageSquare className="shrink-0 text-(--text-gray)" />
+                                        <input
+                                            autoFocus
+                                            value={editTitleValue}
+                                            onChange={(e) => setEditTitleValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleSaveRename(conversation.id);
+                                                if (e.key === 'Escape') handleCancelRename();
+                                            }}
+                                            onBlur={() => handleSaveRename(conversation.id)}
+                                            className="min-w-0 flex-1 bg-transparent text-sm outline-none border-b border-(--sucess)"
+                                        />
+                                    </div>
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={() => handleSelectConversation(conversation)}
+                                            className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm cursor-pointer"
+                                        >
+                                            <FiMessageSquare className="shrink-0 text-(--text-gray)" />
+                                            <span className="truncate">{conversation.title}</span>
+                                        </button>
+                                        {conversation.pinned && (
+                                            <FiStar className="shrink-0 text-(--sucess) mr-1" size={12} />
+                                        )}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setDropdownOpenId(dropdownOpenId === conversation.id ? null : conversation.id);
+                                            }}
+                                            className="mr-1 rounded p-1.5 text-(--text-gray) opacity-0 hover:text-(--text-light) group-hover:opacity-100 cursor-pointer"
+                                            aria-label={`More options for ${conversation.title}`}
+                                        >
+                                            <FiMoreHorizontal size={14} />
+                                        </button>
+
+                                        {dropdownOpenId === conversation.id && (
+                                            <div className="absolute right-0 top-full z-[100] mt-1 w-36 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                <button
+                                                    onClick={() => handlePinConversation(conversation.id)}
+                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
+                                                >
+                                                    <FiStar size={12} className={conversation.pinned ? "fill-(--sucess) text-(--sucess)" : ""} /> 
+                                                    {conversation.pinned ? 'Unpin' : 'Pinchat'}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRenameConversation(conversation.id, conversation.title)}
+                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
+                                                >
+                                                    <FiEdit2 size={12} /> Rename
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteConversation(conversation.id)}
+                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 hover:bg-(--pixel-hover)"
+                                                >
+                                                    <FiTrash2 size={12} /> Delete
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -287,18 +444,9 @@ const ImmersiveSakuPilot = () => {
             <div className="flex min-w-0 flex-1 flex-col bg-(--light)">
                 <div className="relative flex h-14 shrink-0 items-center px-3 md:px-5">
                     <div className="flex items-center gap-1">
-                        {/* Back button — icon + "Back" label on mobile, icon only on desktop */}
-                        <button
-                            onClick={handleGoBack}
-                            className="flex items-center gap-1.5 rounded-md px-2 py-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors"
-                            aria-label="Go back"
-                        >
-                            <FiArrowLeft size={18} />
-                            <span className="text-sm font-medium md:hidden">Back</span>
-                        </button>
                         {/* Sidebar toggle */}
                         <button
-                            className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors"
+                            className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors cursor-pointer"
                             onClick={() => setIsSidebarOpen(prev => !prev)}
                             aria-label="Toggle sidebar"
                         >
@@ -306,10 +454,62 @@ const ImmersiveSakuPilot = () => {
                         </button>
                     </div>
 
-                    {/* Centered title — mobile only */}
-                    <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-sm font-semibold text-(--text-light) md:hidden">
-                        SakuPilot
-                    </span>
+                    {/* Model Switcher — Centered */}
+                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[110]">
+                        <button
+                            onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
+                        >
+                            <span className="text-sm font-semibold text-(--text-light) flex items-center gap-2">
+                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'llama' ? 'Meta llama' : 'Gemini 2.5 Flash'}
+                            </span>
+                            <FiChevronDown className={`text-(--text-gray) transition-transform duration-200 ${isModelMenuOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                            {isModelMenuOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                    transition={{ duration: 0.2, ease: "easeOut" }}
+                                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-(--pixel2) border border-(--border-light) rounded-xl shadow-2xl overflow-hidden p-1"
+                                >
+                                    {[
+                                        { id: 'llama', name: 'Meta llama', desc: 'Groq API', icon: LlamaIcon },
+                                        { id: 'gemini', name: 'Gemini 2.5 Flash', desc: 'Google AI', icon: GeminiIcon }
+                                    ].map((m) => (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => {
+                                                setSelectedModel(m.id);
+                                                setIsModelMenuOpen(false);
+                                            }}
+                                            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-(--pixel-hover) transition-colors text-left group cursor-pointer"
+                                        >
+                                            <div className="relative flex-shrink-0">
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden border ${selectedModel === m.id ? 'border-(--sucess)' : 'border-(--border-light)'}`}>
+                                                    <img src={m.icon} alt={m.name} className="w-full h-full object-cover" />
+                                                </div>
+                                                {selectedModel === m.id && (
+                                                    <div className="absolute -top-1 -left-1 bg-(--light) rounded-full p-0.5 border border-(--border-light)">
+                                                        <FiCheck className="text-(--sucess)" size={10} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-sm font-bold text-(--text-light) truncate">{m.name}</div>
+                                                <div className="text-[10px] text-(--text-gray) uppercase tracking-wider">{m.desc}</div>
+                                            </div>
+                                            {selectedModel === m.id && (
+                                                <FiCheck className="text-(--sucess)" size={16} />
+                                            )}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
 
                     {/* New chat — mobile only, right side */}
                     <button
@@ -348,7 +548,13 @@ const ImmersiveSakuPilot = () => {
                             {activeConversation.messages.map((message, index) => (
                                 <ChatMessage key={`${message.role}-${index}`} message={message} handleNavigate={handleNavigate} />
                             ))}
-                            {isThinking && (
+                            {typingMessage && (
+                                <TypingMessage
+                                    content={typingMessage.displayText + '▌'}
+                                    onNavigate={handleNavigate}
+                                />
+                            )}
+                            {isThinking && !typingMessage && (
                                 <div className="flex items-center gap-3">
                                     <motion.div
                                         animate={{ scale: [1, 1.12, 1] }}

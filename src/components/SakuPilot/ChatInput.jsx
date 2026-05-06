@@ -70,7 +70,7 @@ const ChatInput = memo(function ChatInput({
                     onChange={(e) => setInputValue(e.target.value)}
                     onPaste={handlePaste}
                     placeholder="Ask SakuPilot"
-                    className="bg-transparent flex-1 text-sm outline-none overflow-y-auto overflow-x-hidden break-words github-scrollbar resize-none leading-5 placeholder:text-(--text-gray)"
+                    className="bg-transparent flex-1 text-sm outline-none overflow-y-auto overflow-x-hidden break-words github-scrollbar resize-none leading-5 placeholder:text-(--text-gray) text-(--text-light)"
                     minRows={1}
                     maxRows={8}
                     onKeyDown={(e) => {

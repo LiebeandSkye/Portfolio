@@ -224,7 +224,6 @@
 /* Firefox */
 html {
   scroll-behavior: smooth;
-  scrollbar-gutter: stable;
   scrollbar-width: auto;
   scrollbar-color: var(--main-scrollbar-thumb) var(--main-scrollbar-track);
 }

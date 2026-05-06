@@ -1,18 +1,23 @@
 import Groq from "groq-sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 /* global process */
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY
-});
-
 export default async function handler(req, res) {
+    const groq = new Groq({
+        apiKey: process.env.GROQ_API_KEY
+    });
+    
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
-        const { userInput, chatHistory, projectContext, mode } = req.body;
+        const { userInput, chatHistory, projectContext, mode, model } = req.body;
         const isImmersive = mode === 'immersive';
+        const activeModel = model || 'llama';
+        console.log(`🤖 Chat request received. Model: ${activeModel}, Mode: ${mode}`);
 
         const systemMessage = `You are SakuPilot — a friendly, helpful, and slightly witty AI assistant embedded in Kry Rithisak's personal portfolio website.
 
@@ -132,28 +137,67 @@ ${isImmersive ? `
 - Add excitement for impressive things ("This is really clean! 🔥")
 - Suggest navigation when it helps the user
 
----
-
 Current context: ${projectContext
             ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech}). Answer as a developer who built this project.`
             : 'General conversation about Kry Rithisak, his portfolio, and skills.'}`;
 
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                { role: "system", content: systemMessage },
-                ...chatHistory,
-                { role: "user", content: userInput },
-            ],
-            model: "llama-3.3-70b-versatile",
-            temperature: isImmersive ? 0.72 : 0.75,
-            max_tokens: isImmersive ? 4096 : 2048,
-            top_p: 0.92,
-        });
+        if (activeModel === 'gemini') {
+            const genModel = genAI.getGenerativeModel({ 
+                model: "gemini-2.5-flash",
+                systemInstruction: systemMessage
+            });
+            
+            const chat = genModel.startChat({
+                history: chatHistory.map(msg => ({
+                    role: msg.role === 'assistant' ? 'model' : 'user',
+                    parts: [{ text: msg.content }],
+                })),
+                generationConfig: {
+                    maxOutputTokens: isImmersive ? 4096 : 2048,
+                    temperature: isImmersive ? 0.72 : 0.75,
+                },
+            });
 
-        return res.status(200).json({ content: chatCompletion.choices[0].message.content });
+            const result = await chat.sendMessage(userInput);
+            const response = await result.response;
+            return res.status(200).json({ content: response.text() });
+        } else {
+            // Default to llama
+            let chatCompletion;
+            try {
+                chatCompletion = await groq.chat.completions.create({
+                    messages: [
+                        { role: "system", content: systemMessage },
+                        ...chatHistory,
+                        { role: "user", content: userInput },
+                    ],
+                    model: "llama-3.3-70b-versatile",
+                    temperature: isImmersive ? 0.72 : 0.75,
+                    max_tokens: isImmersive ? 4096 : 2048,
+                    top_p: 0.92,
+                });
+            } catch (error) {
+                console.warn("Primary model failed, trying fallback:", error.message);
+                chatCompletion = await groq.chat.completions.create({
+                    messages: [
+                        { role: "system", content: systemMessage },
+                        ...chatHistory,
+                        { role: "user", content: userInput },
+                    ],
+                    model: "llama-3.1-8b-instant",
+                    temperature: isImmersive ? 0.72 : 0.75,
+                    max_tokens: isImmersive ? 4096 : 2048,
+                    top_p: 0.92,
+                });
+            }
+            return res.status(200).json({ content: chatCompletion.choices[0].message.content });
+        }
 
     } catch (error) {
-        console.error("Groq Backend Error:", error);
-        return res.status(500).json({ error: "Wait up bro, something went wrong with me, oml this happen so many times. maybe try refreshing or its because I used up all this tokens... well not me but u guys. :))" });
+        console.error("Backend Error Detail:", error);
+        return res.status(500).json({ 
+            error: "Wait up bro, something went wrong with me...",
+            details: error.message 
+        });
     }
 }

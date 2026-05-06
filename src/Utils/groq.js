@@ -18,6 +18,7 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
                 chatHistory,
                 projectContext,
                 mode: options.mode,
+                model: options.model, // Add this
             }),
         });
 

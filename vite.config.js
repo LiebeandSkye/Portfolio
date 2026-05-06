@@ -46,6 +46,9 @@ export default defineConfig(({ mode }) => {
   if (!process.env.GROQ_API_KEY) {
     process.env.GROQ_API_KEY = env.GROQ_API_KEY || env.VITE_GROQ_API_KEY;
   }
+  if (!process.env.GEMINI_API_KEY) {
+    process.env.GEMINI_API_KEY = env.GEMINI_API_KEY || env.VITE_GEMINI_API_KEY;
+  }
   
   return {
     plugins: [

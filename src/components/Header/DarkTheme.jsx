@@ -62,7 +62,7 @@ export default function DarkTheme({ variant = 'icon' }) {
     <div className="relative group hidden md:block">
       <button
         onClick={handleToggle}
-        className="icon-button border border-(--border-light)"
+        className="icon-button border border-(--border-light) cursor-pointer"
       >
         <div className={`transition-transform duration-300 ${rotating ? 'rotate-180' : ''}`}>
           {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}

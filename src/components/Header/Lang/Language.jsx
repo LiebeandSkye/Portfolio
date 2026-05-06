@@ -44,7 +44,7 @@ const Language = ({ variant = 'dropdown' }) => {
         <div className={`relative group`}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="icon-button border border-(--border-light) flex items-center gap-1 h-[37px]"
+                className="icon-button border border-(--border-light) flex items-center gap-1 h-[37px] cursor-pointer"
             >
                 <span>{currentLang.code.toUpperCase()}</span>
                 <svg

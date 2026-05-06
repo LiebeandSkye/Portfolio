@@ -226,10 +226,10 @@ const translations = {
                     },
                     howIBuiltIt: {
                         title: 'How I Built this Project',
-                        frameworks: { framework1: { name: 'Next.js', description: 'For a fast, SEO-friendly full-stack architecture.' } },
+                        frameworks: { framework1: { name: 'React.js', description: 'Used for the component-based UI and state management for file staging' } },
                         styles: { style1: { name: 'Tailwind CSS', description: 'For a clean, minimalist dashboard UI.' } },
                         api: {
-                            api1: { name: 'Vector Database', description: 'Used for storing and querying embeddings.' },
+                            api1: { name: 'Browser File API', description: 'Client-side processing for maximum data security.' },
                             api2: { name: 'OpenAI / Groq', description: 'Powering the natural language understanding.' }
                         },
                     }

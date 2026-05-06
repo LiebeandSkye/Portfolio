@@ -46,11 +46,11 @@ const Header = () => {
                     <div className="seperator hidden md:block" />
 
                     {/* Bot button  */}
-                    <div className="items-center border border-(--border-light) dark:border-(--dark-border) rounded-md flex">
-                        <div className="border-r border-(--border-light) dark:border-(--dark-border)">
+                    <div className="items-center border border-(--border-light) dark:border-(--dark-border) rounded-md flex cursor-pointer">
+                        <div className="border-r border-(--border-light) dark:border-(--dark-border) cursor-pointer">
                             <Tooltip text={t('botTooltip')}>
                                 <button
-                                    className="icon-button"
+                                    className="icon-button cursor-pointer"
                                     onClick={openChat}
                                 >
                                     <GoDependabot size={18} />
@@ -60,7 +60,7 @@ const Header = () => {
                         <div className="hidden md:block">
                             <Tooltip text={t('fullscreenTooltip')}>
                                 <button
-                                    className="icon-button flex items-center gap-1.5"
+                                    className="icon-button flex items-center gap-1.5 cursor-pointer"
                                     onClick={() => navigate('/sakupilot')}
                                 >
                                     <MdFullscreen size={18} />
