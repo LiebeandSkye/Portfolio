@@ -18,7 +18,7 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
                 chatHistory,
                 projectContext,
                 mode: options.mode,
-                model: options.model, // Add this
+                model: options.model,
             }),
         });
 
@@ -31,6 +31,6 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
 
     } catch (error) {
         console.error("Frontend Error:", error);
-        return "Sorry, my brain just glitched for a second 😅\n\nTry asking again!";
+        return "Sorry gng, either my rate limits are exceeded or theres just something wrong. Try switching models or try again later in the next 5 hours.";
     }
 };

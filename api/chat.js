@@ -196,7 +196,7 @@ Current context: ${projectContext
     } catch (error) {
         console.error("Backend Error Detail:", error);
         return res.status(500).json({ 
-            error: "Wait up bro, something went wrong with me...",
+            error: "Sorry gng, something went wrong with me...",
             details: error.message 
         });
     }
