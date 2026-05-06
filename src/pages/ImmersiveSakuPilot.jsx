@@ -193,7 +193,7 @@ const ImmersiveSakuPilot = () => {
 
             persistActiveConversation({
                 ...nextConversation,
-                messages: [...nextConversation.messages, { role: 'assistant', content: response }],
+                messages: [...nextConversation.messages, { role: 'assistant', content: response, isNew: true }],
                 updatedAt: new Date().toISOString(),
             });
         } finally {
@@ -285,21 +285,38 @@ const ImmersiveSakuPilot = () => {
             {isSidebarOpen && <button className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
 
             <div className="flex min-w-0 flex-1 flex-col bg-(--light)">
-                <div className="flex h-14 shrink-0 items-center justify-between px-3 md:px-5">
-                    <div className="flex items-center gap-2">
-                        <button 
-                            className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors" 
-                            onClick={() => setIsSidebarOpen(prev => !prev)} 
+                <div className="relative flex h-14 shrink-0 items-center px-3 md:px-5">
+                    <div className="flex items-center gap-1">
+                        {/* Back button — icon + "Back" label on mobile, icon only on desktop */}
+                        <button
+                            onClick={handleGoBack}
+                            className="flex items-center gap-1.5 rounded-md px-2 py-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors"
+                            aria-label="Go back"
+                        >
+                            <FiArrowLeft size={18} />
+                            <span className="text-sm font-medium md:hidden">Back</span>
+                        </button>
+                        {/* Sidebar toggle */}
+                        <button
+                            className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) transition-colors"
+                            onClick={() => setIsSidebarOpen(prev => !prev)}
                             aria-label="Toggle sidebar"
                         >
                             <FiMenu size={20} />
                         </button>
-                        <button onClick={handleGoBack} className="hidden rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) md:block" aria-label="Go back">
-                            <FiArrowLeft size={20} />
-                        </button>
-                        <span className="ml-2 text-sm font-medium text-(--text-light) md:hidden">SakuPilot</span>
                     </div>
-                    <button onClick={handleNewChat} className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) md:hidden" aria-label="New chat">
+
+                    {/* Centered title — mobile only */}
+                    <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-sm font-semibold text-(--text-light) md:hidden">
+                        SakuPilot
+                    </span>
+
+                    {/* New chat — mobile only, right side */}
+                    <button
+                        onClick={handleNewChat}
+                        className="ml-auto rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) md:hidden"
+                        aria-label="New chat"
+                    >
                         <FiEdit3 size={20} />
                     </button>
                 </div>
@@ -332,9 +349,15 @@ const ImmersiveSakuPilot = () => {
                                 <ChatMessage key={`${message.role}-${index}`} message={message} handleNavigate={handleNavigate} />
                             ))}
                             {isThinking && (
-                                <div className="flex items-center gap-3 text-sm text-(--text-gray)">
-                                    <GoDependabot className="text-(--sucess)" />
-                                    <span className="animate-thinking">SakuPilot is thinking...</span>
+                                <div className="flex items-center gap-3">
+                                    <motion.div
+                                        animate={{ scale: [1, 1.12, 1] }}
+                                        transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel2)"
+                                    >
+                                        <GoDependabot className="text-(--sucess)" />
+                                    </motion.div>
+                                    <span className="animate-thinking text-sm">SakuPilot is thinking...</span>
                                 </div>
                             )}
                         </div>
@@ -458,8 +481,14 @@ const ImmersiveSakuPilot = () => {
 
 const ChatMessage = ({ message, handleNavigate }) => {
     const isUser = message.role === 'user';
+    const isNew = message.isNew === true;
     return (
-        <article className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
+        <motion.article
+            className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
+            initial={isNew ? { opacity: 0, y: 10 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+        >
             {!isUser && (
                 <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel2)">
                     <GoDependabot className="text-(--sucess)" />
@@ -481,7 +510,7 @@ const ChatMessage = ({ message, handleNavigate }) => {
                     <BotMessage content={message.content} onNavigate={handleNavigate} />
                 )}
             </div>
-        </article>
+        </motion.article>
     );
 };
 

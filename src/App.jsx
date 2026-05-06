@@ -12,7 +12,7 @@ const App = () => {
   const isImmersiveChat = location.pathname.includes('/sakupilot');
 
   return (
-    <div className={isImmersiveChat ? "h-screen overflow-hidden bg-(--light)" : ""}>
+    <div className={isImmersiveChat ? "h-[100dvh] overflow-hidden bg-(--light)" : ""}>
       <ThemeProvider>
         <NotificationProvider>
           <SakuPilotProvider>
