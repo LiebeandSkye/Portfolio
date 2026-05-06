@@ -23,8 +23,8 @@ import {
 } from 'react-icons/fi';
 import { GoDependabot } from 'react-icons/go';
 
-import LlamaIcon from '../assets/models/Llama.png';
-import GeminiIcon from '../assets/models/gemini.webp';
+import LlamaIcon from '../assets/Models/Llama.png';
+import GeminiIcon from '../assets/Models/gemini.webp';
 
 import Projects from '../Data/Projects';
 import { useLanguage } from '../components/context/LanguageContext';
