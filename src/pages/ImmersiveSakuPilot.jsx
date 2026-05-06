@@ -179,19 +179,26 @@ const ImmersiveSakuPilot = () => {
         setAttachments([]);
         setIsThinking(true);
 
-        const response = await getGroqResponse(
-            prompt,
-            nextConversation.messages.slice(0, -1),
-            projectContext,
-            { mode: 'immersive' }
-        );
+        try {
+            const apiHistory = nextConversation.messages
+                .slice(0, -1)
+                .map(({ role, content }) => ({ role, content }));
 
-        persistActiveConversation({
-            ...nextConversation,
-            messages: [...nextConversation.messages, { role: 'assistant', content: response }],
-            updatedAt: new Date().toISOString(),
-        });
-        setIsThinking(false);
+            const response = await getGroqResponse(
+                prompt,
+                apiHistory,
+                projectContext,
+                { mode: 'immersive' }
+            );
+
+            persistActiveConversation({
+                ...nextConversation,
+                messages: [...nextConversation.messages, { role: 'assistant', content: response }],
+                updatedAt: new Date().toISOString(),
+            });
+        } finally {
+            setIsThinking(false);
+        }
     }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext]);
 
     return (
