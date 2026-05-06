@@ -455,7 +455,7 @@ const ImmersiveSakuPilot = () => {
                     </div>
 
                     {/* Model Switcher — Centered */}
-                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[110]">
+                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[10]">
                         <button
                             onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
