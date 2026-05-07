@@ -429,7 +429,7 @@ const Projects = [
         thumbnail: nebulaThumb,
         designed: true,
         developed: true,
-        demo: '',
+        demo: null,
         code: 'https://github.com/LiebeandSkye/Nebula',
         tags: ['React.js', 'Socket.IO', 'Express', 'Multiplayer', 'Social Deduction', 'Game Systems'],
         summary: {
