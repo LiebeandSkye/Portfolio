@@ -18,10 +18,19 @@ const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isImmersiveChat = location.pathname === '/sakupilot';
+    const botButtonClass = 'icon-button cursor-pointer';
+    const botIcon = <GoDependabot size={18} />;
 
     const handleOpenChat = useCallback(() => {
         openChat();
     }, [openChat]);
+    const handleBotAction = useCallback(() => {
+        if (window.matchMedia('(max-width: 767px)').matches) {
+            navigate('/sakupilot');
+            return;
+        }
+        openChat();
+    }, [navigate, openChat]);
 
     return (
         <>
@@ -50,10 +59,11 @@ const Header = () => {
                         <div className="border-r border-(--border-light) dark:border-(--dark-border) cursor-pointer">
                             <Tooltip text={t('botTooltip')}>
                                 <button
-                                    className="icon-button cursor-pointer"
-                                    onClick={openChat}
+                                    className={botButtonClass}
+                                    onClick={handleBotAction}
+                                    aria-label="Open chat assistant"
                                 >
-                                    <GoDependabot size={18} />
+                                    {botIcon}
                                 </button>
                             </Tooltip>
                         </div>
