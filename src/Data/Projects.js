@@ -11,12 +11,16 @@ import continentalScreenshot9 from '../assets/Continental/screenshot9.webp';
 import continentalScreenshot10 from '../assets/Continental/screenshot10.webp';
 import Memory1 from '../assets/AI_MemoryPorter/Memory1.png';
 import Memory2 from '../assets/AI_MemoryPorter/Memory2.png';
+import nebulaThumb from '../assets/Nebula/WebsiteThumbnail.jpg';
+import nebulaScreenshot1 from '../assets/Nebula/screenshot1.jpg';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
+import NebulaIcon from '../assets/Tools/NebulaIcon.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiGooglemaps } from "react-icons/si";
+import { SiSocketdotio } from "react-icons/si";
 import { LuFileSpreadsheet } from "react-icons/lu";
 
 const Projects = [
@@ -412,6 +416,106 @@ const Projects = [
             screenshots: {
                 screenshot1: Memory1,
                 screenshot2: Memory2,
+            }
+        },
+    },
+    {
+        id: 5,
+        title: 'Project Nebula',
+        langKey: "nebula",
+        public: true,
+        red: true,
+        description: 'A multiplayer social deduction game inspired by Gnosia, featuring day/night rounds, role abilities, and real-time Socket.IO gameplay.',
+        bread: '/portfolio',
+        thumbnail: nebulaThumb,
+        designed: true,
+        developed: true,
+        demo: '',
+        code: 'https://github.com/LiebeandSkye/Nebula',
+        tags: ['React.js', 'Socket.IO', 'Express', 'Multiplayer', 'Social Deduction', 'Game Systems'],
+        summary: {
+            framework: 'React + Vite',
+            style: 'Tailwind CSS v4',
+            API: 'Socket.IO + Express API',
+        },
+        percent: { javascript: 95.5, html: 2.0, css: 2.5 },
+        languages: { javascript: 'JavaScript', html: 'HTML', css: 'CSS' },
+        Information: {
+            title: 'Project Nebula',
+            description: 'Project Nebula is a multiplayer social deduction game inspired by Gnosia. Players enter day/night cycles, discuss, vote, and use role-specific abilities in real time through a Socket.IO-powered architecture.',
+            coreFeatures: {
+                title: 'Core Features',
+                features1: {
+                    title: 'Real-Time Multiplayer Rooms',
+                    description: '– Players can create and join live game rooms with synchronized state updates.',
+                },
+                features2: {
+                    title: 'Role System with Unique Abilities',
+                    description: '– Includes roles like Engineer, Doctor, Guardian Angel, Lawyer, Gnosia, Traitor, and Illusionist.',
+                },
+                features3: {
+                    title: 'Day/Night Game Loop',
+                    description: '– Structured phases for discussion, voting, role actions, and result announcements.',
+                },
+                features4: {
+                    title: 'Host-Controlled Mission Settings',
+                    description: '– Hosts can configure role toggles and game balance settings for each mission.',
+                }
+            },
+            WhyThisProject: {
+                title: 'Why This Project?',
+                description: 'I wanted to build a complete real-time strategy/social game system instead of a standard CRUD app. Nebula let me design game rules, role interactions, and multiplayer synchronization in one production-like project.',
+            },
+            HowItWorks: {
+                title: 'How It Works?',
+                steps: {
+                    step1: {
+                        title: 'Lobby and Setup',
+                        description: '– Players gather in a lobby while the host configures mission settings and role options.',
+                    },
+                    step2: {
+                        title: 'Day Discussion and Voting',
+                        description: '– Players discuss suspicious behavior, nominate targets, and vote for Cold Sleep.',
+                    },
+                    step3: {
+                        title: 'Night Actions and Resolution',
+                        description: '– Gnosia and special roles perform actions, then the game announces outcomes and checks win conditions.',
+                    },
+                },
+                description: 'Nebula combines social deduction mechanics with low-latency networking so every role action and vote is reflected instantly for all players.',
+            },
+            HowIBuiltIt: {
+                title: 'How I Built this Project',
+                frameworks: {
+                    framework1: {
+                        icon: FaReact,
+                        name: 'React + Vite',
+                        description: 'Used for fast client-side rendering and gameplay UI updates.',
+                    },
+                },
+                Styles: {
+                    style1: {
+                        icon: RiTailwindCssFill,
+                        name: 'Tailwind CSS v4',
+                        description: 'Used to build responsive game panels, role UI, and polished visual states.',
+                    },
+                },
+                Api: {
+                    api1: {
+                        icon: SiSocketdotio,
+                        name: 'Socket.IO',
+                        description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.',
+                    },
+                    api2: {
+                        icon: NebulaIcon,
+                        name: 'Express.js API',
+                        description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.',
+                    },
+                },
+            },
+            screenshots: {
+                screenshot1: nebulaThumb,
+                screenshot2: nebulaScreenshot1,
             }
         },
     },
