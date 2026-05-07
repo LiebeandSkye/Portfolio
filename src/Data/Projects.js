@@ -15,12 +15,11 @@ import nebulaThumb from '../assets/Nebula/WebsiteThumbnail.jpg';
 import nebulaScreenshot1 from '../assets/Nebula/screenshot1.jpg';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
-import NebulaIcon from '../assets/Tools/NebulaIcon.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiGooglemaps } from "react-icons/si";
-import { SiSocketdotio } from "react-icons/si";
+import { SiSocketdotio, SiExpress } from "react-icons/si";
 import { LuFileSpreadsheet } from "react-icons/lu";
 
 const Projects = [
@@ -438,7 +437,7 @@ const Projects = [
             style: 'Tailwind CSS v4',
             API: 'Socket.IO + Express API',
         },
-        percent: { javascript: 95.5, html: 2.0, css: 2.5 },
+        percent: { javascript: 88.0, html: 5.0, css: 7.0 },
         languages: { javascript: 'JavaScript', html: 'HTML', css: 'CSS' },
         Information: {
             title: 'Project Nebula',
@@ -507,7 +506,7 @@ const Projects = [
                         description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.',
                     },
                     api2: {
-                        icon: NebulaIcon,
+                        icon: SiExpress,
                         name: 'Express.js API',
                         description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.',
                     },
