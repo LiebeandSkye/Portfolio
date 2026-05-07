@@ -400,7 +400,7 @@ const ImmersiveSakuPilot = () => {
                                                 e.stopPropagation();
                                                 setDropdownOpenId(dropdownOpenId === conversation.id ? null : conversation.id);
                                             }}
-                                            className="mr-1 rounded p-1.5 text-(--text-gray) opacity-0 hover:text-(--text-light) group-hover:opacity-100 cursor-pointer"
+                                            className="mr-1 rounded p-1.5 text-(--text-gray) opacity-100 md:opacity-0 hover:text-(--text-light) md:group-hover:opacity-100 cursor-pointer"
                                             aria-label={`More options for ${conversation.title}`}
                                         >
                                             <FiMoreHorizontal size={14} />

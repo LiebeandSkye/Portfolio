@@ -31,6 +31,20 @@ const AboutProject = () => {
     if (!project) return <div className="p-20 text-center text-white">Project Not Found</div>;
 
     const info = project.Information;
+    const languageStyles = {
+        javascript: { label: 'JavaScript', color: '#f1e05a' },
+        css: { label: 'CSS', color: '#563d7c' },
+        html: { label: 'HTML', color: '#e34c26' },
+        python: { label: 'Python', color: '#3572A5' },
+    };
+    const languageBreakdown = Object.entries(project.percent || {})
+        .filter(([, percent]) => Number(percent) > 0)
+        .map(([key, percent]) => ({
+            key,
+            percent,
+            label: languageStyles[key]?.label || key,
+            color: languageStyles[key]?.color || '#8b949e',
+        }));
 
     const shareLinks = {
         twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`,
@@ -211,14 +225,22 @@ const AboutProject = () => {
                     <div>
                         <h4 className="font-semibold text-sm mb-4 text-(--text-light)">Languages</h4>
                         <div className="h-2 w-full flex rounded-full overflow-hidden mb-4 bg-[#30363d]">
-                            <div style={{ width: `${project.percent.javascript}%` }} className="bg-[#f1e05a]"></div>
-                            <div style={{ width: `${project.percent.css}%` }} className="bg-[#563d7c]"></div>
-                            {project.percent.html && <div style={{ width: `${project.percent.html}%` }} className="bg-[#e34c26]"></div>}
+                            {languageBreakdown.map((language) => (
+                                <div
+                                    key={language.key}
+                                    style={{ width: `${language.percent}%`, backgroundColor: language.color }}
+                                />
+                            ))}
                         </div>
                         <div className="grid grid-cols-2 gap-y-2">
-                            <LangLabel dot="#f1e05a" name="JavaScript" percent={`${project.percent.javascript}%`} />
-                            <LangLabel dot="#563d7c" name="CSS" percent={`${project.percent.css}%`} />
-                            {project.percent.html && <LangLabel dot="#e34c26" name="HTML" percent={`${project.percent.html}%`} />}
+                            {languageBreakdown.map((language) => (
+                                <LangLabel
+                                    key={language.key}
+                                    dot={language.color}
+                                    name={language.label}
+                                    percent={`${language.percent}%`}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>

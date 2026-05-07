@@ -49,12 +49,20 @@ const Header = () => {
                     <div className="items-center border border-(--border-light) dark:border-(--dark-border) rounded-md flex cursor-pointer">
                         <div className="border-r border-(--border-light) dark:border-(--dark-border) cursor-pointer">
                             <Tooltip text={t('botTooltip')}>
-                                <button
-                                    className="icon-button cursor-pointer"
-                                    onClick={openChat}
-                                >
-                                    <GoDependabot size={18} />
-                                </button>
+                                <>
+                                    <button
+                                        className="icon-button cursor-pointer md:hidden"
+                                        onClick={() => navigate('/sakupilot')}
+                                    >
+                                        <GoDependabot size={18} />
+                                    </button>
+                                    <button
+                                        className="icon-button cursor-pointer hidden md:inline-flex"
+                                        onClick={openChat}
+                                    >
+                                        <GoDependabot size={18} />
+                                    </button>
+                                </>
                             </Tooltip>
                         </div>
                         <div className="hidden md:block">
