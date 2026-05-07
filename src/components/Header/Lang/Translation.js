@@ -235,6 +235,43 @@ const translations = {
                     }
                 }
             },
+            nebula: {
+                title: 'Project Nebula',
+                description: 'A multiplayer social deduction game inspired by Gnosia, featuring day/night rounds, role abilities, and real-time Socket.IO gameplay.',
+                botQuestions: [
+                    'What is Project Nebula about?',
+                    'How do roles and day/night phases work in Nebula?',
+                    'What tech stack powers Nebula multiplayer?',
+                ],
+                Information: {
+                    title: 'Project Nebula',
+                    description: 'Project Nebula is a multiplayer social deduction game inspired by Gnosia. Players move through day/night cycles, discuss, vote, and use role-specific abilities in real time through a Socket.IO-powered architecture.',
+                    coreFeatures: {
+                        title: 'Core Features',
+                        features1: { title: 'Real-Time Multiplayer Rooms', description: 'Players can create and join live game rooms with synchronized state updates.' },
+                        features2: { title: 'Role System with Unique Abilities', description: 'Includes roles like Engineer, Doctor, Guardian Angel, Lawyer, Gnosia, Traitor, and Illusionist.' },
+                        features3: { title: 'Day/Night Game Loop', description: 'Structured phases for discussion, voting, role actions, and result announcements.' },
+                        features4: { title: 'Host-Controlled Mission Settings', description: 'Hosts can configure role toggles and game balance settings for each mission.' },
+                    },
+                    whyThisProject: 'I wanted to build a complete real-time strategy/social game system instead of a standard CRUD app. Nebula let me design game rules, role interactions, and multiplayer synchronization in one production-like project.',
+                    howItWorks: {
+                        title: 'How It Works',
+                        step1: { title: 'Lobby and Setup', description: 'Players gather in a lobby while the host configures mission settings and role options.' },
+                        step2: { title: 'Day Discussion and Voting', description: 'Players discuss suspicious behavior, nominate targets, and vote for Cold Sleep.' },
+                        step3: { title: 'Night Actions and Resolution', description: 'Gnosia and special roles perform actions, then the game announces outcomes and checks win conditions.' },
+                        description: 'Nebula combines social deduction mechanics with low-latency networking so every role action and vote is reflected instantly for all players.',
+                    },
+                    howIBuiltIt: {
+                        title: 'How I Built this Project',
+                        frameworks: { framework1: { name: 'React + Vite', description: 'Used for fast client-side rendering and gameplay UI updates.' } },
+                        styles: { style1: { name: 'Tailwind CSS v4', description: 'Used to build responsive game panels, role UI, and polished visual states.' } },
+                        api: {
+                            api1: { name: 'Socket.IO', description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.' },
+                            api2: { name: 'Express.js API', description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.' }
+                        },
+                    }
+                }
+            },
         },
     },
     jp: {
@@ -465,6 +502,43 @@ const translations = {
                         api: {
                             api1: { name: 'Browser File API', description: '100%のプライバシー保護のため、データをローカルで処理。' },
                             api2: { name: 'なし', description: 'データセキュリティを確保するため、外部API呼び出しはゼロ。' }
+                        },
+                    }
+                }
+            },
+            nebula: {
+                title: 'Project Nebula',
+                description: 'Gnosiaに着想を得たマルチプレイヤー人狼系ゲーム。昼夜フェーズ、役職能力、Socket.IOによるリアルタイム同期を備えています。',
+                botQuestions: [
+                    'Project Nebulaはどんなゲームですか？',
+                    '役職と昼夜フェーズはどう機能しますか？',
+                    'Nebulaのマルチプレイヤーはどの技術で動いていますか？',
+                ],
+                Information: {
+                    title: 'Project Nebula',
+                    description: 'Project Nebulaは、Gnosiaにインスパイアされたマルチプレイヤー型のソーシャル推理ゲームです。プレイヤーは昼夜サイクルの中で議論・投票・役職アクションを行い、Socket.IOベースの構成でリアルタイムに進行します。',
+                    coreFeatures: {
+                        title: 'コア機能',
+                        features1: { title: 'リアルタイムマルチプレイヤールーム', description: 'プレイヤーはルームを作成・参加でき、ゲーム状態が全員に同期されます。' },
+                        features2: { title: '固有能力を持つ役職システム', description: 'Engineer、Doctor、Guardian Angel、Lawyer、Gnosia、Traitor、Illusionistなどの役職を実装。' },
+                        features3: { title: '昼夜ゲームループ', description: '議論、投票、役職行動、結果発表を段階的に進行する構造。' },
+                        features4: { title: 'ホストによるミッション設定', description: 'ホストが役職の有効化やバランス設定を調整可能。' },
+                    },
+                    whyThisProject: '一般的なCRUDアプリではなく、リアルタイム戦略・推理ゲームのシステム全体を作りたかったためです。Nebulaではゲームルール設計、役職相互作用、マルチプレイヤー同期を一つの実践的プロジェクトで実装できました。',
+                    howItWorks: {
+                        title: '仕組み',
+                        step1: { title: 'ロビーと初期設定', description: 'プレイヤーがロビーに集まり、ホストがミッション設定と役職オプションを構成します。' },
+                        step2: { title: '昼の議論と投票', description: '不審行動を議論し、候補を指名してCold Sleepの投票を行います。' },
+                        step3: { title: '夜の行動と結果処理', description: 'Gnosiaと特殊役職が行動し、結果発表と勝利条件判定が行われます。' },
+                        description: 'Nebulaはソーシャル推理のゲーム性と低遅延ネットワークを組み合わせ、すべての投票・行動が全プレイヤーへ即時反映されます。',
+                    },
+                    howIBuiltIt: {
+                        title: 'このプロジェクトの構築方法',
+                        frameworks: { framework1: { name: 'React + Vite', description: '高速なクライアント描画とゲームUI更新に使用。' } },
+                        styles: { style1: { name: 'Tailwind CSS v4', description: 'レスポンシブなゲームパネルや役職UI、視覚演出の構築に使用。' } },
+                        api: {
+                            api1: { name: 'Socket.IO', description: '双方向イベントでルーム、チャット、投票、行動同期を実現。' },
+                            api2: { name: 'Express.js API', description: 'ルーム管理、ゲームループ、ミッション進行のサーバー処理を担当。' }
                         },
                     }
                 }
