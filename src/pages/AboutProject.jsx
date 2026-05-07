@@ -37,7 +37,7 @@ const AboutProject = () => {
         html: { label: 'HTML', color: '#e34c26' },
         python: { label: 'Python', color: '#3572A5' },
     };
-    const languageBreakdown = Object.entries(project.percent || {})
+    const languageBreakdown = Object.entries(project.percent)
         .filter(([, percent]) => Number(percent) > 0)
         .map(([key, percent]) => ({
             key,

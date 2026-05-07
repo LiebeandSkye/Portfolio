@@ -18,10 +18,19 @@ const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isImmersiveChat = location.pathname === '/sakupilot';
+    const botButtonClass = 'icon-button cursor-pointer';
+    const botIcon = <GoDependabot size={18} />;
 
     const handleOpenChat = useCallback(() => {
         openChat();
     }, [openChat]);
+    const handleBotAction = useCallback(() => {
+        if (window.matchMedia('(max-width: 767px)').matches) {
+            navigate('/sakupilot');
+            return;
+        }
+        openChat();
+    }, [navigate, openChat]);
 
     return (
         <>
@@ -49,20 +58,13 @@ const Header = () => {
                     <div className="items-center border border-(--border-light) dark:border-(--dark-border) rounded-md flex cursor-pointer">
                         <div className="border-r border-(--border-light) dark:border-(--dark-border) cursor-pointer">
                             <Tooltip text={t('botTooltip')}>
-                                <>
-                                    <button
-                                        className="icon-button cursor-pointer md:hidden"
-                                        onClick={() => navigate('/sakupilot')}
-                                    >
-                                        <GoDependabot size={18} />
-                                    </button>
-                                    <button
-                                        className="icon-button cursor-pointer hidden md:inline-flex"
-                                        onClick={openChat}
-                                    >
-                                        <GoDependabot size={18} />
-                                    </button>
-                                </>
+                                <button
+                                    className={botButtonClass}
+                                    onClick={handleBotAction}
+                                    aria-label="Open chat assistant"
+                                >
+                                    {botIcon}
+                                </button>
                             </Tooltip>
                         </div>
                         <div className="hidden md:block">
