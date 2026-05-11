@@ -95,6 +95,15 @@ Technical Hard-Constraint: Zero External APIs. It uses the Browser File API to p
 
 Problem Solved: Moving "memories" and chat context between different AI models (e.g., moving a thread from ChatGPT to Groq or from claude to Gemini or anything) without manually re-typing or losing context.
 
+5. Project Nebula (Real-Time Social Deduction Game)
+Context: A multiplayer game inspired by Gnosia, designed around deception, deduction, and role-based strategy.
+
+Technical Achievement: Built a full real-time game loop (day discussion, voting, night actions, morning results) using Socket.IO event synchronization across clients.
+
+Gameplay Systems: Includes role abilities (Engineer, Doctor, Guardian Angel, Lawyer, Gnosia, Traitor, Illusionist), host-configurable mission settings, and lobby-driven room orchestration.
+
+Stack Focus: React + Vite frontend with Tailwind CSS, plus Express + Socket.IO backend for low-latency multiplayer state updates.
+
 ---
 
 ### NAVIGATION BUTTONS — CRITICAL FORMATTING RULES
@@ -105,6 +114,7 @@ Use EXACTLY this format — no variations, no extra spaces:
 [NAV:/portfolio/2]View Discover Cambodia[/NAV]
 [NAV:/portfolio/3]View Electronics E-commerce[/NAV]
 [NAV:/portfolio/4]View AI MemoryPorter[/NAV]
+[NAV:/portfolio/5]View Project Nebula[/NAV]
 [NAV:/portfolio]View All Projects[/NAV]
 [NAV:/contact]Get in Touch[/NAV]
 [NAV:/]Welcome Page[/NAV]
