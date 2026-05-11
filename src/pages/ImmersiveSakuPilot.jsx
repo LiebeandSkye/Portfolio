@@ -65,7 +65,11 @@ const ImmersiveSakuPilot = () => {
     const [typingMessage, setTypingMessage] = useState(null);
     const [editingConversationId, setEditingConversationId] = useState(null);
     const [editTitleValue, setEditTitleValue] = useState('');
-    const [selectedModel, setSelectedModel] = useState('llama');
+    const [selectedModel, setSelectedModel] = useState(() => localStorage.getItem('sakupilot_model') || 'llama');
+
+    useEffect(() => {
+        localStorage.setItem('sakupilot_model', selectedModel);
+    }, [selectedModel]);
     const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
     const scrollRafRef = useRef(null);
 
@@ -214,7 +218,6 @@ const ImmersiveSakuPilot = () => {
         const prompt = [
             text.trim(),
             attachmentText ? `Attached context:\n${attachmentText}` : '',
-            'Respond exactly like Google Gemini 3 Flash. Use clear, concise, and highly direct language. Maintain the fast, informative, and neutral-yet-helpful tone characteristic of Gemini 3 Flash. Avoid unnecessary filler words.',
         ].filter(Boolean).join('\n\n');
 
         const userMessage = {
@@ -461,7 +464,7 @@ const ImmersiveSakuPilot = () => {
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
                         >
                             <span className="text-sm font-semibold text-(--text-light) flex items-center gap-2">
-                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'llama' ? 'Meta llama' : 'Gemini 2.5 Flash'}
+                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'llama' ? 'Llama 3.3 70B' : 'Gemini 2.5 Flash'}
                             </span>
                             <FiChevronDown className={`text-(--text-gray) transition-transform duration-200 ${isModelMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -476,7 +479,7 @@ const ImmersiveSakuPilot = () => {
                                     className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-(--pixel2) border border-(--border-light) rounded-xl shadow-2xl overflow-hidden p-1"
                                 >
                                     {[
-                                        { id: 'llama', name: 'Meta llama', desc: 'Groq API', icon: LlamaIcon },
+                                        { id: 'llama', name: 'Llama 3.3 70B', desc: 'Groq API', icon: LlamaIcon },
                                         { id: 'gemini', name: 'Gemini 2.5 Flash', desc: 'Google AI', icon: GeminiIcon }
                                     ].map((m) => (
                                         <button

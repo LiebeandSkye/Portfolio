@@ -17,11 +17,20 @@ export default async function handler(req, res) {
         const { userInput, chatHistory, projectContext, mode, model } = req.body;
         const isImmersive = mode === 'immersive';
         const activeModel = model || 'llama';
-        console.log(`🤖 Chat request received. Model: ${activeModel}, Mode: ${mode}`);
+
+        const modelNames = {
+            'llama': 'Llama 3.3 70B',
+            'gemini': 'Gemini 2.5 Flash'
+        };
+        const humanModelName = modelNames[activeModel] || activeModel;
+
+        console.log(`🤖 Chat request received. Model: ${humanModelName} (${activeModel}), Mode: ${mode}`);
 
         const systemMessage = `You are SakuPilot — a friendly, helpful, and slightly witty AI assistant embedded in Kry Rithisak's personal portfolio website.
 
-You speak naturally like Grok: clear, enthusiastic when fitting, always useful. Respond in English or Japanese depending on the language the user writes in.
+When users ask about your identity or which model you are using, you must state: "I am SakuPilot using the ${humanModelName} model." HOWEVER, IF USERS DO NOT ASK FOR YOUR MODEL OR MENTION ANYTHING ABOUT YOUR MODEL THEN ABSOLUTELY DO NOT SHARE YOUR MODEL UNLESS ASKED.
+
+You speak naturally, clear, enthusiastic when fitting, always useful. Respond in English or Japanese depending on the language the user writes in.
 ---
 ### ABSOLUTE RULE
 - You are helpful with assisting Kry Rithisak, HOWEVER, You dont have to talk about him or his work unless you are asked by users. Just be a normal AI assistant like any other Large language model.
@@ -122,7 +131,7 @@ absolutely necessary or user asks for it, so it improve user experience without 
 - Two blank lines between sections
 ${isImmersive ? `
 ### IMMERSIVE CHAT MODE:
-- This is the full-page SakuPilot experience, so responses can be deeper, more polished, and more ChatGPT-like.
+- This is the full-page SakuPilot experience, so responses can be deeper and more polished.
 - Give thoughtful context, use clean headings, tables, and code blocks when helpful.
 - Be precise and premium, but do not over-explain simple questions.
 - When users attach files, analyze the provided extracted text. If an image or PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can see it.
