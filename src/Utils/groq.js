@@ -23,7 +23,14 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            const errorData = await response.json().catch(() => ({}));
+            throw {
+                status: response.status,
+                message: errorData.error || 'Network response was not ok',
+                details: errorData.details,
+                code: errorData.code,
+                retryAfter: errorData.retryAfter
+            };
         }
 
         const data = await response.json();
@@ -31,6 +38,14 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
 
     } catch (error) {
         console.error("Frontend Error:", error);
-        return "Sorry gng, either my rate limits are exceeded or theres just something wrong. Try switching models or try again later in the next 5 hours.";
+        // If it's already a structured error from above, re-throw it
+        if (error.status) throw error;
+        // Otherwise wrap it
+        throw {
+            status: 500,
+            message: "Failed to connect to SakuPilot.",
+            details: error.message,
+            code: 'FETCH_ERROR'
+        };
     }
 };

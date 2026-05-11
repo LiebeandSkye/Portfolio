@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const groq = new Groq({
         apiKey: process.env.GROQ_API_KEY
     });
-    
+
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
     if (req.method !== 'POST') {
@@ -157,15 +157,15 @@ ${isImmersive ? `
 - Suggest navigation when it helps the user
 
 Current context: ${projectContext
-            ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech}). Answer as a developer who built this project.`
-            : 'General conversation about Kry Rithisak, his portfolio, and skills.'}`;
+                ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech}). Answer as a developer who built this project.`
+                : 'General conversation about Kry Rithisak, his portfolio, and skills.'}`;
 
         if (activeModel === 'gemini') {
-            const genModel = genAI.getGenerativeModel({ 
+            const genModel = genAI.getGenerativeModel({
                 model: "gemini-2.5-flash",
                 systemInstruction: systemMessage
             });
-            
+
             const chat = genModel.startChat({
                 history: chatHistory.map(msg => ({
                     role: msg.role === 'assistant' ? 'model' : 'user',
@@ -214,9 +214,37 @@ Current context: ${projectContext
 
     } catch (error) {
         console.error("Backend Error Detail:", error);
-        return res.status(500).json({ 
-            error: "Sorry gng, something went wrong with me...",
-            details: error.message 
+
+        let status = 500;
+        let errorCode = 'BACKEND_ERROR';
+        let errorMessage = "Something went wrong on our end.";
+        let retryAfter = null;
+
+        // Detect rate limits
+        if (error.status === 429 || error.response?.status === 429) {
+            status = 429;
+            errorCode = 'RATE_LIMIT';
+            errorMessage = "Whoa! You're moving faster than I can think.";
+            retryAfter = error.headers?.['retry-after'] || 60;
+        }
+        // Detect auth/API key issues
+        else if (error.status === 401 || error.status === 403) {
+            status = error.status;
+            errorCode = 'API_ERROR';
+            errorMessage = "I'm having trouble authenticating with the AI service.";
+        }
+        // Detect invalid requests
+        else if (error.status === 400) {
+            status = 400;
+            errorCode = 'INVALID_REQUEST';
+            errorMessage = "The message format wasn't quite right.";
+        }
+
+        return res.status(status).json({
+            error: errorMessage,
+            code: errorCode,
+            details: error.message,
+            retryAfter: typeof retryAfter === 'string' ? parseInt(retryAfter) : retryAfter
         });
     }
 }

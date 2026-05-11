@@ -418,6 +418,9 @@ const Projects = [
             }
         },
     },
+    // ===========================
+    // PROJECT NEBULA (ID:5)
+    // ===========================
     {
         id: 5,
         title: 'Project Nebula',
@@ -429,7 +432,7 @@ const Projects = [
         thumbnail: nebulaThumb,
         designed: true,
         developed: true,
-        demo: null,
+        demo: 'https://nebula-eight-self.vercel.app',
         code: 'https://github.com/LiebeandSkye/Nebula',
         tags: ['React.js', 'Socket.IO', 'Express', 'Multiplayer', 'Social Deduction', 'Game Systems'],
         summary: {

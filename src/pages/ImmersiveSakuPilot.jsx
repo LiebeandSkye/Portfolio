@@ -19,7 +19,9 @@ import {
     FiStar,
     FiEdit2,
     FiChevronDown,
-    FiCheck
+    FiCheck,
+    FiAlertCircle,
+    FiClock
 } from 'react-icons/fi';
 import { GoDependabot } from 'react-icons/go';
 
@@ -66,10 +68,21 @@ const ImmersiveSakuPilot = () => {
     const [editingConversationId, setEditingConversationId] = useState(null);
     const [editTitleValue, setEditTitleValue] = useState('');
     const [selectedModel, setSelectedModel] = useState(() => localStorage.getItem('sakupilot_model') || 'llama');
+    const [error, setError] = useState(null);
+    const [retryCountdown, setRetryCountdown] = useState(0);
 
     useEffect(() => {
         localStorage.setItem('sakupilot_model', selectedModel);
     }, [selectedModel]);
+
+    useEffect(() => {
+        if (retryCountdown > 0) {
+            const timer = setInterval(() => {
+                setRetryCountdown((prev) => prev - 1);
+            }, 1000);
+            return () => clearInterval(timer);
+        }
+    }, [retryCountdown]);
     const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
     const scrollRafRef = useRef(null);
 
@@ -237,11 +250,13 @@ const ImmersiveSakuPilot = () => {
         };
 
         persistActiveConversation(nextConversation);
+        const lastInput = text.trim();
         setInputValue('');
         setAttachments([]);
         setIsThinking(true);
 
         try {
+            setError(null);
             const apiHistory = nextConversation.messages
                 .slice(0, -1)
                 .map(({ role, content }) => ({ role, content }));
@@ -254,8 +269,13 @@ const ImmersiveSakuPilot = () => {
             );
 
             setTypingMessage({ fullText: response, displayText: '' });
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
+            setError(err);
+            setInputValue(lastInput); // Restore input on error
+            if (err.code === 'RATE_LIMIT') {
+                setRetryCountdown(err.retryAfter || 60);
+            }
             setIsThinking(false);
         }
     }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext]);
@@ -569,6 +589,10 @@ const ImmersiveSakuPilot = () => {
                                     <span className="animate-thinking text-sm">SakuPilot is thinking...</span>
                                 </div>
                             )}
+
+                            {error && (
+                                <ErrorDisplay error={error} retryCountdown={retryCountdown} onRetry={() => handleSendMessage()} />
+                            )}
                         </div>
                     )}
                 </div>
@@ -751,6 +775,58 @@ const prepareAttachment = async (file) => {
         content: content.slice(0, 45_000),
         note: content.length > 45_000 ? 'File was trimmed to fit the chat context.' : '',
     };
+};
+
+const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {
+    const isRateLimit = error.code === 'RATE_LIMIT';
+    const isApiError = error.code === 'API_ERROR';
+    
+    return (
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col gap-3 p-4 rounded-2xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10"
+        >
+            <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-500">
+                    {isRateLimit ? <FiClock size={18} /> : <FiAlertCircle size={18} />}
+                </div>
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-bold text-red-500 flex items-center gap-2">
+                        {isRateLimit ? 'Rate Limit Exceeded' : isApiError ? 'API Connection Error' : 'System Error'}
+                        {isRateLimit && retryCountdown > 0 && (
+                            <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-[10px] font-mono">
+                                {Math.floor(retryCountdown / 60)}:{(retryCountdown % 60).toString().padStart(2, '0')}
+                            </span>
+                        )}
+                    </h3>
+                    <p className="text-sm text-(--text-gray) mt-1 leading-relaxed">
+                        {error.message || "I encountered an unexpected issue while processing your request."}
+                    </p>
+                    {error.details && (
+                        <div className="mt-2 p-2 rounded bg-black/5 dark:bg-white/5 font-mono text-[10px] text-(--text-gray) break-all">
+                            Error Code: {error.code} | {error.details}
+                        </div>
+                    )}
+                </div>
+            </div>
+            
+            <div className="flex items-center gap-2 mt-1">
+                <button 
+                    onClick={onRetry}
+                    disabled={isRateLimit && retryCountdown > 0}
+                    className="px-4 py-2 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Try Again
+                </button>
+                {isRateLimit && (
+                    <span className="text-[11px] text-(--text-gray)">
+                        {retryCountdown > 0 ? `Wait for the timer to finish...` : 'Ready to retry.'}
+                    </span>
+                )}
+            </div>
+        </motion.div>
+    );
 };
 
 export default ImmersiveSakuPilot;
