@@ -5,9 +5,75 @@ import { useLanguage } from '../components/context/LanguageContext';
 import { FaArrowLeft, FaCode, FaRocket, FaPalette } from "react-icons/fa6";
 import { RiStackLine } from "react-icons/ri";
 import { MdOutlineViewQuilt } from "react-icons/md";
-import portfolioList from '../assets/Continental/screenshot7.webp';
-import portfolioGrid from '../assets/Continental/screenshot10.webp';
-import projectDetails from '../assets/Nebula/screenshot1.jpg';
+
+const portfolioList = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0f172a"/>
+  <rect x="40" y="40" width="1200" height="640" rx="24" fill="#111827" stroke="#334155"/>
+  <text x="90" y="105" fill="#f8fafc" font-family="Arial, sans-serif" font-size="34" font-weight="700">Portfolio list view</text>
+  <text x="90" y="140" fill="#94a3b8" font-family="Arial, sans-serif" font-size="18">Project cards displayed in a single-column portfolio list</text>
+  <rect x="90" y="180" width="1100" height="110" rx="16" fill="#1e293b"/>
+  <rect x="115" y="205" width="170" height="60" rx="10" fill="#334155"/>
+  <rect x="315" y="210" width="310" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="315" y="242" width="520" height="12" rx="6" fill="#64748b"/>
+  <rect x="315" y="264" width="430" height="12" rx="6" fill="#475569"/>
+  <rect x="90" y="315" width="1100" height="110" rx="16" fill="#1e293b"/>
+  <rect x="115" y="340" width="170" height="60" rx="10" fill="#334155"/>
+  <rect x="315" y="345" width="280" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="315" y="377" width="500" height="12" rx="6" fill="#64748b"/>
+  <rect x="315" y="399" width="390" height="12" rx="6" fill="#475569"/>
+  <rect x="90" y="450" width="1100" height="110" rx="16" fill="#1e293b"/>
+  <rect x="115" y="475" width="170" height="60" rx="10" fill="#334155"/>
+  <rect x="315" y="480" width="330" height="18" rx="9" fill="#e2e8f0"/>
+  <rect x="315" y="512" width="540" height="12" rx="6" fill="#64748b"/>
+  <rect x="315" y="534" width="410" height="12" rx="6" fill="#475569"/>
+</svg>
+`)}`;
+const portfolioGrid = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0f172a"/>
+  <rect x="40" y="40" width="1200" height="640" rx="24" fill="#111827" stroke="#334155"/>
+  <text x="90" y="105" fill="#f8fafc" font-family="Arial, sans-serif" font-size="34" font-weight="700">Portfolio grid view</text>
+  <text x="90" y="140" fill="#94a3b8" font-family="Arial, sans-serif" font-size="18">Projects arranged in a multi-card portfolio gallery</text>
+  <rect x="90" y="190" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="118" y="218" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="118" y="325" width="180" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="430" y="190" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="458" y="218" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="458" y="325" width="180" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="770" y="190" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="798" y="218" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="798" y="325" width="180" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="90" y="400" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="118" y="428" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="118" y="535" width="180" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="430" y="400" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="458" y="428" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="458" y="535" width="180" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="770" y="400" width="320" height="180" rx="18" fill="#1e293b"/>
+  <rect x="798" y="428" width="264" height="90" rx="12" fill="#334155"/>
+  <rect x="798" y="535" width="180" height="16" rx="8" fill="#e2e8f0"/>
+</svg>
+`)}`;
+const projectDetails = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0f172a"/>
+  <rect x="40" y="40" width="1200" height="640" rx="24" fill="#111827" stroke="#334155"/>
+  <text x="90" y="105" fill="#f8fafc" font-family="Arial, sans-serif" font-size="34" font-weight="700">Project details page</text>
+  <text x="90" y="140" fill="#94a3b8" font-family="Arial, sans-serif" font-size="18">Detailed portfolio project view with preview, description, and metadata</text>
+  <rect x="90" y="190" width="640" height="300" rx="20" fill="#1e293b"/>
+  <rect x="770" y="190" width="420" height="300" rx="20" fill="#1e293b"/>
+  <rect x="800" y="225" width="220" height="22" rx="11" fill="#e2e8f0"/>
+  <rect x="800" y="265" width="330" height="12" rx="6" fill="#64748b"/>
+  <rect x="800" y="289" width="300" height="12" rx="6" fill="#64748b"/>
+  <rect x="800" y="313" width="280" height="12" rx="6" fill="#64748b"/>
+  <rect x="800" y="355" width="110" height="34" rx="17" fill="#2563eb"/>
+  <rect x="930" y="355" width="130" height="34" rx="17" fill="#334155"/>
+  <rect x="90" y="525" width="1100" height="100" rx="18" fill="#1e293b"/>
+  <rect x="120" y="553" width="220" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="120" y="581" width="500" height="12" rx="6" fill="#64748b"/>
+</svg>
+`)}`;
 
 const AboutWebsite = () => {
     const { t } = useLanguage();
