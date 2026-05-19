@@ -7,7 +7,7 @@ import { RiStackLine } from "react-icons/ri";
 import { MdOutlineViewQuilt } from "react-icons/md";
 import portfolioList from '../assets/Continental/screenshot7.webp';
 import portfolioGrid from '../assets/Continental/screenshot10.webp';
-import projectDetails from '../assets/DiscoverCambodia/screenshot1.jpg';
+import projectDetails from '../assets/Nebula/screenshot1.jpg';
 
 const AboutWebsite = () => {
     const { t } = useLanguage();
