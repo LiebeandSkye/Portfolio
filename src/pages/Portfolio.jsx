@@ -45,7 +45,7 @@ const Portfolio = () => {
         ) : (
           <ProjectGrid projects={filteredProjects} />
         )}
-        <AboutWebsiteCard />
+        {filteredProjects.length > 0 && <AboutWebsiteCard />}
       </div>
     </MainLayout>
   )
