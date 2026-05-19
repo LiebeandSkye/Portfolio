@@ -10,18 +10,20 @@ import { SakuPilotProvider } from './components/context/SakuPilotContext.jsx'
 const App = () => {
   const location = useLocation();
   const isImmersiveChat = location.pathname.includes('/sakupilot');
+  const isAboutWebsite = location.pathname.includes('/about-website');
+  const isViewportPage = isImmersiveChat || isAboutWebsite;
 
   return (
-    <div className={isImmersiveChat ? "h-[100dvh] w-full flex flex-col overflow-hidden bg-(--light)" : ""}>
+    <div className={isViewportPage ? "h-[100dvh] w-full flex flex-col overflow-hidden bg-(--light)" : ""}>
       <ThemeProvider>
         <NotificationProvider>
           <SakuPilotProvider>
             <Header />
             {!isImmersiveChat && <Links />}
-            <main className={isImmersiveChat ? "flex-1 min-h-0 w-full" : "p-6"}>
+            <main className={isViewportPage ? "flex-1 min-h-0 w-full" : "p-6"}>
               <Outlet />
             </main>
-            {!isImmersiveChat && <Footer />}
+            {!isViewportPage && <Footer />}
           </SakuPilotProvider>
         </NotificationProvider>
       </ThemeProvider>

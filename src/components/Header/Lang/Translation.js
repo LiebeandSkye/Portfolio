@@ -273,6 +273,473 @@ const translations = {
                 }
             },
         },
+        aboutWebsiteCard: {
+          title: "About this website",
+          imageAlt: "About this website preview",
+          p1: "This portfolio is documented like a real product: GitHub-inspired UI, project browsing, AI assistance, translations, and deployment.",
+          p2: "Open the breakdown for design notes, technology details, screenshots placed in context, and how Vercel plus Render keep the project online.",
+          note: "Explore the full write-up."
+        },
+        aboutWebsitePage: {
+          title: "About this website",
+          subtitle: "A product-style breakdown of the portfolio, from GitHub-inspired UI research to deployment.",
+          goBack: "Go Back",
+          sourceCode: "Source Code",
+          viewOnGithub: "View on GitHub",
+          goToTop: "Go to Top",
+          goToBottom: "Go to Bottom",
+          whatsThis: {
+            title: "What's this?",
+            desc: "This page documents how the portfolio was designed, built, translated, connected to AI services, and deployed. It is written like a project README, but presented inside the website itself."
+          },
+          navGroups: [
+            {
+              title: "1. Introduction",
+              items: [
+                {
+                  id: "intro-why",
+                  label: "Why I Built This"
+                },
+                {
+                  id: "intro-tech",
+                  label: "Key Technologies"
+                }
+              ]
+            },
+            {
+              title: "2. Design & UI",
+              items: [
+                {
+                  id: "design-github",
+                  label: "GitHub-Style Inspiration"
+                },
+                {
+                  id: "design-extracting",
+                  label: "Extracting GitHub's UI Elements"
+                },
+                {
+                  id: "design-dark-mode",
+                  label: "Dark Mode"
+                },
+                {
+                  id: "design-responsive",
+                  label: "Responsiveness"
+                }
+              ]
+            },
+            {
+              title: "3. Tech Stack",
+              items: [
+                {
+                  id: "tech-react",
+                  label: "React"
+                },
+                {
+                  id: "tech-vite",
+                  label: "Vite"
+                },
+                {
+                  id: "tech-node",
+                  label: "Node.js"
+                },
+                {
+                  id: "tech-tailwind",
+                  label: "Tailwind CSS"
+                },
+                {
+                  id: "tech-github",
+                  label: "GitHub"
+                },
+                {
+                  id: "tech-ai",
+                  label: "Gemini & Groq"
+                },
+                {
+                  id: "tech-deploy",
+                  label: "Vercel & Render"
+                }
+              ]
+            },
+            {
+              title: "4. Features Breakdown",
+              items: [
+                {
+                  id: "feature-welcome",
+                  label: "Welcome"
+                },
+                {
+                  id: "feature-portfolio",
+                  label: "Portfolio"
+                },
+                {
+                  id: "feature-contact",
+                  label: "Contact"
+                },
+                {
+                  id: "feature-sakupilot",
+                  label: "SakuPilot AI"
+                },
+                {
+                  id: "feature-language",
+                  label: "Multilanguage Support"
+                }
+              ]
+            },
+            {
+              title: "5. Deployment & Future Plans",
+              items: [
+                {
+                  id: "deployment",
+                  label: "Hosting & CI/CD"
+                },
+                {
+                  id: "next",
+                  label: "What's Next?"
+                }
+              ]
+            }
+          ],
+          techBadges: [
+            {
+              key: "react",
+              label: "React"
+            },
+            {
+              key: "vite",
+              label: "Vite"
+            },
+            {
+              key: "node",
+              label: "Node.js"
+            },
+            {
+              key: "tailwind",
+              label: "Tailwind CSS"
+            },
+            {
+              key: "github",
+              label: "GitHub"
+            },
+            {
+              key: "vercel",
+              label: "Vercel"
+            },
+            {
+              key: "render",
+              label: "Render"
+            },
+            {
+              key: "gemini",
+              label: "Gemini"
+            },
+            {
+              key: "groq",
+              label: "Groq"
+            }
+          ],
+          sections: {
+            intro: {
+              id: "intro-why",
+              step: "1. Introduction",
+              title: "Why I Built This",
+              paragraphs: [
+                "I wanted this portfolio to feel like a real developer product, not a generic landing page. The portfolio itself should demonstrate how I think about interface structure, interaction, documentation, and polish.",
+                "GitHub became the main reference because developers already understand its visual language: repository cards, compact controls, restrained borders, useful sidebars, source links, and information that is easy to scan."
+              ],
+              callout: "The result is a portfolio that acts like a project: it has documentation, project routes, AI assistance, translation support, and deployment choices worth explaining."
+            },
+            keyTech: {
+              id: "intro-tech",
+              step: "1. Introduction",
+              title: "Key Technologies",
+              p1: "The project uses React, Vite, Node.js, Tailwind CSS, GitHub, Vercel, Render, Gemini, and Groq. Each technology has a focused role, and the stack stays intentionally lighter than a full framework setup."
+            },
+            design: {
+              id: "design-github",
+              step: "2. Design & UI",
+              title: "GitHub-Style Inspiration",
+              paragraphs: [
+                "The portfolio borrows the feeling of GitHub without trying to clone every detail. The important parts are structure, restraint, discoverability, and a developer-friendly rhythm.",
+                "Cards, borders, side navigation, repository-like project browsing, and compact buttons are used because they make the site feel familiar to people who already read and ship code."
+              ],
+              image: {
+                src: "/about-website/portfolio_page.png",
+                alt: "Portfolio page styled like GitHub project browsing",
+                title: "Example: portfolio page",
+                caption: "The portfolio view uses repository-like project cards and actions so visitors can scan projects the way they scan code repositories."
+              }
+            },
+            extracting: {
+              id: "design-extracting",
+              step: "2. Design & UI",
+              title: "Extracting GitHub's UI Elements",
+              paragraphs: [
+                "The extracting-ui work is about inspecting GitHub and translating its visual decisions into this portfolio: color values, spacing rhythm, border contrast, hover states, and the density of developer-facing controls.",
+                "The goal is familiarity, not blind copying. The design borrows what makes GitHub readable and useful, then adapts it for a personal project showcase."
+              ],
+              image: {
+                src: "/about-website/extracting-ui.png",
+                alt: "Screenshot showing GitHub UI extraction notes",
+                title: "Example: extracting UI",
+                caption: "This asset shows the design research side: inspecting GitHub-style colors and interface details before adapting them into the portfolio."
+              }
+            },
+            theme: {
+              id: "design-dark-mode",
+              step: "2. Design & UI",
+              title: "Dark Mode",
+              p1: "The theme system keeps one light theme and one dark theme. That keeps the design easier to maintain while still matching the GitHub-inspired aesthetic.",
+              points: [
+                "Theme colors are centralized through CSS variables.",
+                "The UI keeps borders and contrast readable in both themes.",
+                "The theme toggle gives visitors control without multiplying the number of palettes to maintain."
+              ]
+            },
+            responsive: {
+              id: "design-responsive",
+              step: "2. Design & UI",
+              title: "Responsiveness",
+              paragraphs: [
+                "The layout adapts from a three-column documentation view on desktop into a simpler mobile experience. The goal is to keep the content readable without losing the GitHub-style structure.",
+                "On desktop, the left navigation can scroll independently, the article is the only main scroll area, and the right context panel stays still. On smaller screens, the page becomes more direct and content-first."
+              ]
+            },
+            welcome: {
+              id: "feature-welcome",
+              step: "4. Features Breakdown",
+              title: "Welcome",
+              p1: "The welcome page introduces the portfolio like a developer profile. It gives visitors a quick sense of identity, direction, and the interactive pieces they can explore next.",
+              image: {
+                src: "/about-website/welcome.png",
+                alt: "Welcome page screenshot",
+                title: "Example: welcome screen",
+                caption: "The first screen frames the portfolio as a personal developer space instead of a static resume."
+              }
+            },
+            portfolio: {
+              id: "feature-portfolio",
+              step: "4. Features Breakdown",
+              title: "Portfolio",
+              paragraphs: [
+                "The portfolio is the main showcase. Projects are organized in a GitHub-like style with filters, project cards, source/demo actions, and detail pages.",
+                "This structure makes each project feel like a repository: easy to scan first, then easy to open for deeper context."
+              ],
+              image: {
+                src: "/about-website/portfolio.png",
+                alt: "Portfolio cards screenshot",
+                title: "Example: project cards",
+                caption: "Project cards keep the browsing experience compact and familiar, close to how developers already inspect repositories."
+              }
+            },
+            contact: {
+              id: "feature-contact",
+              step: "4. Features Breakdown",
+              title: "Contact",
+              p1: "The contact page keeps communication simple and direct. It supports the practical side of the portfolio: after exploring the work, visitors need a clear way to reach out.",
+              image: {
+                src: "/about-website/contact.png",
+                alt: "Contact page screenshot",
+                title: "Example: contact page",
+                caption: "The contact surface follows the same restrained UI language so it feels connected to the rest of the site."
+              }
+            },
+            sakupilot: {
+              id: "feature-sakupilot",
+              step: "4. Features Breakdown",
+              title: "SakuPilot AI",
+              paragraphs: [
+                "SakuPilot is the AI assistant for the portfolio. It helps visitors ask about projects, technologies, role, and background without manually reading every page.",
+                "Gemini and Groq power the assistant layer, while the UI offers both quick chat and a more immersive conversation route."
+              ],
+              image: {
+                src: "/about-website/sakupilot.png",
+                alt: "SakuPilot AI assistant screenshot",
+                title: "Example: SakuPilot",
+                caption: "SakuPilot turns the portfolio into a conversational experience, useful for recruiters, collaborators, and curious visitors."
+              }
+            },
+            multilanguage: {
+              id: "feature-language",
+              step: "4. Features Breakdown",
+              title: "Multilanguage Support",
+              p1: "The website uses a shared translation file so UI text and documentation can switch language from one source of truth. That keeps page components cleaner and avoids duplicating English/Japanese copy inside individual components.",
+              images: [
+                {
+                  src: "/about-website/translation_en.png",
+                  alt: "English translation object screenshot",
+                  title: "Example: English translation data",
+                  caption: "The English object stores labels and article copy used by the about page."
+                },
+                {
+                  src: "/about-website/translation_jp.png",
+                  alt: "Japanese translation object screenshot",
+                  title: "Example: Japanese translation data",
+                  caption: "The Japanese object mirrors the same structure, so switching language changes content without changing the component logic."
+                }
+              ],
+              p2: "The component only asks for translated content and renders it. This keeps language behavior centralized and makes future edits easier."
+            },
+            deployment: {
+              id: "deployment",
+              step: "5. Deployment & Future Plans",
+              title: "Hosting & CI/CD",
+              p1: "The project is deployed with Vercel and Render so the frontend and backend can each run in the environment that fits them best.",
+              platforms: [
+                {
+                  icon: "vercel",
+                  title: "Vercel",
+                  desc: "Vercel hosts the Vite frontend and connects naturally with the GitHub workflow for production builds."
+                },
+                {
+                  icon: "render",
+                  title: "Render",
+                  desc: "Render hosts backend services and server-side integrations for API behavior."
+                }
+              ],
+              note: "This split keeps the public portfolio fast while still allowing backend and AI-related services to run separately."
+            },
+            next: {
+              id: "next",
+              step: "5. Deployment & Future Plans",
+              title: "What's Next?",
+              p1: "The portfolio is meant to keep evolving as the project list, assistant behavior, and documentation grow.",
+              points: [
+                "Add more project-specific context for SakuPilot.",
+                "Keep improving performance and bundle splitting.",
+                "Expand documentation when new features become part of the portfolio.",
+                "Continue refining the GitHub-inspired UI while keeping it personal."
+              ]
+            }
+          },
+          techSections: [
+            {
+              id: "tech-react",
+              step: "3. Tech Stack",
+              title: "React",
+              icon: "react",
+              summary: "Component model for the portfolio UI.",
+              body: "React powers the route-based pages, reusable cards, assistant surfaces, language-aware components, and interactive state throughout the site.",
+              points: [
+                "Reusable UI components keep the GitHub-style patterns consistent.",
+                "React state handles filters, language changes, drawers, and assistant interactions."
+              ]
+            },
+            {
+              id: "tech-vite",
+              step: "3. Tech Stack",
+              title: "Vite",
+              icon: "vite",
+              summary: "Fast local development and production builds.",
+              body: "Vite keeps the portfolio lightweight and quick to iterate on. It is a good fit here because the site behaves like a focused single-page application instead of a server-rendered content platform."
+            },
+            {
+              id: "tech-node",
+              step: "3. Tech Stack",
+              title: "Node.js",
+              icon: "node",
+              summary: "Server-side API behavior.",
+              body: "Node.js supports backend routes and integrations, including the pieces that should not live entirely in browser code."
+            },
+            {
+              id: "tech-tailwind",
+              step: "3. Tech Stack",
+              title: "Tailwind CSS",
+              icon: "tailwind",
+              summary: "GitHub-inspired styling system.",
+              body: "Tailwind CSS makes it practical to build compact, consistent interface pieces while still using the existing CSS variables for theme colors, borders, and surfaces."
+            },
+            {
+              id: "tech-github",
+              step: "3. Tech Stack",
+              title: "GitHub",
+              icon: "github",
+              summary: "Source control and visual inspiration.",
+              body: "GitHub is both the repository workflow and the design reference. The portfolio intentionally borrows the language of repositories, sidebars, cards, and developer documentation."
+            },
+            {
+              id: "tech-ai",
+              step: "3. Tech Stack",
+              title: "Gemini & Groq",
+              icon: "gemini",
+              summary: "AI services behind SakuPilot.",
+              body: "Gemini and Groq support the assistant experience. They make it possible for SakuPilot to explain projects, summarize technical choices, and answer visitor questions conversationally."
+            },
+            {
+              id: "tech-deploy",
+              step: "3. Tech Stack",
+              title: "Vercel & Render",
+              icon: "vercel",
+              summary: "Deployment split for frontend and backend.",
+              body: "Vercel serves the frontend while Render hosts backend services. This keeps the public site fast and lets server-side pieces evolve independently."
+            }
+          ]
+        },
+        aboutPage: {
+            title: 'About this website',
+            goBack: 'Go Back',
+            whatsThis: {
+                title: "What's this?",
+                desc: "Welcome to \"About This Website\", a behind-the-scenes look at how I built this GitHub-inspired portfolio. If you're curious about the design choices, tech stack, or unique features (like the AI chatbot), this is the right place!"
+            },
+            viewOnGithub: 'View on GitHub',
+            goToTop: 'Go to Top',
+            goToBottom: 'Go to Bottom',
+            sourceCode: 'Source Code',
+            nav: {
+                introduction: {
+                    title: '1. Introduction',
+                    items: ['Why I Built This', 'Key Technologies']
+                },
+                design: {
+                    title: '2. Design & UI',
+                    items: ['GitHub-Style Inspiration', 'Extracting GitHub\'s UI Elements']
+                },
+                tech: {
+                    title: '3. Tech Stack',
+                    items: ['Under the Hood']
+                },
+                features: {
+                    title: '4. Features Breakdown',
+                    items: ['Portfolio & AI Experiences']
+                }
+            },
+            sections: {
+                intro: {
+                    step: '1. Introduction',
+                    title: 'Why I Built This',
+                    p1: "I had a portfolio before, one of my first React projects. It was cool, with a built-in bot pretending to be me, but over time, I felt it was too generic. It looked like every other portfolio out there, and that's not who I am. I like to do things differently, to create something unusual. ",
+                    highlight1: "Isn't that already part of what makes a portfolio interesting?",
+                    p2: "I started looking for inspiration, browsing portfolios across different fields: software engineers, UI/UX designers, photographers, graphic artists. Many were visually stunning, but none felt like the kind of portfolio I wanted. They inspired me not in design, but in concept. I wanted my portfolio to feel like a real project, not just a showcase. A portfolio where people could interact, not just browse.",
+                    idea: "💡 Then, it hit me. GitHub",
+                    p3: "I love GitHub's minimalist yet effective design. It's built for developers, and let's be real: ",
+                    highlight2: "what developer hasn't used GitHub at least once?",
+                    p4: " That's when I knew: I wanted my portfolio to feel like a GitHub clone. Not just in aesthetics, but in functionality: ",
+                    highlight3: "interactive, intuitive, and dev-friendly.",
+                    keyTechTitle: "Key Technologies",
+                    keyTechDesc: "To bring this project to life, I used a combination of modern web technologies, libraries, and tools. Here's what I used to build it. Don't worry, I'll go into more detail about each one in the next sections.",
+                    infoBox: "You can grab the source code above. But here's the deal: this project is constantly evolving. Some sections are well-structured, others need refinement. I built it iteratively, fixed bugs on the fly, and balanced it with other commitments. Whenever I get time, I'll keep improving and optimizing the code."
+                },
+                design: {
+                    step: '2. Design & UI',
+                    title: 'GitHub-Style Inspirations',
+                    p1: "As mentioned in the introduction, I wanted my portfolio to look and feel like GitHub, from the layout to the colors, fonts, and overall structure. The visual direction is heavily inspired by GitHub: subtle borders, neutral surfaces, compact controls, and clean typography.",
+                    extractTitle: 'Extracting GitHub\'s UI Elements',
+                    p2: "I spent hours reviewing spacing, colors, and interactive states by inspecting GitHub's UI elements and then carefully adapting those values. The goal was familiarity without cloning every behavior exactly—striking a balance between a personal portfolio and a professional developer tool."
+                },
+                tech: {
+                    step: '3. Tech Stack',
+                    title: 'Under the Hood',
+                    p1: "Instead of jumping to Next.js, I chose to stick with Vite and React for this project. Why? Because I wanted a lightweight, fast, and purely client-rendered application that feels snappy like a true Single Page Application.",
+                    p2: "For styling, Tailwind CSS was the obvious choice. It allowed me to rapidly prototype the GitHub-inspired components without writing endless custom CSS classes. For the backend, Node.js and Express handle the API routes, bringing everything together seamlessly."
+                },
+                features: {
+                    step: '4. Features Breakdown',
+                    title: 'Portfolio and AI Experiences',
+                    p1: "The portfolio section is inspired by repository browsing patterns and supports list/grid views, project detail routes, and quick actions. It's designed to make exploring my past work feel like navigating a familiar codebase.",
+                    p2: "SakuPilot is the interactive AI assistant integrated directly into the portfolio. Inspired by Copilot-like UX patterns, it offers both quick interactions and an immersive chat experience, answering questions about my projects and background autonomously."
+                }
+            }
+        },
     },
     jp: {
         name: 'サク',
@@ -543,6 +1010,473 @@ const translations = {
                     }
                 }
             },
+        },
+        aboutWebsiteCard: {
+          title: "このウェブサイトについて",
+          imageAlt: "このウェブサイトのプレビュー",
+          p1: "このポートフォリオをプロダクトのように解説しています。GitHub風UI、プロジェクト閲覧、AIアシスタント、翻訳、デプロイまでまとめています。",
+          p2: "デザインメモ、技術詳細、文脈に合わせたスクリーンショット、VercelとRenderでの運用方法を確認できます。",
+          note: "詳しい解説を見る。"
+        },
+        aboutWebsitePage: {
+          title: "このウェブサイトについて",
+          subtitle: "GitHub風UIの研究からデプロイまで、このポートフォリオをプロダクトのようにまとめたページです。",
+          goBack: "戻る",
+          sourceCode: "ソースコード",
+          viewOnGithub: "GitHubで見る",
+          goToTop: "トップへ戻る",
+          goToBottom: "一番下へ移動",
+          whatsThis: {
+            title: "これは何？",
+            desc: "このページでは、ポートフォリオのデザイン、実装、翻訳、AI連携、デプロイ構成を説明します。READMEのような内容を、サイト内のドキュメントとして読めるようにしています。"
+          },
+          navGroups: [
+            {
+              title: "1. はじめに",
+              items: [
+                {
+                  id: "intro-why",
+                  label: "作成した理由"
+                },
+                {
+                  id: "intro-tech",
+                  label: "主要技術"
+                }
+              ]
+            },
+            {
+              title: "2. デザイン & UI",
+              items: [
+                {
+                  id: "design-github",
+                  label: "GitHub風の発想"
+                },
+                {
+                  id: "design-extracting",
+                  label: "GitHub UIの抽出"
+                },
+                {
+                  id: "design-dark-mode",
+                  label: "ダークモード"
+                },
+                {
+                  id: "design-responsive",
+                  label: "レスポンシブ"
+                }
+              ]
+            },
+            {
+              title: "3. 技術スタック",
+              items: [
+                {
+                  id: "tech-react",
+                  label: "React"
+                },
+                {
+                  id: "tech-vite",
+                  label: "Vite"
+                },
+                {
+                  id: "tech-node",
+                  label: "Node.js"
+                },
+                {
+                  id: "tech-tailwind",
+                  label: "Tailwind CSS"
+                },
+                {
+                  id: "tech-github",
+                  label: "GitHub"
+                },
+                {
+                  id: "tech-ai",
+                  label: "Gemini & Groq"
+                },
+                {
+                  id: "tech-deploy",
+                  label: "Vercel & Render"
+                }
+              ]
+            },
+            {
+              title: "4. 機能の詳細",
+              items: [
+                {
+                  id: "feature-welcome",
+                  label: "Welcome"
+                },
+                {
+                  id: "feature-portfolio",
+                  label: "Portfolio"
+                },
+                {
+                  id: "feature-contact",
+                  label: "Contact"
+                },
+                {
+                  id: "feature-sakupilot",
+                  label: "SakuPilot AI"
+                },
+                {
+                  id: "feature-language",
+                  label: "多言語対応"
+                }
+              ]
+            },
+            {
+              title: "5. デプロイ & 今後",
+              items: [
+                {
+                  id: "deployment",
+                  label: "ホスティング & CI/CD"
+                },
+                {
+                  id: "next",
+                  label: "今後の改善"
+                }
+              ]
+            }
+          ],
+          techBadges: [
+            {
+              key: "react",
+              label: "React"
+            },
+            {
+              key: "vite",
+              label: "Vite"
+            },
+            {
+              key: "node",
+              label: "Node.js"
+            },
+            {
+              key: "tailwind",
+              label: "Tailwind CSS"
+            },
+            {
+              key: "github",
+              label: "GitHub"
+            },
+            {
+              key: "vercel",
+              label: "Vercel"
+            },
+            {
+              key: "render",
+              label: "Render"
+            },
+            {
+              key: "gemini",
+              label: "Gemini"
+            },
+            {
+              key: "groq",
+              label: "Groq"
+            }
+          ],
+          sections: {
+            intro: {
+              id: "intro-why",
+              step: "1. はじめに",
+              title: "作成した理由",
+              paragraphs: [
+                "このポートフォリオは、ただのランディングページではなく、実際の開発者向けプロダクトのように感じられるものにしたいと思って作りました。UI構成、操作感、ドキュメント、細部の仕上げまで、自分の考え方が伝わるサイトにしたかったのです。",
+                "GitHubは開発者にとってなじみのある視覚言語を持っています。リポジトリカード、コンパクトな操作、控えめな境界線、便利なサイドバー、ソースリンク、読みやすい情報構造が参考になりました。"
+              ],
+              callout: "このポートフォリオは一つのプロジェクトとして作っています。ドキュメント、プロジェクト詳細、AIアシスタント、翻訳、デプロイ構成まで含めて説明できるようにしています。"
+            },
+            keyTech: {
+              id: "intro-tech",
+              step: "1. はじめに",
+              title: "主要技術",
+              p1: "このプロジェクトではReact、Vite、Node.js、Tailwind CSS、GitHub、Vercel、Render、Gemini、Groqを使用しています。それぞれの役割を絞り、必要以上に重い構成にしないことを意識しました。"
+            },
+            design: {
+              id: "design-github",
+              step: "2. デザイン & UI",
+              title: "GitHub風の発想",
+              paragraphs: [
+                "GitHubをそのまま複製するのではなく、構造、控えめな見た目、見つけやすさ、開発者にとって自然な情報の流れを参考にしています。",
+                "カード、境界線、サイドナビゲーション、リポジトリ風のプロジェクト一覧、コンパクトなボタンを使うことで、コードを読む人にとって親しみやすい体験にしています。"
+              ],
+              image: {
+                src: "/about-website/portfolio_page.png",
+                alt: "GitHub風のポートフォリオページ",
+                title: "例: ポートフォリオページ",
+                caption: "リポジトリ風のカードと操作を使い、プロジェクトを素早く確認できるようにしています。"
+              }
+            },
+            extracting: {
+              id: "design-extracting",
+              step: "2. デザイン & UI",
+              title: "GitHub UIの抽出",
+              paragraphs: [
+                "extracting-uiは、GitHubを検証し、その視覚的な判断をこのポートフォリオへ変換する作業です。色、余白、境界線のコントラスト、ホバー状態、開発者向けUIの情報密度を確認しました。",
+                "目標は完全なコピーではなく、親しみやすさです。GitHubの読みやすさと実用性を借りながら、個人のプロジェクト紹介に合う形へ調整しています。"
+              ],
+              image: {
+                src: "/about-website/extracting-ui.png",
+                alt: "GitHub UI抽出メモのスクリーンショット",
+                title: "例: UI抽出",
+                caption: "GitHub風の色や細部を調べ、ポートフォリオに合わせて変換するデザイン研究の画像です。"
+              }
+            },
+            theme: {
+              id: "design-dark-mode",
+              step: "2. デザイン & UI",
+              title: "ダークモード",
+              p1: "テーマはライトとダークの2種類に絞っています。GitHub風の雰囲気を保ちながら、メンテナンスしやすい配色にするためです。",
+              points: [
+                "色はCSS変数で集約しています。",
+                "どちらのテーマでも境界線と文字のコントラストを読みやすく保っています。",
+                "テーマ切り替えは用意しつつ、管理するパレットは増やしすぎないようにしています。"
+              ]
+            },
+            responsive: {
+              id: "design-responsive",
+              step: "2. デザイン & UI",
+              title: "レスポンシブ",
+              paragraphs: [
+                "デスクトップでは3カラムのドキュメントレイアウトにし、モバイルでは読みやすい構成に変化します。GitHub風の構造を残しつつ、内容を読みやすくすることを優先しています。",
+                "デスクトップでは左ナビゲーションだけが必要に応じてスクロールし、中央の記事がメインのスクロール領域になり、右側の補足パネルは固定されたままです。"
+              ]
+            },
+            welcome: {
+              id: "feature-welcome",
+              step: "4. 機能の詳細",
+              title: "Welcome",
+              p1: "Welcomeページは開発者プロフィールのように、訪問者に自己紹介とサイトの方向性を伝える場所です。次にどこを見ればよいかも自然に分かるようにしています。",
+              image: {
+                src: "/about-website/welcome.png",
+                alt: "Welcomeページのスクリーンショット",
+                title: "例: Welcome画面",
+                caption: "最初の画面で、静的な履歴書ではなく個人の開発者スペースとして見せています。"
+              }
+            },
+            portfolio: {
+              id: "feature-portfolio",
+              step: "4. 機能の詳細",
+              title: "Portfolio",
+              paragraphs: [
+                "Portfolioはメインの作品一覧です。フィルター、プロジェクトカード、ソース/デモへの操作、詳細ページをGitHub風に整理しています。",
+                "まず素早くスキャンし、気になったものを深く読めるようにしています。"
+              ],
+              image: {
+                src: "/about-website/portfolio.png",
+                alt: "ポートフォリオカードのスクリーンショット",
+                title: "例: プロジェクトカード",
+                caption: "開発者がリポジトリを見る感覚に近い、コンパクトで見慣れた一覧にしています。"
+              }
+            },
+            contact: {
+              id: "feature-contact",
+              step: "4. 機能の詳細",
+              title: "Contact",
+              p1: "Contactページは、作品を見たあとにすぐ連絡できる実用的な場所です。他のページと同じ控えめなUIで、サイト全体の雰囲気を保っています。",
+              image: {
+                src: "/about-website/contact.png",
+                alt: "Contactページのスクリーンショット",
+                title: "例: Contactページ",
+                caption: "連絡フォームも同じデザイン言語でまとめています。"
+              }
+            },
+            sakupilot: {
+              id: "feature-sakupilot",
+              step: "4. 機能の詳細",
+              title: "SakuPilot AI",
+              paragraphs: [
+                "SakuPilotはポートフォリオ用のAIアシスタントです。訪問者は全ページを読み込まなくても、プロジェクト、技術、役割、経歴について質問できます。",
+                "GeminiとGroqがAI体験を支え、クイックチャットと没入型チャットの両方を提供しています。"
+              ],
+              image: {
+                src: "/about-website/sakupilot.png",
+                alt: "SakuPilot AIアシスタントのスクリーンショット",
+                title: "例: SakuPilot",
+                caption: "ポートフォリオを静的なページではなく、会話できる体験にします。"
+              }
+            },
+            multilanguage: {
+              id: "feature-language",
+              step: "4. 機能の詳細",
+              title: "多言語対応",
+              p1: "このサイトでは共有の翻訳ファイルを使い、UIテキストとドキュメントを一つの構造から切り替えています。コンポーネント内に英語と日本語の文章を重複して持たせないためです。",
+              images: [
+                {
+                  src: "/about-website/translation_en.png",
+                  alt: "英語翻訳オブジェクトのスクリーンショット",
+                  title: "例: 英語の翻訳データ",
+                  caption: "英語側のオブジェクトに、ラベルと本文をまとめています。"
+                },
+                {
+                  src: "/about-website/translation_jp.png",
+                  alt: "日本語翻訳オブジェクトのスクリーンショット",
+                  title: "例: 日本語の翻訳データ",
+                  caption: "日本語側も同じ構造なので、コンポーネントを変えずに表示内容を切り替えられます。"
+                }
+              ],
+              p2: "コンポーネントは翻訳済みのデータを受け取って描画するだけなので、今後の文章修正や言語追加がしやすくなります。"
+            },
+            deployment: {
+              id: "deployment",
+              step: "5. デプロイ & 今後",
+              title: "ホスティング & CI/CD",
+              p1: "このプロジェクトはVercelとRenderに分けてデプロイしています。フロントエンドとバックエンドを、それぞれ適した環境で動かすためです。",
+              platforms: [
+                {
+                  icon: "vercel",
+                  title: "Vercel",
+                  desc: "VercelはViteフロントエンドをホストし、GitHubワークフローと相性よく本番ビルドを配信できます。"
+                },
+                {
+                  icon: "render",
+                  title: "Render",
+                  desc: "RenderはAPI処理やサーバー側連携を担当するバックエンドサービスをホストします。"
+                }
+              ],
+              note: "この分離により、公開ポートフォリオは高速に保ちつつ、バックエンドやAI連携を別で運用できます。"
+            },
+            next: {
+              id: "next",
+              step: "5. デプロイ & 今後",
+              title: "今後の改善",
+              p1: "このポートフォリオは、プロジェクト、アシスタント、ドキュメントと一緒に成長していく前提で作っています。",
+              points: [
+                "SakuPilotにプロジェクトごとの文脈をさらに追加する。",
+                "パフォーマンスとコード分割を改善する。",
+                "新しい機能を追加したらドキュメントも拡張する。",
+                "GitHub風のUIを保ちながら、より自分らしい表現に磨いていく。"
+              ]
+            }
+          },
+          techSections: [
+            {
+              id: "tech-react",
+              step: "3. 技術スタック",
+              title: "React",
+              icon: "react",
+              summary: "UIを組み立てるコンポーネントモデル。",
+              body: "Reactはページ、カード、アシスタントUI、言語切り替えに対応するコンポーネント、インタラクティブな状態管理を支えています。",
+              points: [
+                "再利用できるUIでGitHub風の見た目を統一しています。",
+                "フィルター、言語変更、ドロワー、アシスタント操作などをReactの状態で扱っています。"
+              ]
+            },
+            {
+              id: "tech-vite",
+              step: "3. 技術スタック",
+              title: "Vite",
+              icon: "vite",
+              summary: "高速な開発環境と本番ビルド。",
+              body: "Viteにより、軽量で素早く反復できるフロントエンド環境になっています。このサイトはサーバーレンダリング中心ではなく、SPAとして動く構成に合っています。"
+            },
+            {
+              id: "tech-node",
+              step: "3. 技術スタック",
+              title: "Node.js",
+              icon: "node",
+              summary: "サーバー側API処理。",
+              body: "Node.jsはブラウザだけに置きたくない処理や、外部サービス連携を含むバックエンド側の役割を担当します。"
+            },
+            {
+              id: "tech-tailwind",
+              step: "3. 技術スタック",
+              title: "Tailwind CSS",
+              icon: "tailwind",
+              summary: "GitHub風UIのスタイリング。",
+              body: "Tailwind CSSでコンパクトで一貫したUIを素早く構築しつつ、テーマの色や境界線などは既存のCSS変数と組み合わせています。"
+            },
+            {
+              id: "tech-github",
+              step: "3. 技術スタック",
+              title: "GitHub",
+              icon: "github",
+              summary: "ソース管理とデザインの参照元。",
+              body: "GitHubはコード管理の場所であり、このポートフォリオのUI発想の元でもあります。リポジトリ、サイドバー、カード、ドキュメントの雰囲気を取り入れています。"
+            },
+            {
+              id: "tech-ai",
+              step: "3. 技術スタック",
+              title: "Gemini & Groq",
+              icon: "gemini",
+              summary: "SakuPilotを支えるAIサービス。",
+              body: "GeminiとGroqは、SakuPilotがプロジェクト、技術選定、背景について会話形式で説明するためのAIレイヤーです。"
+            },
+            {
+              id: "tech-deploy",
+              step: "3. 技術スタック",
+              title: "Vercel & Render",
+              icon: "vercel",
+              summary: "フロントエンドとバックエンドのデプロイ分離。",
+              body: "Vercelでフロントエンドを配信し、Renderでバックエンドサービスを運用します。公開サイトを高速に保ちながら、サーバー側機能を独立して改善できます。"
+            }
+          ]
+        },
+        aboutPage: {
+            title: 'このウェブサイトについて',
+            goBack: '戻る',
+            whatsThis: {
+                title: "これは何？",
+                desc: "「このウェブサイトについて」へようこそ。ここでは、GitHub風のポートフォリオをどのように構築したかの裏側を紹介します。デザインの選択、技術スタック、ユニークな機能（AIチャットボットなど）に興味があるなら、ここは最適な場所です！"
+            },
+            viewOnGithub: 'GitHubで見る',
+            goToTop: 'トップへ戻る',
+            goToBottom: '一番下へ移動',
+            sourceCode: 'ソースコード',
+            nav: {
+                introduction: {
+                    title: '1. はじめに',
+                    items: ['作成の動機', '主要な技術']
+                },
+                design: {
+                    title: '2. デザイン & UI',
+                    items: ['GitHubスタイルのインスピレーション', 'GitHubのUI要素の抽出']
+                },
+                tech: {
+                    title: '3. 技術スタック',
+                    items: ['技術の裏側']
+                },
+                features: {
+                    title: '4. 機能の詳細',
+                    items: ['ポートフォリオとAI体験']
+                }
+            },
+            sections: {
+                intro: {
+                    step: '1. はじめに',
+                    title: '作成の動機',
+                    p1: "以前にもポートフォリオを持っていました。最初のReactプロジェクトの一つで、自分になりすましたボットが組み込まれていてクールでしたが、時間が経つにつれて一般的すぎると感じるようになりました。世の中にある他のすべてのポートフォリオと同じように見え、それは自分らしくありませんでした。私は違うことをして、珍しいものを作るのが好きです。",
+                    highlight1: "それこそがポートフォリオを面白くする要素の一つではないでしょうか？",
+                    p2: "ソフトウェアエンジニア、UI/UXデザイナー、写真家、グラフィックアーティストなど、さまざまな分野のポートフォリオを見てインスピレーションを探し始めました。視覚的に素晴らしいものは多くありましたが、私が望むようなポートフォリオには感じられませんでした。デザインではなく、コンセプトに刺激を受けました。ただのショーケースではなく、実際のプロジェクトのように感じられるポートフォリオにしたかったのです。人々がただ閲覧するだけでなく、対話できるポートフォリオです。",
+                    idea: "💡 その時、ひらめきました。GitHubです。",
+                    p3: "私はGitHubのミニマリストでありながら効果的なデザインが大好きです。開発者のために作られており、正直に言って、",
+                    highlight2: "GitHubを一度も使ったことがない開発者がいるでしょうか？",
+                    p4: " その時、自分のポートフォリオをGitHubのクローンのように感じさせたいと確信しました。見た目だけでなく、機能的にも",
+                    highlight3: "インタラクティブで直感的、そして開発者フレンドリーに。",
+                    keyTechTitle: "主要な技術",
+                    keyTechDesc: "このプロジェクトを実現するために、最新のWeb技術、ライブラリ、ツールを組み合わせて使用しました。構築に使用したものはこちらです。それぞれについて、次のセクションで詳しく説明しますのでご心配なく。",
+                    infoBox: "上記のソースコードは取得可能ですが、このプロジェクトは常に進化していることを理解してください。一部のセクションはよく構造化されていますが、他のセクションは改善が必要です。反復的に構築し、その場でバグを修正し、他の仕事とのバランスを取りました。時間ができるたびに、コードの改善と最適化を続けていきます。"
+                },
+                design: {
+                    step: '2. デザイン & UI',
+                    title: 'GitHubスタイルのインスピレーション',
+                    p1: "はじめに述べたように、レイアウトから色、フォント、全体的な構造に至るまで、ポートフォリオをGitHubのように見せ、感じさせたかったのです。視覚的な方向性はGitHubから強く影響を受けています。控えめな境界線、ニュートラルな表面、コンパクトなコントロール、クリーンなタイポグラフィなどです。",
+                    extractTitle: 'GitHubのUI要素の抽出',
+                    p2: "GitHubのUI要素を調査し、スペースや色、インタラクティブな状態を検討するために何時間も費やし、それらの値を慎重に適応させました。目標は、すべての動作を完全に複製するのではなく、親しみやすさを持たせることでした。個人的なポートフォリオとプロフェッショナルな開発者ツールとの間のバランスを取るためです。"
+                },
+                tech: {
+                    step: '3. 技術スタック',
+                    title: '技術の裏側',
+                    p1: "このプロジェクトでは、Next.jsに飛びつくのではなく、ViteとReactを使用することを選びました。理由は、真のシングルページアプリケーションのように機敏に動作する、軽量で高速な純粋なクライアントレンダリングアプリケーションを構築したかったからです。",
+                    p2: "スタイリングにはTailwind CSSが明確な選択肢でした。無限のカスタムCSSクラスを書くことなく、GitHubから着想を得たコンポーネントを迅速にプロトタイプ作成できました。バックエンドでは、Node.jsとExpressがAPIルートを処理し、すべてをシームレスにまとめ上げています。"
+                },
+                features: {
+                    step: '4. 機能の詳細',
+                    title: 'ポートフォリオとAI体験',
+                    p1: "ポートフォリオセクションはリポジトリの閲覧パターンから着想を得ており、リスト/グリッドビュー、プロジェクト詳細ルート、クイックアクションをサポートしています。過去の作品を探索する作業が、見慣れたコードベースをナビゲートするように感じられるよう設計されています。",
+                    p2: "SakuPilotはこのポートフォリオに直接統合されたインタラクティブなAIアシスタントです。CopilotのようなUXパターンからインスピレーションを得ており、クイックインタラクションと没入型チャット体験の両方を提供し、私のプロジェクトや経歴に関する質問に自律的に回答します。"
+                }
+            }
         },
     },
 };
