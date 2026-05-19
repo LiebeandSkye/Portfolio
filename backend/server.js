@@ -14,13 +14,29 @@ const allowedOrigins = [
     'http://localhost:5173',   // Vite dev
     'http://localhost:3000',   // CRA dev (just in case)
     process.env.FRONTEND_ORIGIN, // your deployed domain from .env
-].filter(Boolean); // removes undefined if FRONTEND_ORIGIN isn't set yet
+]
+    .filter(Boolean)
+    .map(origin => origin.replace(/\/$/, '')); // removes trailing slash for exact matching
 
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (e.g. curl, Postman, server-to-server)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) return callback(null, true);
+
+        // Normalize the incoming origin (remove trailing slash if any)
+        const cleanOrigin = origin.replace(/\/$/, '');
+
+        // Check if origin matches allowed list
+        if (allowedOrigins.includes(cleanOrigin)) return callback(null, true);
+
+        // Dynamically allow Vercel domains for your portfolio deployment
+        const isVercelDeployment = /^https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(cleanOrigin);
+        const containsUserIdentifier = cleanOrigin.toLowerCase().includes('kryrithisak');
+
+        if (isVercelDeployment && containsUserIdentifier) {
+            return callback(null, true);
+        }
+
         callback(new Error(`CORS: origin ${origin} not allowed`));
     },
     methods: ['POST', 'GET', 'OPTIONS'],
