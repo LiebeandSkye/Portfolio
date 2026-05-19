@@ -200,10 +200,14 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 {/* Bottom */}
                 <div className="flex flex-col gap-1 px-8 pb-8">
                     <SectionLabel>Others</SectionLabel>
-                    <div className="text-(--text-gray) flex items-center gap-2 px-2 py-1 mt-1 hover:bg-(--pixel-hover) rounded-lg cursor-pointer">
+                    <NavLink
+                        to="/about-this-website"
+                        onClick={toggleSidebar}
+                        className="text-(--text-gray) flex items-center gap-2 px-2 py-1 mt-1 hover:bg-(--pixel-hover) rounded-lg cursor-pointer"
+                    >
                         <PiInfoDuotone />
                         <span className="text-(--text-light)">{t('aboutWebsite')}</span>
-                    </div>
+                    </NavLink>
                     <div className="w-full h-[1px] bg-(--border-light) md:hidden mt-2" />
                     <div className="md:hidden mt-2">
                         <div className="flex justify-between items-start mb-2">

@@ -79,6 +79,73 @@ const translations = {
             statusPublic: 'Public',
             btnDemo: 'View Demo',
             btnCode: 'Source Code',
+            aboutWebsiteCard: {
+                title: 'About this website',
+                text1: "This website is heavily inspired by GitHub's layout and interaction style, especially on the portfolio page where projects behave like repositories.",
+                text2: 'You can switch list/grid views, explore each project in detail, and navigate a developer-friendly UI designed to feel familiar.',
+                text3: 'For a deeper walkthrough of design choices, stack decisions, and feature breakdowns, open the full documentation page.',
+                imageAlt: 'About this website preview image',
+            },
+        },
+        aboutWebsitePage: {
+            tagline: 'Documentation style overview',
+            sections: {
+                introduction: '1. Introduction',
+                design: '2. Design & UI',
+                techStack: '3. Tech Stack',
+                features: '4. Features Breakdown',
+                deployment: '5. Deployment & Future Plans',
+            },
+            introduction: {
+                title: 'Why I built this website',
+                items: [
+                    'I wanted a portfolio that feels like a real product, not just a static showcase. GitHub became the main inspiration for layout, spacing, and navigation patterns.',
+                    "Compared to my older versions, this one focuses more on interactivity and a cleaner information hierarchy so visitors can quickly understand who I am and what I've built.",
+                ],
+            },
+            design: {
+                title: 'GitHub-inspired visual system',
+                items: [
+                    "The UI follows GitHub-inspired cards, borders, and spacing while still being adapted to my own content and flow.",
+                    'I kept the two-theme system simple and focused on readability, contrast, and consistent component styling across pages.',
+                ],
+            },
+            techStack: {
+                title: 'Built with Vite + React',
+                items: [
+                    'This portfolio is built with Vite + React, Tailwind CSS, and React Router for client-side navigation.',
+                    'Some parts are intentionally lightweight so iteration is fast, and the structure stays maintainable as I keep adding projects.',
+                ],
+            },
+            features: {
+                title: 'What this portfolio includes',
+                items: [
+                    'A welcome page, portfolio with list/grid view, project detail pages, contact page, and AI-powered SakuPilot chat.',
+                    'The portfolio section mirrors a repository-browsing workflow while still being tailored for showcasing personal work.',
+                ],
+            },
+            deployment: {
+                title: 'Deployment and continuous updates',
+                items: [
+                    'The site is deployed from GitHub and built for continuous updates as I add projects, improve UI details, and iterate on features.',
+                    "This page itself exists to document those choices and keep the portfolio transparent about how it's built.",
+                ],
+            },
+            screenshots: {
+                title: 'Screenshots',
+                description: 'These screenshots show key portfolio experiences similar to the reference design: repository-style listing, grid browsing, and project details.',
+                portfolioListAlt: 'Portfolio list view screenshot',
+                portfolioGridAlt: 'Portfolio grid view screenshot',
+                projectDetailsAlt: 'Project details screenshot',
+                portfolioListCaption: 'Portfolio list view',
+                portfolioGridCaption: 'Portfolio grid view',
+                projectDetailsCaption: 'Project details page',
+            },
+            links: {
+                welcome: 'Welcome page',
+                portfolio: 'Explore portfolio',
+                contact: 'Contact page',
+            },
         },
         projects: {
             titles: {
@@ -354,6 +421,73 @@ const translations = {
             btnDemo: "デモを見る",
             btnCode: "ソースコードを見る",
             statusPublic: '公開中',
+            aboutWebsiteCard: {
+                title: 'このウェブサイトについて',
+                text1: 'このサイトは、特にポートフォリオ画面でのレイアウトや操作性において、GitHubのデザイン思想から強く影響を受けています。',
+                text2: 'リスト表示とグリッド表示を切り替えながら作品を閲覧でき、開発者にとって親しみやすいUIを目指しています。',
+                text3: '設計意図・技術スタック・機能構成の詳細は、専用の「このウェブサイトについて」ページで確認できます。',
+                imageAlt: 'このウェブサイトについてのプレビュー画像',
+            },
+        },
+        aboutWebsitePage: {
+            tagline: 'ドキュメント形式の概要',
+            sections: {
+                introduction: '1. はじめに',
+                design: '2. デザイン & UI',
+                techStack: '3. 技術スタック',
+                features: '4. 機能概要',
+                deployment: '5. デプロイと今後の計画',
+            },
+            introduction: {
+                title: 'このサイトを作った理由',
+                items: [
+                    '単なる作品一覧ではなく、実際のプロダクトのように使えるポートフォリオを目指しました。レイアウトや導線はGitHubから着想を得ています。',
+                    '以前のバージョンよりも、操作性と情報整理を重視し、訪問者が私や制作物を素早く理解できる構成にしました。',
+                ],
+            },
+            design: {
+                title: 'GitHub風のビジュアル設計',
+                items: [
+                    'カード、境界線、余白などはGitHub風の見た目をベースにしつつ、自分のコンテンツに合うよう最適化しています。',
+                    'テーマは読みやすさとコントラストを重視し、ページ全体で統一感が出るように調整しています。',
+                ],
+            },
+            techStack: {
+                title: 'Vite + Reactで構築',
+                items: [
+                    'このポートフォリオは Vite + React、Tailwind CSS、React Router を中心に構築しています。',
+                    '今後も継続的に機能追加しやすいよう、軽量で保守しやすい構成を意識しています。',
+                ],
+            },
+            features: {
+                title: '主な機能',
+                items: [
+                    'Welcomeページ、ポートフォリオ（リスト/グリッド切替）、プロジェクト詳細、Contactページ、SakuPilotチャットを備えています。',
+                    'ポートフォリオ画面はGitHubのリポジトリ閲覧体験を参考にしつつ、個人作品の紹介向けに調整しています。',
+                ],
+            },
+            deployment: {
+                title: 'デプロイと継続的な更新',
+                items: [
+                    'このサイトはGitHubからデプロイされ、作品追加やUI改善を継続的に反映できるようにしています。',
+                    'このページでは、その設計意図や実装方針を透明性を持ってまとめています。',
+                ],
+            },
+            screenshots: {
+                title: 'スクリーンショット',
+                description: '参照デザインと同様に、リポジトリ風リスト表示・グリッド表示・詳細ページの体験を示すスクリーンショットです。',
+                portfolioListAlt: 'ポートフォリオのリスト表示',
+                portfolioGridAlt: 'ポートフォリオのグリッド表示',
+                projectDetailsAlt: 'プロジェクト詳細ページ',
+                portfolioListCaption: 'ポートフォリオ（リスト表示）',
+                portfolioGridCaption: 'ポートフォリオ（グリッド表示）',
+                projectDetailsCaption: 'プロジェクト詳細ページ',
+            },
+            links: {
+                welcome: 'Welcomeページ',
+                portfolio: 'ポートフォリオを見る',
+                contact: 'Contactページ',
+            },
         },
         projects: {
             titles: {

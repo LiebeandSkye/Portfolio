@@ -8,6 +8,7 @@ const Welcome = lazy(() => import('../pages/Welcome'));
 const Contact = lazy(() => import('../pages/Contact'));
 const AboutProject = lazy(() => import('../pages/AboutProject'));
 const ImmersiveSakuPilot = lazy(() => import('../pages/ImmersiveSakuPilot'));
+const AboutWebsite = lazy(() => import('../pages/AboutWebsite'));
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             {
                 path: 'sakupilot',
                 element: <Suspense fallback={null}><ImmersiveSakuPilot /></Suspense>,
+            },
+            {
+                path: 'about-this-website',
+                element: <Suspense fallback={null}><AboutWebsite /></Suspense>,
             },
             {
                 path: '*',
