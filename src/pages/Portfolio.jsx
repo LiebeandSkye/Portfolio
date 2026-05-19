@@ -3,6 +3,7 @@ import MainLayout from './MainLayout'
 import PortfolioHeader from '../components/PortfolioHead/PortfolioHeader'
 import ProjectList from '../components/project/ProjectList'
 import ProjectGrid from '../components/project/ProjectGrid'
+import AboutWebsiteCard from '../components/project/AboutWebsiteCard'
 import Projects from '../Data/Projects'
 
 const Portfolio = () => {
@@ -44,6 +45,7 @@ const Portfolio = () => {
         ) : (
           <ProjectGrid projects={filteredProjects} />
         )}
+        <AboutWebsiteCard />
       </div>
     </MainLayout>
   )

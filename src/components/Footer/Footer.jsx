@@ -23,7 +23,7 @@ const Footer = () => {
                     <NavLink to="/contact" onClick={scrollToTop} className='font-semibold text-(--text-gray) text-xs hover:text-(--sucess)'>{t('links')?.contact}</NavLink>
                     <a className='font-semibold text-(--text-gray) text-xs hover:text-(--sucess)' href='#' target='_blank'>LinkedIn</a>
                     <a className='font-semibold text-(--text-gray) text-xs hover:text-(--sucess)' href='https://github.com/LiebeandSkye' target='_blank'>Github</a>
-                    <NavLink to="/contact" className='font-semibold text-(--text-gray) text-xs hover:text-(--sucess)'>{t('aboutWebsite')}</NavLink>
+                    <NavLink to="/about-website" onClick={scrollToTop} className='font-semibold text-(--text-gray) text-xs hover:text-(--sucess)'>{t('aboutWebsite')}</NavLink>
                 </div>
             </div>
         </div>
