@@ -5,7 +5,6 @@ import None from '../assets/Tools/None.png';
 import continentalScreenshot1 from '../assets/Continental/screenshot1.webp';
 import continentalScreenshot2 from '../assets/Continental/screenshot2.webp';
 import continentalScreenshot6 from '../assets/Continental/screenshot6.webp';
-import continentalScreenshot7 from '../assets/Continental/screenshot7.webp';
 import continentalScreenshot8 from '../assets/Continental/screenshot8.webp';
 import continentalScreenshot9 from '../assets/Continental/screenshot9.webp';
 import continentalScreenshot10 from '../assets/Continental/screenshot10.webp';
@@ -124,7 +123,6 @@ const Projects = [
                 screenshot2: continentalScreenshot2,
                 screenshot6: continentalScreenshot6,
                 screenshot10: continentalScreenshot10,
-                screenshot7: continentalScreenshot7,
                 screenshot8: continentalScreenshot8,
                 screenshot9: continentalScreenshot9,
             },
