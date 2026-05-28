@@ -6,6 +6,7 @@ import Footer from './components/Footer/Footer'
 import { ThemeProvider } from './components/context/ThemeContext'
 import { NotificationProvider } from './components/context/NotificationContext'
 import { SakuPilotProvider } from './components/context/SakuPilotContext.jsx'
+import Seo from './seo/Seo.jsx'
 
 const App = () => {
   const location = useLocation();
@@ -18,6 +19,7 @@ const App = () => {
       <ThemeProvider>
         <NotificationProvider>
           <SakuPilotProvider>
+            <Seo />
             <Header />
             {!isImmersiveChat && <Links />}
             <main className={isViewportPage ? "flex-1 min-h-0 w-full" : "p-6"}>

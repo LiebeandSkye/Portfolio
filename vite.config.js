@@ -56,5 +56,44 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       localApiPlugin(),
     ],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+            const isPackage = (name) => id.includes(`node_modules/${name}/`) || id.includes(`node_modules\\${name}\\`);
+            if (isPackage('react') || isPackage('react-dom') || isPackage('scheduler')) {
+              return 'vendor-react';
+            }
+            if (id.includes('framer-motion') || id.includes('@floating-ui')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('react-icons')) {
+              return 'vendor-icons';
+            }
+            if (
+              [
+                'react-markdown',
+                'react-syntax-highlighter',
+                'remark-gfm',
+                'rehype-raw',
+                'refractor',
+                'prismjs',
+                'lowlight',
+                'hast-util-raw',
+                'hast-util-to-jsx-runtime',
+                'mdast-util-gfm',
+                'micromark',
+                'unified',
+                'unist-util-visit',
+                'vfile',
+              ].some(isPackage)
+            ) {
+              return 'vendor-markdown';
+            }
+          },
+        },
+      },
+    },
   };
 })

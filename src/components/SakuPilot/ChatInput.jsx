@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { IoClose, IoSend, IoAttachOutline, IoDocumentOutline } from "react-icons/io5";
 import { HiOutlineCodeBracket } from "react-icons/hi2";
 import Tooltip from '../ui/Tooltip';
-import Textarea from 'react-textarea-autosize';
+import AutoResizeTextarea from '../ui/AutoResizeTextarea';
 
 // memo — only re-renders when inputValue, attachedFiles, or selectedProject change.
 // Does NOT re-render during the typing animation.
@@ -64,7 +64,7 @@ const ChatInput = memo(function ChatInput({
 
             {/* Textarea row */}
             <div className="flex items-end gap-2 bg-(--pixel) border border-(--border-light) rounded-xl px-3 py-3 focus-within:ring-1 ring-blue-500 transition-all">
-                <Textarea
+                <AutoResizeTextarea
                     ref={textareaRef}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}

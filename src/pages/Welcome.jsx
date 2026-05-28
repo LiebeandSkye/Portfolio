@@ -32,9 +32,9 @@ const Welcome = () => {
             </button>
           </NavLink>
 
-          <h1 className='w-full border-b border-(--border-light) py-2 text-xl md:text-2xl font-semibold'>
+          <h2 className='w-full border-b border-(--border-light) py-2 text-xl md:text-2xl font-semibold'>
             {t('bio')?.techStack}
-          </h1>
+          </h2>
 
           <TechStacks />
 

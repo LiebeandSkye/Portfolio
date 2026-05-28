@@ -30,7 +30,7 @@ const Information = [
         },
         {
             name: 'Kry Rithisak',
-            url: 'linkedin.com/in/kry-rithisak-b2b66824a',
+            url: 'https://www.linkedin.com/in/kry-rithisak-b2b66824a',
             type: 'link',
             icon: <FaLinkedin />,
             blue: true,

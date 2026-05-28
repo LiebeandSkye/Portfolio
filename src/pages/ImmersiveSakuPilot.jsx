@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Textarea from 'react-textarea-autosize';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -34,6 +33,7 @@ import { getGroqResponse } from '../Utils/groq';
 import MessageContent from '../components/SakuPilot/MessageContent';
 import BotMessage from '../components/SakuPilot/BotMessage';
 import TypingMessage from '../components/SakuPilot/TypingMessage';
+import AutoResizeTextarea from '../components/ui/AutoResizeTextarea';
 import {
     createConversation,
     loadConversations,
@@ -635,7 +635,7 @@ const ImmersiveSakuPilot = () => {
                             <button onClick={() => fileInputRef.current?.click()} className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)" aria-label="Attach file">
                                 <FiPaperclip size={18} />
                             </button>
-                            <Textarea
+                            <AutoResizeTextarea
                                 value={inputValue}
                                 onChange={(event) => setInputValue(event.target.value)}
                                 minRows={1}

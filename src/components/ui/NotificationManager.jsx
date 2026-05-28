@@ -1,13 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Toast from "./Toast";
 
 const NotificationManager = () => {
     const [notifications, setNotifications] = useState([]);
-
-    const addNotification = useCallback((message, type = 'info') => {
-        const id = Date.now() + Math.random();
-        setNotifications((prev) => [...prev, { id, message, type }]);
-    }, []);
 
     const removeNotification = (id) => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));

@@ -88,8 +88,6 @@ const Search = ({ onOpenChat }) => {
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    // open/close are defined inline so they're stable each render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     useEffect(() => { setActive(0); }, [query]);

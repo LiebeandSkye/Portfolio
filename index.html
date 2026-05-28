@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kry Rithisak</title>
-  <meta name="description" content="Kry Rithisak's software developer portfolio featuring web, AI, and full-stack projects, including SakuPilot, AI MemoryPorter, and Discover Cambodia." />
-  <meta name="keywords" content="Kry Rithisak, Kry Rithisak portfolio, Saku, software developer, web developer, AI projects, full-stack developer" />
+  <title>Kry Rithisak | Software Developer</title>
+  <meta name="description" content="Kry Rithisak is a software developer in Phnom Penh building React, full-stack, AI, and real-time web projects including SakuPilot and AI MemoryPorter." />
+  <meta name="keywords" content="Kry Rithisak, Saku, software developer, React developer, AI projects, full-stack developer, Phnom Penh, AUPP" />
   <meta name="author" content="Kry Rithisak" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://kryrithisak.vercel.app/" />
@@ -16,38 +16,74 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kryrithisak.vercel.app/" />
-  <meta property="og:title" content="Kry Rithisak" />
-  <meta property="og:description" content="Explore Kry Rithisak's software developer portfolio, projects, technical stack, and SakuPilot AI assistant." />
+  <meta property="og:title" content="Kry Rithisak | Software Developer" />
+  <meta property="og:description" content="Kry Rithisak is a software developer in Phnom Penh building React, full-stack, AI, and real-time web projects including SakuPilot and AI MemoryPorter." />
   <meta property="og:image" content="https://kryrithisak.vercel.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="Kry Rithisak" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Kry Rithisak" />
-  <meta name="twitter:description" content="Software developer portfolio for Kry Rithisak, featuring web, AI, and full-stack projects." />
+  <meta name="twitter:title" content="Kry Rithisak | Software Developer" />
+  <meta name="twitter:description" content="Kry Rithisak is a software developer in Phnom Penh building React, full-stack, AI, and real-time web projects including SakuPilot and AI MemoryPorter." />
   <meta name="twitter:image" content="https://kryrithisak.vercel.app/og-image.png" />
 
-  <script type="application/ld+json">
+  <script type="application/ld+json" data-seo-jsonld="route">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Kry Rithisak",
-      "alternateName": "Saku",
-      "url": "https://kryrithisak.vercel.app/",
-      "image": "https://kryrithisak.vercel.app/og-image.png",
-      "jobTitle": "Software Developer",
-      "email": "mailto:kryrithisak@gmail.com",
-      "sameAs": [
-        "https://github.com/LiebeandSkye",
-        "https://www.linkedin.com/in/kry-rithisak-b2b66824a"
-      ],
-      "knowsAbout": [
-        "React",
-        "JavaScript",
-        "Full-stack development",
-        "AI applications",
-        "Web development"
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://kryrithisak.vercel.app/#person",
+          "name": "Kry Rithisak",
+          "alternateName": "Saku",
+          "url": "https://kryrithisak.vercel.app/",
+          "image": "https://kryrithisak.vercel.app/og-image.png",
+          "jobTitle": "Software Developer",
+          "email": "mailto:kryrithisak@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Phnom Penh",
+            "addressCountry": "Cambodia"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "American University of Phnom Penh"
+          },
+          "sameAs": [
+            "https://github.com/LiebeandSkye",
+            "https://www.linkedin.com/in/kry-rithisak-b2b66824a",
+            "https://www.instagram.com/skyeoridk",
+            "https://www.facebook.com/share/1FiTy3pjKz/"
+          ],
+          "knowsAbout": [
+            "React",
+            "JavaScript",
+            "Node.js",
+            "Full-stack development",
+            "AI applications",
+            "Web development",
+            "Socket.IO",
+            "Tailwind CSS"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://kryrithisak.vercel.app/#website",
+          "name": "Kry Rithisak Portfolio",
+          "url": "https://kryrithisak.vercel.app/",
+          "inLanguage": ["en", "ja"],
+          "author": { "@id": "https://kryrithisak.vercel.app/#person" }
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://kryrithisak.vercel.app/#profile",
+          "url": "https://kryrithisak.vercel.app/",
+          "name": "Kry Rithisak | Software Developer Portfolio",
+          "description": "Kry Rithisak is a software developer in Phnom Penh building React, full-stack, AI, and real-time web projects including SakuPilot and AI MemoryPorter.",
+          "about": { "@id": "https://kryrithisak.vercel.app/#person" },
+          "isPartOf": { "@id": "https://kryrithisak.vercel.app/#website" }
+        }
       ]
     }
   </script>

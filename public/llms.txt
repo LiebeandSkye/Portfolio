@@ -1,0 +1,19 @@
+# Kry Rithisak
+
+Kry Rithisak, also known as Saku, is a software developer in Phnom Penh, Cambodia.
+
+Primary site: https://kryrithisak.vercel.app/
+Portfolio: https://kryrithisak.vercel.app/portfolio
+AI assistant: https://kryrithisak.vercel.app/sakupilot
+Contact: https://kryrithisak.vercel.app/contact
+GitHub: https://github.com/LiebeandSkye
+LinkedIn: https://www.linkedin.com/in/kry-rithisak-b2b66824a
+
+Core topics: React, JavaScript, Node.js, full-stack development, AI applications, Tailwind CSS, Socket.IO, Vite, web development.
+
+Notable projects:
+- Continental: car e-commerce project with Contentful CMS, simulated checkout, and AI assistant features.
+- Discover Cambodia: tourism project with destination content and weather data.
+- AI MemoryPorter: privacy-first utility for converting exported AI memory/context data into token-optimized Markdown.
+- Project Nebula: real-time social deduction game with React, Express, and Socket.IO.
+- SakuPilot: AI assistant embedded in the portfolio for answering questions about Kry Rithisak, projects, skills, and background.

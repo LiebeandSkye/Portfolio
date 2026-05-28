@@ -1,5 +1,4 @@
 export const getChatEndpoint = (
-    metaEnv = import.meta.env,
     env = import.meta.env
 ) => {
     const apiUrl = env?.VITE_CHAT_API_URL?.replace(/\/$/, '');

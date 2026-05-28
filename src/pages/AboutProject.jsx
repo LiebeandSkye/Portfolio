@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../components/context/LanguageContext';
 import Projects from '../Data/Projects';
@@ -13,7 +13,6 @@ import { FiCode } from "react-icons/fi";
 import { GoDotFill, GoCheck } from "react-icons/go";
 import { BsLayersHalf } from "react-icons/bs";
 import { RiTwitterXFill, RiWhatsappFill } from "react-icons/ri";
-import languages from '../Data/Language';
 
 const AboutProject = () => {
     const { addNotification } = useNotification();

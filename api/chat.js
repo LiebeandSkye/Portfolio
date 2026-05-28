@@ -1,6 +1,5 @@
 import Groq from "groq-sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-/* global process */
 
 export default async function handler(req, res) {
     const groq = new Groq({

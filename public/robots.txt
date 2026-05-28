@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://kryrithisak.vercel.app/sitemap.xml
+Host: kryrithisak.vercel.app

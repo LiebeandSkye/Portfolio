@@ -10,7 +10,7 @@ const InfoMobile = () => {
                     <img src={Kry_rithisak} alt="Kry Rithisak" width="104" height="104" className='w-full h-full object-cover' />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <h1 className='font-semibold text-(--text-light) text-3xl'>{t('name')}</h1>
+                    <p className='font-semibold text-(--text-light) text-3xl'>{t('name')}</p>
                     <p className='text-(--text-gray) font-semibold text-lg leading-relaxed'>{t('job')}</p>
                 </div>
             </div>

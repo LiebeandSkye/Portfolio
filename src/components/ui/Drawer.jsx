@@ -101,10 +101,10 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 {/* Profile */}
                 <div className="px-8 pb-4">
                     <div className="w-28 h-28 overflow-hidden mb-2">
-                        <img src={profile} alt="" width="112" height="112" className="w-full h-full rounded-full object-cover" loading="lazy" />
+                        <img src={profile} alt="Kry Rithisak" width="112" height="112" className="w-full h-full rounded-full object-cover" loading="lazy" />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <h1 className="font-semibold text-(--text-light) text-xl">{t('name')}</h1>
+                        <p className="font-semibold text-(--text-light) text-xl">{t('name')}</p>
                         <p className="text-(--text-gray) font-semibold text-md leading-relaxed">{t('job')}</p>
                         <p className="text-gray-400 leading-relaxed text-xs">{t('description')}</p>
                     </div>
