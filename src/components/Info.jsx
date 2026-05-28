@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Kry_rithisak from '../assets/Kry_Rithisak.optimized.jpg';
 import Information from '../Data/Contacts';
 import CopyButton from './ui/CopyButton';
@@ -11,6 +12,7 @@ const Info = memo(function Info() {
     const { t } = useLanguage();
     const { addNotification } = useNotification();
     const [quote, setQuote] = useState({ text: '', author: '' });
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const randomizeQuote = useCallback(() => {
         const quotes = t('quotes');
@@ -29,7 +31,10 @@ const Info = memo(function Info() {
         <div className="w-full md:w-[280px] px-4 md:px-6 flex-shrink-0 hidden md:block">
             <div className="flex flex-col justify-center gap-5">
                 {/* Avatar */}
-                <div className="w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden mx-auto md:mx-1">
+                <div 
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden mx-auto md:mx-1 cursor-pointer border border-(--border-light) group"
+                >
                     <img
                         src={Kry_rithisak}
                         alt="Kry Rithisak"
@@ -88,6 +93,31 @@ const Info = memo(function Info() {
                     </button>
                 </div>
             </div>
+
+            {/* Image Closer Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div 
+                        onClick={() => setIsModalOpen(false)}
+                        className="fixed inset-0 z-[200] flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.98)_100%)] backdrop-blur-md cursor-pointer"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.92, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.92, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-w-[90vw] max-h-[85vh] md:max-w-[420px] overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-black/40 cursor-default"
+                        >
+                            <img
+                                src={Kry_rithisak}
+                                alt="Kry Rithisak closer look"
+                                className="w-full h-auto max-h-[85vh] object-contain select-none"
+                            />
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 });

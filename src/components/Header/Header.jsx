@@ -83,13 +83,13 @@ const Header = () => {
                     {!isImmersiveChat && (
                         <button
                             onClick={openChat}
-                            className="fixed bottom-8 right-4 md:w-24 md:h-24 w-16 h-16 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
+                            className="fixed bottom-0 right-1 md:w-34 md:h-40 w-24 h-28 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
                         >
                             <img
                                 src={SakuPilotIcon}
                                 alt="SakuPilot"
-                                width="96"
-                                height="96"
+                                width="144"
+                                height="144"
                                 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full"
                             />
                         </button>
