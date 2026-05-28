@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
 import MainLayout from './MainLayout';
 import { useLanguage } from '../components/context/LanguageContext';
-import { FaLongArrowAltLeft } from "react-icons/fa";
+import { FaCheckCircle, FaLongArrowAltLeft } from 'react-icons/fa';
 
-// ── API URL ───────────────────────────────────────────────────────────────────
-// In development:  set VITE_API_URL in your frontend .env → http://localhost:5000
-// In production:   set VITE_API_URL to your deployed backend URL
-//                  e.g. https://your-backend.onrender.com
-//
-// Your frontend .env (inside /src or project root) should contain:
-//   VITE_API_URL=http://localhost:5000
 const API_URL = import.meta.env.VITE_API_URL
     ? `${import.meta.env.VITE_API_URL}/api/contact`
     : 'http://localhost:5000/api/contact';
@@ -23,28 +16,30 @@ const Contact = () => {
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
     const [serverError, setServerError] = useState('');
+    const [deliveryInfo, setDeliveryInfo] = useState(null);
 
-    // ── Field change ─────────────────────────────────────────────────────────
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
-        // Clear individual field error on change
+
         if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+        if (status === 'success' || status === 'error') {
+            setStatus('idle');
+            setServerError('');
+            setDeliveryInfo(null);
+        }
     };
 
-    // ── Client-side validation ───────────────────────────────────────────────
     const validate = () => {
         const next = {};
-        if (!form.name.trim())    next.name    = 'Name is required.';
-        if (!form.email.trim())   next.email   = 'Email is required.';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-                                  next.email   = 'Enter a valid email.';
-        if (!form.tel.trim())     next.tel     = 'Phone number is required.';
+        if (!form.name.trim()) next.name = 'Name is required.';
+        if (!form.email.trim()) next.email = 'Email is required.';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email.';
+        if (!form.tel.trim()) next.tel = 'Phone number is required.';
         if (!form.message.trim()) next.message = 'Message is required.';
         return next;
     };
 
-    // ── Submit ───────────────────────────────────────────────────────────────
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -56,6 +51,7 @@ const Contact = () => {
 
         setStatus('loading');
         setServerError('');
+        setDeliveryInfo(null);
 
         try {
             const res = await fetch(API_URL, {
@@ -71,10 +67,10 @@ const Contact = () => {
             }
 
             setStatus('success');
+            setDeliveryInfo(data.delivery || null);
             setForm(INITIAL_FORM);
         } catch (err) {
             setStatus('error');
-            // Give a clearer message for the "server not running" case
             if (err.message === 'Failed to fetch') {
                 setServerError('Could not reach the server. Make sure the backend is running.');
             } else {
@@ -89,34 +85,45 @@ const Contact = () => {
     return (
         <MainLayout>
             <div className='border border-(--border-light) w-full py-4 px-4 sm:px-6 flex flex-col'>
-
                 <p className='text-xs'>
                     Kry-Rithisak<span className='text-(--text-gray)'> / </span>Contact
                     <span className='text-(--text-gray)'>.jsx</span>
                 </p>
 
-                {/* ── Success banner ── */}
                 {status === 'success' && (
-                    <div className='mt-6 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-md text-green-400 text-sm'>
-                        ✅ Message sent! I'll get back to you soon.
+                    <div className='mt-6 flex items-start gap-3 rounded-md border border-green-500/40 bg-green-500/10 px-4 py-4 text-sm text-green-300'>
+                        <FaCheckCircle className='mt-0.5 shrink-0 text-green-400' size={18} />
+                        <div className='min-w-0'>
+                            <p className='font-semibold text-green-300'>Message delivered</p>
+                            <p className='mt-1 text-green-200/90'>
+                                Your message reached me. I will get back to you soon.
+                            </p>
+                            {deliveryInfo?.email === 'pending' && (
+                                <p className='mt-2 text-xs text-green-200/70'>
+                                    Email backup is still processing in the background.
+                                </p>
+                            )}
+                            {deliveryInfo?.telegram === 'failed' && deliveryInfo?.email === 'sent' && (
+                                <p className='mt-2 text-xs text-green-200/70'>
+                                    Telegram was unavailable, so the message was delivered by email instead.
+                                </p>
+                            )}
+                        </div>
                     </div>
                 )}
 
-                {/* ── Server error banner ── */}
                 {status === 'error' && serverError && (
                     <div className='mt-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-md text-red-400 text-sm'>
-                        ❌ {serverError}
+                        {serverError}
                     </div>
                 )}
 
                 <form className='flex flex-col gap-8 my-8' onSubmit={handleSubmit} noValidate>
-
-                    {/* Name */}
                     <div className='flex flex-col gap-1.5'>
                         <label>{t('contact')?.name}<span className='text-red-500'> *</span></label>
                         <input
-                            type="text"
-                            name="name"
+                            type='text'
+                            name='name'
                             value={form.name}
                             onChange={handleChange}
                             className={`${inputBase} ${errors.name ? 'border-red-500' : 'border-(--border-light)'}`}
@@ -124,12 +131,11 @@ const Contact = () => {
                         {errors.name && <p className='text-xs text-red-400'>{errors.name}</p>}
                     </div>
 
-                    {/* Email */}
                     <div className='flex flex-col gap-1.5'>
                         <label>{t('contact')?.email}<span className='text-red-500'> *</span></label>
                         <input
-                            type="email"
-                            name="email"
+                            type='email'
+                            name='email'
                             value={form.email}
                             onChange={handleChange}
                             className={`${inputBase} ${errors.email ? 'border-red-500' : 'border-(--border-light)'}`}
@@ -137,12 +143,11 @@ const Contact = () => {
                         {errors.email && <p className='text-xs text-red-400'>{errors.email}</p>}
                     </div>
 
-                    {/* Phone */}
                     <div className='flex flex-col gap-1.5'>
                         <label>{t('contact')?.tel}<span className='text-red-500'> *</span></label>
                         <input
-                            type="tel"
-                            name="tel"
+                            type='tel'
+                            name='tel'
                             value={form.tel}
                             onChange={handleChange}
                             className={`${inputBase} ${errors.tel ? 'border-red-500' : 'border-(--border-light)'}`}
@@ -150,11 +155,10 @@ const Contact = () => {
                         {errors.tel && <p className='text-xs text-red-400'>{errors.tel}</p>}
                     </div>
 
-                    {/* Message */}
                     <div className='flex flex-col gap-1.5'>
                         <label>{t('contact')?.message}<span className='text-red-500'> *</span></label>
                         <textarea
-                            name="message"
+                            name='message'
                             value={form.message}
                             onChange={handleChange}
                             className={`${inputBase} h-28 resize-none ${errors.message ? 'border-red-500' : 'border-(--border-light)'}`}
@@ -162,22 +166,18 @@ const Contact = () => {
                         {errors.message && <p className='text-xs text-red-400'>{errors.message}</p>}
                     </div>
 
-                    {/* Submit */}
                     <button
-                        type="submit"
+                        type='submit'
                         disabled={status === 'loading'}
-                        className='w-36 bg-(--sucess) text-white font-semibold py-2 px-4 rounded-md
-                                   hover:bg-(--sucess-hover) transition-colors disabled:opacity-60
-                                   disabled:cursor-not-allowed cursor-pointer'
+                        className='w-36 bg-(--sucess) text-white font-semibold py-2 px-4 rounded-md hover:bg-(--sucess-hover) transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer'
                     >
-                        {status === 'loading' ? 'Sending…' : t('contact')?.submit}
+                        {status === 'loading' ? 'Sending...' : t('contact')?.submit}
                     </button>
 
                     <div className='flex gap-4 text-(--text-gray) items-center'>
                         <FaLongArrowAltLeft size={24} />
                         <p className='text-(--text-light)'>{t('contact')?.tip}</p>
                     </div>
-
                 </form>
             </div>
         </MainLayout>
