@@ -1,10 +1,10 @@
 import React, { useState, memo, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '../context/ThemeContext';
+import remarkGithubSafe from '../../Utils/githubMarkdown';
 
 // ─── Static markdown component overrides ─────────────────────────────────────
 // Defined at MODULE SCOPE so they are never recreated.
@@ -64,7 +64,7 @@ const MessageContent = memo(({ content }) => {
 
     return (
         <div className="overflow-x-hidden w-full min-w-0">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
+            <ReactMarkdown remarkPlugins={[remarkGithubSafe]} rehypePlugins={[rehypeRaw]} components={components}>
                 {processedContent}
             </ReactMarkdown>
         </div>
