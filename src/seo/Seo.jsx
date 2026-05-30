@@ -46,6 +46,7 @@ const Seo = () => {
     setMeta('meta[name="description"]', { name: 'description', content: metadata.description });
     setMeta('meta[name="keywords"]', { name: 'keywords', content: keywords });
     setMeta('meta[name="robots"]', { name: 'robots', content: metadata.robots });
+    setMeta('meta[name="thumbnail"]', { name: 'thumbnail', content: PROFILE_IMAGE });
     setLink('link[rel="canonical"]', { rel: 'canonical', href: metadata.canonical });
 
     setMeta('meta[property="og:type"]', { property: 'og:type', content: metadata.ogType });

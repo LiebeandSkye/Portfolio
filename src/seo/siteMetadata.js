@@ -188,6 +188,7 @@ export const getStructuredData = (pathname) => {
         name: metadata.title,
         description: metadata.description,
         about: { '@id': `${BASE_URL}/#person` },
+        mainEntity: { '@id': `${BASE_URL}/#person` },
         isPartOf: { '@id': `${BASE_URL}/#website` },
       },
       ...(project ? [project] : []),
