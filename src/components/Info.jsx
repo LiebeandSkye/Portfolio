@@ -31,18 +31,27 @@ const Info = memo(function Info() {
         <div className="w-full md:w-[280px] px-4 md:px-6 flex-shrink-0 hidden md:block">
             <div className="flex flex-col justify-center gap-5">
                 {/* Avatar */}
-                <div 
-                    onClick={() => setIsModalOpen(true)}
-                    className="w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden mx-auto md:mx-1 cursor-pointer border border-(--border-light) group"
-                >
-                    <img
-                        src={Kry_rithisak}
-                        alt="Kry Rithisak"
-                        width="256"
-                        height="256"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                    />
+                <div className="relative w-max mx-auto md:mx-1">
+                    <div 
+                        onClick={() => setIsModalOpen(true)}
+                        className="w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden cursor-pointer border border-(--border-light) group"
+                    >
+                        <img
+                            src={Kry_rithisak}
+                            alt="Kry Rithisak"
+                            width="256"
+                            height="256"
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                    </div>
+                    {/* Status Badge */}
+                    <div className="absolute bottom-[12%] left-[85%] z-20 bg-(--light) border border-(--border-light) rounded-full flex items-center p-1.5 md:p-2 cursor-pointer shadow-lg hover:pr-3 md:hover:pr-4 group/badge transition-all duration-300">
+                        <span className="shrink-0 leading-none text-base md:text-md">🚀</span>
+                        <span className="text-[10px] md:text-xs text-(--text-light) font-medium max-w-0 opacity-0 overflow-hidden whitespace-nowrap transition-all duration-300 group-hover/badge:max-w-xs group-hover/badge:ml-1.5 md:group-hover/badge:ml-2 group-hover/badge:opacity-100">
+                            Hello World
+                        </span>
+                    </div>
                 </div>
 
                 {/* Name */}

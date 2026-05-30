@@ -43,7 +43,7 @@ import {
 } from '../components/SakuPilot/immersiveChatStorage';
 
 const STARTER_PROMPTS = [
-    'Review my portfolio like a senior recruiter.',
+    'Review this portfolio like a senior recruiter.',
     'Help me explain AI MemoryPorter in a premium way.',
     'Compare my projects and suggest what to improve next.',
 ];
@@ -559,7 +559,7 @@ const ImmersiveSakuPilot = () => {
                                     <button
                                         key={prompt}
                                         onClick={() => handleSendMessage(prompt)}
-                                        className="rounded-lg border border-(--border-light) bg-(--pixel2) px-4 py-3 text-left text-sm hover:bg-(--pixel-hover)"
+                                        className="rounded-lg border border-(--border-light) bg-(--pixel2) px-4 py-3 text-left text-sm hover:bg-(--pixel-hover) cursor-pointer"
                                     >
                                         {prompt}
                                     </button>

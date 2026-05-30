@@ -12,7 +12,7 @@ const InfoMobile = () => {
             <div className='flex items-center gap-4'>
                 <div 
                     onClick={() => setIsModalOpen(true)}
-                    className='w-26 h-26 md:w-64 md:h-64 rounded-full overflow-hidden md:mx-1 mx-2 cursor-pointer active:scale-95 border border-(--border-light) transition-all duration-300'
+                    className='w-26 h-26 md:w-64 md:h-64 rounded-full overflow-hidden md:mx-1 mx-2 cursor-pointer active:scale-95 border border-(--border-light) transition-all duration-300 flex-shrink-0'
                 >
                     <img src={Kry_rithisak} alt="Kry Rithisak" width="104" height="104" className='w-full h-full object-cover' />
                 </div>
@@ -20,6 +20,12 @@ const InfoMobile = () => {
                     <p className='font-semibold text-(--text-light) text-3xl'>{t('name')}</p>
                     <p className='text-(--text-gray) font-semibold text-lg leading-relaxed'>{t('job')}</p>
                 </div>
+            </div>
+
+            {/* Mobile Status Bar */}
+            <div className="mt-5 px-3 border border-[#30363d] rounded-[6px] text-sm text-(--text-light) w-full flex items-center min-h-[38px] cursor-pointer hover:border-white/20 transition-all select-none gap-2">
+                <span className="text-base leading-none">🚀</span>
+                <span className="font-semibold">Hello World</span>
             </div>
 
             {/* Image Closer Modal */}
