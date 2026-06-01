@@ -42,12 +42,6 @@ import {
     upsertConversation,
 } from '../components/SakuPilot/immersiveChatStorage';
 
-const STARTER_PROMPTS = [
-    'Review this portfolio like a senior recruiter.',
-    'Help me explain AI MemoryPorter in a premium way.',
-    'Compare my projects and suggest what to improve next.',
-];
-
 const ImmersiveSakuPilot = () => {
     const navigate = useNavigate();
     const { t } = useLanguage();
@@ -347,18 +341,18 @@ const ImmersiveSakuPilot = () => {
 
                     <button onClick={handleGoBack} className="mb-2 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer">
                         <FiArrowLeft />
-                        Go Back
+                        {t('sakupilot.immersive.goBack')}
                     </button>
 
                     <button onClick={handleNewChat} className="mb-2 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer">
                         <FiEdit3 />
-                        New Chat
+                        {t('sakupilot.immersive.newChat')}
                     </button>
 
                     <details className="group mb-2 rounded-md">
                         <summary className="flex cursor-pointer list-none items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-(--pixel-hover)">
                             <FiFolder />
-                            Projects
+                            {t('sakupilot.immersive.projects')}
                         </summary>
                         <div className="mt-1 space-y-1 pl-4">
                             {projectOptions.map((project) => (
@@ -378,13 +372,13 @@ const ImmersiveSakuPilot = () => {
                         className="mb-5 flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-(--pixel-hover) cursor-pointer"
                     >
                         <FiSearch className="text-(--text-gray)" />
-                        Search chat
+                        {t('sakupilot.immersive.searchChat')}
                     </button>
 
-                    <p className="px-2 pb-2 text-xs font-semibold text-(--text-gray)">Recent</p>
+                    <p className="px-2 pb-2 text-xs font-semibold text-(--text-gray)">{t('sakupilot.immersive.recent')}</p>
                     <div className="github-scrollbar flex-1 space-y-1 overflow-y-auto pr-1">
                         {conversations.length === 0 ? (
-                            <p className="px-2 py-3 text-xs text-(--text-gray)">No saved conversations yet.</p>
+                            <p className="px-2 py-3 text-xs text-(--text-gray)">{t('sakupilot.immersive.noSavedChats')}</p>
                         ) : [...conversations].sort((a, b) => {
                             if (a.pinned && !b.pinned) return -1;
                             if (!a.pinned && b.pinned) return 1;
@@ -436,19 +430,19 @@ const ImmersiveSakuPilot = () => {
                                                     className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
                                                 >
                                                     <FiStar size={12} className={conversation.pinned ? "fill-(--sucess) text-(--sucess)" : ""} /> 
-                                                    {conversation.pinned ? 'Unpin' : 'Pinchat'}
+                                                    {conversation.pinned ? t('sakupilot.immersive.unpin') : t('sakupilot.immersive.pinchat')}
                                                 </button>
                                                 <button
                                                     onClick={() => handleRenameConversation(conversation.id, conversation.title)}
                                                     className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
                                                 >
-                                                    <FiEdit2 size={12} /> Rename
+                                                    <FiEdit2 size={12} /> {t('sakupilot.immersive.rename')}
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteConversation(conversation.id)}
                                                     className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 hover:bg-(--pixel-hover)"
                                                 >
-                                                    <FiTrash2 size={12} /> Delete
+                                                    <FiTrash2 size={12} /> {t('sakupilot.immersive.delete')}
                                                 </button>
                                             </div>
                                         )}
@@ -550,12 +544,16 @@ const ImmersiveSakuPilot = () => {
                             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel)">
                                 <GoDependabot size={24} className="text-(--sucess)" />
                             </div>
-                            <h2 className="mb-3 text-2xl font-semibold md:text-3xl">Where should we begin?</h2>
+                            <h2 className="mb-3 text-2xl font-semibold md:text-3xl">{t('sakupilot.immersive.whereToBegin')}</h2>
                             <p className="mb-6 max-w-xl text-sm leading-6 text-(--text-gray)">
-                                Ask about Kry's projects, get portfolio strategy, analyze attached files, or use SakuPilot like a focused general AI assistant.
+                                {t('sakupilot.immersive.description')}
                             </p>
                             <div className="grid w-full gap-2 sm:grid-cols-3">
-                                {STARTER_PROMPTS.map((prompt) => (
+                                {[
+                                    t('sakupilot.immersive.starter1'),
+                                    t('sakupilot.immersive.starter2'),
+                                    t('sakupilot.immersive.starter3')
+                                ].map((prompt) => (
                                     <button
                                         key={prompt}
                                         onClick={() => handleSendMessage(prompt)}
@@ -586,7 +584,7 @@ const ImmersiveSakuPilot = () => {
                                     >
                                         <GoDependabot className="text-(--sucess)" />
                                     </motion.div>
-                                    <span className="animate-thinking text-sm">SakuPilot is thinking...</span>
+                                    <span className="animate-thinking text-sm">{t('sakupilot.immersive.thinking')}</span>
                                 </div>
                             )}
 
@@ -640,7 +638,7 @@ const ImmersiveSakuPilot = () => {
                                 onChange={(event) => setInputValue(event.target.value)}
                                 minRows={1}
                                 maxRows={8}
-                                placeholder="Message SakuPilot..."
+                                placeholder={t('sakupilot.immersive.messagePlaceholder')}
                                 className="github-scrollbar min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
                                 onKeyDown={(event) => {
                                     if (event.key === 'Enter' && !event.shiftKey) {
@@ -658,7 +656,7 @@ const ImmersiveSakuPilot = () => {
                                 <FiSend size={16} className="-ml-0.5" />
                             </button>
                         </div>
-                        <p className="mt-2 text-center text-[11px] text-(--text-gray)">SakuPilot can make mistakes. Verify important details.</p>
+                        <p className="mt-2 text-center text-[11px] text-(--text-gray)">{t('sakupilot.immersive.disclaimer')}</p>
                     </div>
                 </div>
             </div>
@@ -672,7 +670,7 @@ const ImmersiveSakuPilot = () => {
                                 autoFocus
                                 value={searchQuery}
                                 onChange={(event) => setSearchQuery(event.target.value)}
-                                placeholder="Search chats..."
+                                placeholder={t('sakupilot.immersive.searchChatsPlaceholder')}
                                 className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-(--text-gray)"
                                 onKeyDown={(event) => {
                                     if (event.key === 'Escape') setIsSearchOpen(false);
@@ -688,12 +686,12 @@ const ImmersiveSakuPilot = () => {
                                 className="mb-3 flex w-full items-center gap-3 rounded-xl bg-(--pixel-hover) px-4 py-3 text-left text-sm font-medium"
                             >
                                 <FiEdit3 />
-                                New chat
+                                {t('sakupilot.immersive.newChat')}
                             </button>
 
-                            <p className="px-4 py-2 text-xs text-(--text-gray)">Recent</p>
+                            <p className="px-4 py-2 text-xs text-(--text-gray)">{t('sakupilot.immersive.recent')}</p>
                             {filteredConversations.length === 0 ? (
-                                <p className="px-4 py-5 text-sm text-(--text-gray)">No chats match your search.</p>
+                                <p className="px-4 py-5 text-sm text-(--text-gray)">{t('sakupilot.immersive.noMatch')}</p>
                             ) : filteredConversations.map((conversation) => (
                                 <button
                                     key={conversation.id}
@@ -778,6 +776,7 @@ const prepareAttachment = async (file) => {
 };
 
 const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {
+    const { t } = useLanguage();
     const isRateLimit = error.code === 'RATE_LIMIT';
     const isApiError = error.code === 'API_ERROR';
     
@@ -793,7 +792,7 @@ const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {
                 </div>
                 <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-bold text-red-500 flex items-center gap-2">
-                        {isRateLimit ? 'Rate Limit Exceeded' : isApiError ? 'API Connection Error' : 'System Error'}
+                        {isRateLimit ? t('sakupilot.immersive.rateLimitExceeded') : isApiError ? t('sakupilot.immersive.apiConnectionError') : t('sakupilot.immersive.systemError')}
                         {isRateLimit && retryCountdown > 0 && (
                             <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-[10px] font-mono">
                                 {Math.floor(retryCountdown / 60)}:{(retryCountdown % 60).toString().padStart(2, '0')}
@@ -816,7 +815,7 @@ const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {
                     onClick={onRetry}
                     disabled={isRateLimit && retryCountdown > 0}
                     className="px-4 py-2 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                >{t('sakupilot.immersive.tryAgain')}
                     Try Again
                 </button>
                 {isRateLimit && (
