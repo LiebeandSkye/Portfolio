@@ -12,14 +12,16 @@ import Memory1 from '../assets/AI_MemoryPorter/Memory1.png';
 import Memory2 from '../assets/AI_MemoryPorter/Memory2.png';
 import nebulaThumb from '../assets/Nebula/WebsiteThumbnail.jpg';
 import nebulaScreenshot1 from '../assets/Nebula/screenshot1.jpg';
+import sakiKaraokeThumb from '../assets/SakiKaraoke/WebsiteThumbnail.png';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
-import { SiGooglemaps } from "react-icons/si";
-import { SiSocketdotio, SiExpress } from "react-icons/si";
+import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube } from "react-icons/si";
+import { MdLyrics } from "react-icons/md";
 import { LuFileSpreadsheet } from "react-icons/lu";
+import { BsLayersHalf } from "react-icons/bs";
 
 const Projects = [
     {
@@ -94,6 +96,7 @@ const Projects = [
                         icon: FaReact,
                         name: 'React.js',
                         description: 'Used for routing and state management.',
+                        color: '#61dafb',
                     },
                 },
                 Styles: {
@@ -101,6 +104,7 @@ const Projects = [
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS',
                         description: 'Utility-first CSS framework.',
+                        color: '#38bdf8',
                     },
                 },
                 Api: {
@@ -108,11 +112,13 @@ const Projects = [
                         icon: googleMap,
                         name: 'Google Maps',
                         description: 'Location services integration.',
+                        color: '#4caf50',
                     },
                     api2: {
                         icon: groq,
                         name: 'Groq',
                         description: 'AI virtual assistant integration.',
+                        color: '#ffffff',
                     },
                 },
             },
@@ -205,6 +211,7 @@ const Projects = [
                         icon: None,
                         name: 'None (Vanilla)',
                         description: 'HTML CSS and Javascript.',
+                        color: '#8e8e93',
                     },
                 },
                 Styles: {
@@ -212,6 +219,7 @@ const Projects = [
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS',
                         description: 'Used for styling and responsiveness.',
+                        color: '#38bdf8',
                     },
                 },
                 Api: {
@@ -219,6 +227,7 @@ const Projects = [
                         icon: OpenWeather,
                         name: 'OpenWeatherMap API',
                         description: 'Used to fetch real-time weather data.',
+                        color: '#ffffff',
                     },
                 },
             },
@@ -297,6 +306,7 @@ const Projects = [
                         icon: None,
                         name: 'None (Vanilla)',
                         description: 'HTML CSS and Javascript.',
+                        color: '#8e8e93',
                     },
                 },
                 Styles: {
@@ -304,6 +314,7 @@ const Projects = [
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS',
                         description: 'Utility-first CSS framework.',
+                        color: '#38bdf8',
                     },
                 },
                 Api: {
@@ -311,7 +322,8 @@ const Projects = [
                         icon: None,
                         name: 'None',
                         description: 'No API integration.',
-                    }
+                        color: '#8b949e',
+                    },
                 },
             },
         },
@@ -393,6 +405,7 @@ const Projects = [
                         icon: FaReact,
                         name: 'React.js',
                         description: 'Used for the component-based UI and state management for file staging.',
+                        color: '#61dafb',
                     },
                 },
                 Styles: {
@@ -400,6 +413,7 @@ const Projects = [
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS v4',
                         description: 'Leveraging the latest utility-first features for a sleek, dark-mode interface.',
+                        color: '#38bdf8',
                     },
                 },
                 Api: {
@@ -407,6 +421,7 @@ const Projects = [
                         icon: LuFileSpreadsheet,
                         name: 'Browser File API',
                         description: 'Client-side processing for maximum data security.',
+                        color: '#2ea043',
                     },
                 },
             },
@@ -491,6 +506,7 @@ const Projects = [
                         icon: FaReact,
                         name: 'React + Vite',
                         description: 'Used for fast client-side rendering and gameplay UI updates.',
+                        color: '#61dafb',
                     },
                 },
                 Styles: {
@@ -498,6 +514,7 @@ const Projects = [
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS v4',
                         description: 'Used to build responsive game panels, role UI, and polished visual states.',
+                        color: '#38bdf8',
                     },
                 },
                 Api: {
@@ -505,11 +522,13 @@ const Projects = [
                         icon: SiSocketdotio,
                         name: 'Socket.IO',
                         description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.',
+                        color: '#ffffff',
                     },
                     api2: {
                         icon: SiExpress,
                         name: 'Express.js API',
                         description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.',
+                        color: '#ffffff',
                     },
                 },
             },
@@ -517,6 +536,128 @@ const Projects = [
                 screenshot1: nebulaThumb,
                 screenshot2: nebulaScreenshot1,
             }
+        },
+    },
+    {
+        id: 6,
+        title: 'SakiKaraoke',
+        langKey: "sakikaraoke",
+        public: true,
+        red: true,
+        description: 'A real-time collaborative karaoke web app. Create a room, share the code, and sing together — everyone stays in sync while you take turns on the mic.',
+        bread: '/portfolio',
+        code: 'https://github.com/LiebeandSkye/SakiKaraoke',
+        demo: 'https://sakikaraoke.vercel.app/',
+        designed: true,
+        developed: true,
+        thumbnail: sakiKaraokeThumb,
+        tags: ['React.js', 'Socket.IO', 'Express', 'Vite', 'LRCLIB API', 'Real-time Sync', 'Karaoke'],
+        summary: {
+            title: 'Development Summary',
+            framework: 'React 19 + Vite 8',
+            style: 'Vanilla CSS',
+            API: 'Socket.io + LRCLIB',
+        },
+        percent: { javascript: 85.0, css: 12.0, html: 3.0 },
+        Information: {
+            title: 'SakiKaraoke',
+            description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users can create a virtual room with a 6-character code, share it with friends, and sing together. Playback is synchronized across all participants using a custom sync architecture, and timestamped LRC lyrics scroll in real-time.',
+            coreFeatures: {
+                title: 'Core Features',
+                features1: {
+                    title: 'Room System & Sync',
+                    description: '– Create a room with a 6-digit code, share it, and sing in sync with friends.'
+                },
+                features2: {
+                    title: 'YouTube Integration',
+                    description: '– Paste any YouTube URL and watch synchronized video playback in real time.'
+                },
+                features3: {
+                    title: 'Real-time Lyrics',
+                    description: '– Timestamped LRC lyrics fetched from LRCLIB API scroll in sync with the song.'
+                },
+                features4: {
+                    title: 'Singer Rotation & Controls',
+                    description: '– Automatic singer rotation per segment or song, with host playback and lyrics offset controls.'
+                }
+            },
+            WhyThisProject: {
+                title: 'Why This Project?',
+                description: "I wanted to build a high-fidelity real-time collaboration experience. Synced karaoke required solving complex networking challenges like latency-compensated playback synchronization, state propagation, and client-side drift correction.",
+            },
+            HowItWorks: {
+                title: 'How It Works?',
+                steps: {
+                    step1: {
+                        title: 'Host Creates Room',
+                        description: '– The host generates a room code and sets the initial playlist.'
+                    },
+                    step2: {
+                        title: 'Real-time Synced Playback',
+                        description: '– Host controls are broadcast via Socket.IO with network latency compensation; guests sync positions via heartbeats.'
+                    },
+                    step3: {
+                        title: 'Drift Correction & Lyrics',
+                        description: '– Clients verify timing every 2 seconds and re-sync if drifted >300ms, while lyrics scroll using synchronized offsets.'
+                    },
+                },
+                description: 'SakiKaraoke combines collaborative features with sub-second synchronization to deliver a premium karaoke experience.',
+            },
+            HowIBuiltIt: {
+                title: 'How I Built this Project',
+                frameworks: {
+                    framework1: {
+                        icon: FaReact,
+                        name: 'React 19',
+                        description: 'Powering the reactive user interface, component states, and player integration.',
+                        color: '#61dafb',
+                    },
+                    framework2: {
+                        icon: SiVite,
+                        name: 'Vite 8',
+                        description: 'Providing a lightning-fast build tool and dev server configuration.',
+                        color: '#646cff',
+                    },
+                },
+                Styles: {
+                    style1: {
+                        icon: BsLayersHalf,
+                        name: 'Vanilla CSS',
+                        description: 'Premium custom glassmorphic theme designed with CSS custom properties.',
+                        color: '#ffffff',
+                    },
+                },
+                Api: {
+                    api1: {
+                        icon: SiSocketdotio,
+                        name: 'Socket.IO 4',
+                        description: 'Handles bi-directional real-time events for playback controls, queues, and sync heartbeats.',
+                        color: '#ffffff',
+                    },
+                    api2: {
+                        icon: SiExpress,
+                        name: 'Express 5',
+                        description: 'Manages server routing, room states, and proxies requests to the LRCLIB API.',
+                        color: '#ffffff',
+                    },
+                    api3: {
+                        icon: MdLyrics,
+                        name: 'LRCLIB API',
+                        description: 'Fetches timestamped LRC lyrics for synchronized, line-by-line scrolling.',
+                        color: '#ff79c6',
+                    },
+                    api4: {
+                        icon: SiYoutube,
+                        name: 'YouTube IFrame API',
+                        description: 'Powers video playback and synchronization through react-player controls.',
+                        color: '#ff0000',
+                    },
+                },
+            },
+            languages: { lang1: 'JavaScript', lang2: 'CSS', lang3: 'HTML' },
+            screenshots: {
+                screenshot1: sakiKaraokeThumb,
+            },
         },
     },
 ];
