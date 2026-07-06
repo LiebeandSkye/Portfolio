@@ -25,8 +25,8 @@ const fallback = getRouteMetadata('/unknown-route');
 assert.equal(fallback.canonical, `${BASE_URL}/`);
 assert.equal(fallback.robots, 'noindex, follow');
 
-assert.equal(PROJECT_ROUTES.length, 5);
-assert.equal(new Set(PROJECT_ROUTES.map((route) => route.path)).size, 5);
+assert.equal(PROJECT_ROUTES.length, 6);
+assert.equal(new Set(PROJECT_ROUTES.map((route) => route.path)).size, 6);
 
 const structuredData = getStructuredData('/portfolio/5');
 assert.equal(structuredData['@graph'][0]['@type'], 'Person');

@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const { normalizeContactSubmission, buildPhoneLine } = require('./contactFormatting');
 
 /**
  * Sends a contact form notification to your Telegram chat via your bot.
@@ -28,16 +29,19 @@ async function sendTelegramNotification({ name, email, tel, message }) {
         return;
     }
 
+    const contact = normalizeContactSubmission({ name, email, tel, message });
+    const phoneLine = buildPhoneLine(contact.tel);
+
     const text = [
         `📬 *New Contact Form Message*`,
         ``,
-        `👤 *Name:*    ${name}`,
-        `📧 *Email:*   ${email}`,
-        `📞 *Phone:*   ${tel}`,
+        `👤 *Name:*    ${contact.name}`,
+        `📧 *Email:*   ${contact.email}`,
+        phoneLine ? `📞 *Phone:*   ${phoneLine}` : null,
         ``,
         `💬 *Message:*`,
-        `${message}`,
-    ].join('\n');
+        `${contact.message}`,
+    ].filter(Boolean).join('\n');
 
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
 

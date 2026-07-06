@@ -3,9 +3,11 @@ import MainLayout from './MainLayout';
 import { useLanguage } from '../components/context/LanguageContext';
 import { FaCheckCircle, FaLongArrowAltLeft } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/api/contact`
-    : 'http://localhost:5000/api/contact';
+const API_URL = import.meta.env.DEV
+    ? 'http://localhost:5000/api/contact'
+    : import.meta.env.VITE_API_URL
+        ? `${import.meta.env.VITE_API_URL}/api/contact`
+        : '/api/contact';
 
 const INITIAL_FORM = { name: '', email: '', tel: '', message: '' };
 
@@ -35,7 +37,6 @@ const Contact = () => {
         if (!form.name.trim()) next.name = 'Name is required.';
         if (!form.email.trim()) next.email = 'Email is required.';
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email.';
-        if (!form.tel.trim()) next.tel = 'Phone number is required.';
         if (!form.message.trim()) next.message = 'Message is required.';
         return next;
     };
@@ -100,12 +101,12 @@ const Contact = () => {
                             </p>
                             {deliveryInfo?.email === 'pending' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    Email backup is still processing in the background.
+                                    
                                 </p>
                             )}
                             {deliveryInfo?.telegram === 'failed' && deliveryInfo?.email === 'sent' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    Telegram was unavailable, so the message was delivered by email instead.
+                                    
                                 </p>
                             )}
                         </div>
@@ -144,15 +145,14 @@ const Contact = () => {
                     </div>
 
                     <div className='flex flex-col gap-1.5'>
-                        <label>{t('contact')?.tel}<span className='text-red-500'> *</span></label>
+                        <label>{t('contact')?.tel}<span className='text-xs text-(--text-gray) ml-1.5'>{t('contact')?.optional}</span></label>
                         <input
                             type='tel'
                             name='tel'
                             value={form.tel}
                             onChange={handleChange}
-                            className={`${inputBase} ${errors.tel ? 'border-red-500' : 'border-(--border-light)'}`}
+                            className={`${inputBase} border-(--border-light)`}
                         />
-                        {errors.tel && <p className='text-xs text-red-400'>{errors.tel}</p>}
                     </div>
 
                     <div className='flex flex-col gap-1.5'>

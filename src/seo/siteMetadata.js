@@ -33,6 +33,12 @@ export const PROJECT_ROUTES = [
     description: 'Project Nebula is a real-time social deduction game by Kry Rithisak using React, Express, and Socket.IO for multiplayer play.',
     keywords: ['Project Nebula', 'real-time game', 'Socket.IO', 'React', 'social deduction'],
   },
+  {
+    path: '/portfolio/6',
+    name: 'SakiKaraoke',
+    description: 'SakiKaraoke is a real-time collaborative karaoke web application by Kry Rithisak utilizing React, Express, and Socket.IO for synchronized playback and lyrics.',
+    keywords: ['SakiKaraoke', 'real-time karaoke', 'Socket.IO', 'React', 'collaborative web app'],
+  },
 ];
 
 const ROUTES = [

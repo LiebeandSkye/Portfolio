@@ -41,6 +41,7 @@ const translations = {
             emailHolder: 'Enter your email',
             tel: 'Phone Number',
             telHolder: 'Enter your phone number',
+            optional: '(optional)',
             message: 'Message',
             messageHolder: 'Your Message',
             submit: 'Send Message',
@@ -294,6 +295,50 @@ const translations = {
                         api: {
                             api1: { name: 'Socket.IO', description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.' },
                             api2: { name: 'Express.js API', description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.' }
+                        },
+                    }
+                }
+            },
+            sakikaraoke: {
+                title: 'SakiKaraoke',
+                description: 'A real-time collaborative karaoke web app. Create a room, share the code, and sing together — everyone stays in sync while you take turns on the mic.',
+                botQuestions: [
+                    'What is SakiKaraoke about?',
+                    'How does the real-time syncing mechanism work?',
+                    'What technologies were used to build it?',
+                ],
+                Information: {
+                    title: 'SakiKaraoke Web App',
+                    description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users can create a virtual room with a 6-character code, share it with friends, and sing together. Playback is synchronized across all participants using a custom sync architecture, and timestamped LRC lyrics scroll in real-time.',
+                    coreFeatures: {
+                        title: 'Core Features',
+                        features1: { title: 'Room System & Sync', description: 'Create a room with a 6-digit code, share it, and sing in sync with friends.' },
+                        features2: { title: 'YouTube Integration', description: 'Paste any YouTube URL and watch synchronized video playback in real time.' },
+                        features3: { title: 'Real-time Lyrics', description: 'Timestamped LRC lyrics fetched from LRCLIB API scroll in sync with the song.' },
+                        features4: { title: 'Singer Rotation & Controls', description: 'Automatic singer rotation per segment or song, with host playback and lyrics offset controls.' }
+                    },
+                    whyThisProject: 'I wanted to build a high-fidelity real-time collaboration experience. Synced karaoke required solving complex networking challenges like latency-compensated playback synchronization, state propagation, and client-side drift correction.',
+                    howItWorks: {
+                        title: 'How It Works',
+                        step1: { title: 'Host Creates Room', description: 'The host generates a room code and sets the initial playlist.' },
+                        step2: { title: 'Real-time Synced Playback', description: 'Host controls are broadcast via Socket.IO with network latency compensation; guests sync positions via heartbeats.' },
+                        step3: { title: 'Drift Correction & Lyrics', description: 'Clients verify timing every 2 seconds and re-sync if drifted >300ms, while lyrics scroll using synchronized offsets.' },
+                        description: 'SakiKaraoke combines collaborative features with sub-second synchronization to deliver a premium karaoke experience.',
+                    },
+                    howIBuiltIt: {
+                        title: 'How I Built this Project',
+                        frameworks: {
+                            framework1: { name: 'React 19', description: 'Powering the reactive user interface, component states, and player integration.' },
+                            framework2: { name: 'Vite 8', description: 'Providing a lightning-fast build tool and dev server configuration.' }
+                        },
+                        styles: {
+                            style1: { name: 'Vanilla CSS', description: 'Premium custom glassmorphic theme designed with CSS custom properties.' }
+                        },
+                        api: {
+                            api1: { name: 'Socket.IO 4', description: 'Handles bi-directional real-time events for playback controls, queues, and sync heartbeats.' },
+                            api2: { name: 'Express 5', description: 'Manages server routing, room states, and proxies requests to the LRCLIB API.' },
+                            api3: { name: 'LRCLIB API', description: 'Fetches timestamped LRC lyrics for synchronized, line-by-line scrolling.' },
+                            api4: { name: 'YouTube IFrame API', description: 'Powers video playback and synchronization through react-player controls.' }
                         },
                     }
                 }
@@ -809,6 +854,7 @@ const translations = {
             emailHolder: 'メールアドレスを入力',
             tel: '電話番号',
             telHolder: '電話番号を入力',
+            optional: '（任意）',
             message: 'メッセージ',
             messageHolder: 'メッセージを入力',
             submit: '送信',
@@ -1058,6 +1104,50 @@ const translations = {
                         api: {
                             api1: { name: 'Socket.IO', description: '双方向イベントでルーム、チャット、投票、行動同期を実現。' },
                             api2: { name: 'Express.js API', description: 'ルーム管理、ゲームループ、ミッション進行のサーバー処理を担当。' }
+                        },
+                    }
+                }
+            },
+            sakikaraoke: {
+                title: 'SakiKaraoke',
+                description: 'リアルタイムで共同利用できるカラオケWebアプリ。ルームを作成してコードを共有し、みんなで一緒に歌いましょう。マイクの交代時も全員が完全に同期した状態を維持します。',
+                botQuestions: [
+                    'SakiKaraokeはどんなプロジェクトですか？',
+                    'リアルタイム同期の仕組みはどのようになっていますか？',
+                    '構築にはどのような技術が使われていますか？',
+                ],
+                Information: {
+                    title: 'SakiKaraoke ウェブアプリ',
+                    description: 'SakiKaraokeは、リアルタイムで共同利用できるカラオケWebアプリケーションです。ユーザーは文6字のコードでバーチャルルームを作成し、友達と共有して一緒に歌うことができます。独自の同期アーキテクチャにより全員の再生状態が同期され、タイムスタンプ付きのLRC歌詞がリアルタイムでスクロールします。',
+                    coreFeatures: {
+                        title: 'コア機能',
+                        features1: { title: 'ルームシステムと同期', description: '6桁のコードでルームを作成・共有し、友達と同期して歌うことができます。' },
+                        features2: { title: 'YouTube統合', description: '任意のYouTube URLを貼り付けて、全員で同時に同期されたビデオを視聴可能。' },
+                        features3: { title: 'リアルタイム歌詞表示', description: 'LRCLIB APIから取得したタイムスタンプ付きのLRC歌詞がビデオと同期してスクロール。' },
+                        features4: { title: '歌手のターン制ローテーション', description: 'セグメントごとまたは曲ごとの自動歌手交代、およびホストによる再生制御と歌詞オフセット調整機能。' }
+                    },
+                    whyThisProject: '高品質なリアルタイム共同体験を作りたいと考えました。カラオケの同期には、遅延補償された再生同期、状態伝播、クライアント側のドリフト補正など、複雑なネットワーク課題の解決が必要でした。',
+                    howItWorks: {
+                        title: '仕組み',
+                        step1: { title: 'ホストがルームを作成', description: 'ホストがルームコードを生成し、初期プレイリストを設定します。' },
+                        step2: { title: 'リアルタイム同期再生', description: 'ホストの操作はネットワーク遅延補償付きでSocket.IOを介して配信され、ゲストはハートビートで位置を同期します。' },
+                        step3: { title: 'ドリフト補正と歌詞同期', description: 'クライアントは2秒ごとにタイミングを検証し、300ms以上のズレがあれば再同期。歌詞は同期オフセットでスクロールします。' },
+                        description: 'SakiKaraokeは、共同機能とサブ秒単位の同期を組み合わせて、プレミアムなカラオケ体験を提供します。',
+                    },
+                    howIBuiltIt: {
+                        title: 'このプロジェクトの構築方法',
+                        frameworks: {
+                            framework1: { name: 'React 19', description: 'リアクティブなUI、コンポーネント状態、およびプレイヤー統合を担当。' },
+                            framework2: { name: 'Vite 8', description: '超高速なビルドツールと開発サーバー構成を提供。' }
+                        },
+                        styles: {
+                            style1: { name: 'Vanilla CSS', description: 'CSSカスタムプロパティで設計された、プレミアムなカスタムグラスモーフィックテーマ。' }
+                        },
+                        api: {
+                            api1: { name: 'Socket.IO 4', description: '再生制御、キュー、および同期ハートビートの双方向リアルタイムイベントを処理。' },
+                            api2: { name: 'Express 5', description: 'サーバーのルーティング、ルーム状態の管理、およびLRCLIB APIへのプロキシ要求を処理。' },
+                            api3: { name: 'LRCLIB API', description: '同期されたラインごとのスクロール用に、タイムスタンプ付きLRC歌詞を取得。' },
+                            api4: { name: 'YouTube IFrame API', description: 'react-player制御を介してビデオ再生と同期機能を提供。' }
                         },
                     }
                 }

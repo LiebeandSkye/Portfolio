@@ -274,7 +274,7 @@ const BuildSection = ({ title, items, langPath }) => {
                     const item = items[itemKey];
                     return (
                         <div key={itemKey} className="flex items-center gap-4 p-3 rounded-lg border border-(--border-light) bg-(--pixel)">
-                            <div className="text-2xl text-[#388bfd]">
+                            <div className="text-2xl" style={{ color: item.color || '#388bfd' }}>
                                 {typeof item.icon === 'function' ? (
                                     <item.icon />
                                 ) : (

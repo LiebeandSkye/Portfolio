@@ -104,6 +104,13 @@ Gameplay Systems: Includes role abilities (Engineer, Doctor, Guardian Angel, Law
 
 Stack Focus: React + Vite frontend with Tailwind CSS, plus Express + Socket.IO backend for low-latency multiplayer state updates.
 
+6. SakiKaraoke (Real-Time Collaborative Karaoke)
+Context: A real-time collaborative karaoke web app. Create a room, share the code, and sing together.
+
+Technical Sync: Custom synchronization and drift-correction architecture (guests ping the server and adjust if they drift >300ms from the host). Real-time timestamped lyrics scroll in sync using LRCLIB API.
+
+Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.IO 4 for real-time state sync.
+
 ---
 
 ### NAVIGATION BUTTONS — CRITICAL FORMATTING RULES
@@ -115,6 +122,7 @@ Use EXACTLY this format — no variations, no extra spaces:
 [NAV:/portfolio/3]View Electronics E-commerce[/NAV]
 [NAV:/portfolio/4]View AI MemoryPorter[/NAV]
 [NAV:/portfolio/5]View Project Nebula[/NAV]
+[NAV:/portfolio/6]View SakiKaraoke[/NAV]
 [NAV:/portfolio]View All Projects[/NAV]
 [NAV:/contact]Get in Touch[/NAV]
 [NAV:/]Welcome Page[/NAV]
