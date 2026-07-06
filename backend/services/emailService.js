@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { normalizeContactSubmission, buildPhoneLine } = require('./contactFormatting');
 
 /**
  * Creates a reusable Nodemailer transporter using Gmail.
@@ -27,11 +28,22 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise<void>}
  */
 async function sendContactEmail({ name, email, tel, message }) {
+    const contact = normalizeContactSubmission({ name, email, tel, message });
+    const phoneLine = buildPhoneLine(contact.tel);
+
+    const phoneRow = phoneLine
+        ? `
+                    <tr>
+                        <td style="padding: 10px 0; color: #8b949e; vertical-align: top;">Phone</td>
+                        <td style="padding: 10px 0; color: #e6edf3;">${phoneLine}</td>
+                    </tr>`
+        : '';
+
     const mailOptions = {
         from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER, // sends to yourself
-        replyTo: email,             // reply goes directly to the sender
-        subject: `📬 New message from ${name}`,
+        replyTo: contact.email,     // reply goes directly to the sender
+        subject: `📬 New message from ${contact.name}`,
         html: `
             <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0d1117; color: #e6edf3; border-radius: 12px; border: 1px solid #30363d;">
                 <h2 style="margin: 0 0 24px; color: #3fb950; font-size: 20px;">
@@ -41,21 +53,18 @@ async function sendContactEmail({ name, email, tel, message }) {
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr>
                         <td style="padding: 10px 0; color: #8b949e; width: 90px; vertical-align: top;">Name</td>
-                        <td style="padding: 10px 0; color: #e6edf3; font-weight: 600;">${name}</td>
+                        <td style="padding: 10px 0; color: #e6edf3; font-weight: 600;">${contact.name}</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px 0; color: #8b949e; vertical-align: top;">Email</td>
                         <td style="padding: 10px 0;">
-                            <a href="mailto:${email}" style="color: #58a6ff;">${email}</a>
+                            <a href="mailto:${contact.email}" style="color: #58a6ff;">${contact.email}</a>
                         </td>
                     </tr>
-                    <tr>
-                        <td style="padding: 10px 0; color: #8b949e; vertical-align: top;">Phone</td>
-                        <td style="padding: 10px 0; color: #e6edf3;">${tel}</td>
-                    </tr>
+                    ${phoneRow}
                     <tr>
                         <td style="padding: 10px 0; color: #8b949e; vertical-align: top; border-top: 1px solid #30363d;">Message</td>
-                        <td style="padding: 10px 0; color: #e6edf3; white-space: pre-wrap; border-top: 1px solid #30363d;">${message}</td>
+                        <td style="padding: 10px 0; color: #e6edf3; white-space: pre-wrap; border-top: 1px solid #30363d;">${contact.message}</td>
                     </tr>
                 </table>
 

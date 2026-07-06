@@ -11,7 +11,8 @@ const PORT = process.env.PORT || 5000;
 // Allows requests from your frontend — both local dev AND your deployed domain.
 // Add every origin you need in the array below.
 const allowedOrigins = [
-    'http://localhost:5173',   // Vite dev
+    'http://localhost:5173',   // Vite dev (default)
+    'http://localhost:5174',   // Vite dev (fallback port)
     'http://localhost:3000',   // CRA dev (just in case)
     process.env.FRONTEND_ORIGIN, // your deployed domain from .env
 ]
@@ -59,8 +60,8 @@ app.listen(PORT, () => {
     console.log(`   Contact API   → http://localhost:${PORT}/api/contact`);
 
     // Startup warnings so you know immediately if something's missing
-    if (!process.env.EMAIL_USER)          console.warn('⚠️  EMAIL_USER not set in .env');
-    if (!process.env.EMAIL_PASS)          console.warn('⚠️  EMAIL_PASS not set in .env');
-    if (!process.env.TELEGRAM_BOT_TOKEN)  console.warn('⚠️  TELEGRAM_BOT_TOKEN not set in .env');
-    if (!process.env.TELEGRAM_CHAT_ID)    console.warn('⚠️  TELEGRAM_CHAT_ID not set in .env');
+    if (!process.env.EMAIL_USER) console.warn('⚠️  EMAIL_USER not set in .env');
+    if (!process.env.EMAIL_PASS) console.warn('⚠️  EMAIL_PASS not set in .env');
+    if (!process.env.TELEGRAM_BOT_TOKEN) console.warn('⚠️  TELEGRAM_BOT_TOKEN not set in .env');
+    if (!process.env.TELEGRAM_CHAT_ID) console.warn('⚠️  TELEGRAM_CHAT_ID not set in .env');
 });

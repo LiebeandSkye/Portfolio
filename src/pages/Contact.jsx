@@ -3,9 +3,11 @@ import MainLayout from './MainLayout';
 import { useLanguage } from '../components/context/LanguageContext';
 import { FaCheckCircle, FaLongArrowAltLeft } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/api/contact`
-    : 'http://localhost:5000/api/contact';
+const API_URL = import.meta.env.DEV
+    ? 'http://localhost:5000/api/contact'
+    : import.meta.env.VITE_API_URL
+        ? `${import.meta.env.VITE_API_URL}/api/contact`
+        : '/api/contact';
 
 const INITIAL_FORM = { name: '', email: '', tel: '', message: '' };
 
@@ -99,12 +101,12 @@ const Contact = () => {
                             </p>
                             {deliveryInfo?.email === 'pending' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    Email backup is still processing in the background.
+                                    
                                 </p>
                             )}
                             {deliveryInfo?.telegram === 'failed' && deliveryInfo?.email === 'sent' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    Telegram was unavailable, so the message was delivered by email instead.
+                                    
                                 </p>
                             )}
                         </div>

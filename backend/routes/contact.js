@@ -3,6 +3,7 @@ const router = express.Router();
 const { sendContactEmail } = require('../services/emailService');
 const { sendTelegramNotification } = require('../services/telegramService');
 const { createContactDelivery } = require('../services/contactDelivery');
+const { normalizeContactSubmission } = require('../services/contactFormatting');
 
 const deliverContactMessage = createContactDelivery({
     sendEmail: sendContactEmail,
@@ -12,15 +13,15 @@ const deliverContactMessage = createContactDelivery({
 /**
  * POST /api/contact
  *
- * Body: { name, email, tel, message }
+ * Body: { name, email, tel?, message }
  *
- * 1. Validates all required fields
+ * 1. Validates required fields and normalizes the optional phone field
  * 2. Starts email and Telegram delivery
  * 3. Returns as soon as Telegram succeeds; email continues in the background
  * 4. Falls back to email confirmation if Telegram fails
  */
 router.post('/', async (req, res) => {
-    const { name, email, tel = '', message } = req.body;
+    const { name, email, tel, message } = normalizeContactSubmission(req.body);
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
         return res.status(400).json({

@@ -109,7 +109,7 @@ Context: A real-time collaborative karaoke web app. Create a room, share the cod
 
 Technical Sync: Custom synchronization and drift-correction architecture (guests ping the server and adjust if they drift >300ms from the host). Real-time timestamped lyrics scroll in sync using LRCLIB API.
 
-Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.io 4 for real-time state sync.
+Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.IO 4 for real-time state sync.
 
 ---
 
