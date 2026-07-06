@@ -99,12 +99,12 @@ const Contact = () => {
                             </p>
                             {deliveryInfo?.email === 'pending' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    
+                                    email delivery still pending but sent to telegram already. No worries though, I will still get back to you.
                                 </p>
                             )}
                             {deliveryInfo?.telegram === 'failed' && deliveryInfo?.email === 'sent' && (
                                 <p className='mt-2 text-xs text-green-200/70'>
-                                    
+                                    email sent but telegram probably delivery failed. No worries though, I will still get back to you.
                                 </p>
                             )}
                         </div>
