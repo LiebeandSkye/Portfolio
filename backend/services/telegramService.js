@@ -25,8 +25,7 @@ async function sendTelegramNotification({ name, email, tel, message }) {
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
     if (!token || !chatId) {
-        console.warn('[Telegram] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set in .env — skipping.');
-        return;
+        throw new Error('Telegram bot token or chat ID is missing from environment variables');
     }
 
     const contact = normalizeContactSubmission({ name, email, tel, message });

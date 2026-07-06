@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { sendContactEmail } = require('../services/emailService');
 const { sendTelegramNotification } = require('../services/telegramService');
 const { createContactDelivery } = require('../services/contactDelivery');
 const { normalizeContactSubmission } = require('../services/contactFormatting');
 
 const deliverContactMessage = createContactDelivery({
-    sendEmail: sendContactEmail,
     sendTelegram: sendTelegramNotification,
 });
 
