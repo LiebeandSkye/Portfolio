@@ -35,7 +35,6 @@ const Contact = () => {
         if (!form.name.trim()) next.name = 'Name is required.';
         if (!form.email.trim()) next.email = 'Email is required.';
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email.';
-        if (!form.tel.trim()) next.tel = 'Phone number is required.';
         if (!form.message.trim()) next.message = 'Message is required.';
         return next;
     };
@@ -144,15 +143,14 @@ const Contact = () => {
                     </div>
 
                     <div className='flex flex-col gap-1.5'>
-                        <label>{t('contact')?.tel}<span className='text-red-500'> *</span></label>
+                        <label>{t('contact')?.tel}<span className='text-xs text-(--text-gray) ml-1.5'>{t('contact')?.optional}</span></label>
                         <input
                             type='tel'
                             name='tel'
                             value={form.tel}
                             onChange={handleChange}
-                            className={`${inputBase} ${errors.tel ? 'border-red-500' : 'border-(--border-light)'}`}
+                            className={`${inputBase} border-(--border-light)`}
                         />
-                        {errors.tel && <p className='text-xs text-red-400'>{errors.tel}</p>}
                     </div>
 
                     <div className='flex flex-col gap-1.5'>

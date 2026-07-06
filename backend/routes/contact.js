@@ -20,12 +20,12 @@ const deliverContactMessage = createContactDelivery({
  * 4. Falls back to email confirmation if Telegram fails
  */
 router.post('/', async (req, res) => {
-    const { name, email, tel, message } = req.body;
+    const { name, email, tel = '', message } = req.body;
 
-    if (!name?.trim() || !email?.trim() || !tel?.trim() || !message?.trim()) {
+    if (!name?.trim() || !email?.trim() || !message?.trim()) {
         return res.status(400).json({
             success: false,
-            error: 'All fields are required.',
+            error: 'Name, email, and message are required.',
         });
     }
 
