@@ -22,7 +22,7 @@ const translations = {
         privateRepo: {
             title: "Private Repository",
             subtitle: "This project is not publicly available.",
-            body: "Sorry, this is a private repository. The source code for this project is not publicly accessible at this time — it may contain proprietary logic, sensitive configuration, or is simply kept private for now.",
+            body: "Sorry, this is a private repository. The source code for this project is not publicly accessible at this time. it may contain proprietary logic, sensitive configuration, or is simply kept private for now.",
             note: "If you're genuinely interested in the code, feel free to reach out and I'll be happy to discuss the implementation!",
             close: "Got it",
         },
