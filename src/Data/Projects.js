@@ -13,7 +13,7 @@ import Memory2 from '../assets/AI_MemoryPorter/Memory2.png';
 import nebulaThumb from '../assets/Nebula/WebsiteThumbnail.jpg';
 import nebulaScreenshot1 from '../assets/Nebula/screenshot1.jpg';
 import sakiKaraokeThumb from '../assets/SakiKaraoke/WebsiteThumbnail.png';
-import charmStoreThumb from '../assets/CharmStoreKH/WebsiteThumbnail.png';
+import charmStoreThumb from '../assets/charmstorekh/WebsiteThumbnail.png';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
 import { RiNextjsFill } from "react-icons/ri";
