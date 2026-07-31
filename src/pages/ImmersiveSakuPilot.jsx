@@ -15,13 +15,13 @@ import {
     FiTrash2,
     FiX,
     FiMoreHorizontal,
-    FiStar,
     FiEdit2,
     FiChevronDown,
     FiCheck,
     FiAlertCircle,
     FiClock
 } from 'react-icons/fi';
+import { BsPinAngle, BsPinAngleFill } from 'react-icons/bs';
 import { GoDependabot } from 'react-icons/go';
 
 import LlamaIcon from '../assets/Models/Llama.png';
@@ -108,6 +108,22 @@ const ImmersiveSakuPilot = () => {
             conversation.messages.some((message) => message.content.toLowerCase().includes(query))
         );
     }, [conversations, searchQuery]);
+
+    const { pinnedConversations, recentConversations } = useMemo(() => {
+        const pinned = [];
+        const recent = [];
+        filteredConversations.forEach((conv) => {
+            if (conv.pinned) {
+                pinned.push(conv);
+            } else {
+                recent.push(conv);
+            }
+        });
+        const sortByDate = (a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+        pinned.sort(sortByDate);
+        recent.sort(sortByDate);
+        return { pinnedConversations: pinned, recentConversations: recent };
+    }, [filteredConversations]);
 
     const projectOptions = useMemo(() => Projects.map((project) => ({
         ...project,
@@ -376,80 +392,218 @@ const ImmersiveSakuPilot = () => {
                     </button>
 
                     <p className="px-2 pb-2 text-xs font-semibold text-(--text-gray)">{t('sakupilot.immersive.recent')}</p>
-                    <div className="github-scrollbar flex-1 space-y-1 overflow-y-auto pr-1">
-                        {conversations.length === 0 ? (
+                    <div className="github-scrollbar flex-1 space-y-3 overflow-y-auto pr-1">
+                        {pinnedConversations.length === 0 && recentConversations.length === 0 ? (
                             <p className="px-2 py-3 text-xs text-(--text-gray)">{t('sakupilot.immersive.noSavedChats')}</p>
-                        ) : [...conversations].sort((a, b) => {
-                            if (a.pinned && !b.pinned) return -1;
-                            if (!a.pinned && b.pinned) return 1;
-                            return new Date(b.updatedAt || 0) < new Date(a.updatedAt || 0) ? -1 : 1;
-                        }).map((conversation) => (
-                            <div key={conversation.id} className={`group flex items-center gap-1 rounded-md dropdown-container relative ${activeConversation.id === conversation.id ? 'bg-(--pixel-hover)' : 'hover:bg-(--pixel-hover)'}`}>
-                                {editingConversationId === conversation.id ? (
-                                    <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
-                                        <FiMessageSquare className="shrink-0 text-(--text-gray)" />
-                                        <input
-                                            autoFocus
-                                            value={editTitleValue}
-                                            onChange={(e) => setEditTitleValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') handleSaveRename(conversation.id);
-                                                if (e.key === 'Escape') handleCancelRename();
-                                            }}
-                                            onBlur={() => handleSaveRename(conversation.id)}
-                                            className="min-w-0 flex-1 bg-transparent text-sm outline-none border-b border-(--sucess)"
-                                        />
-                                    </div>
-                                ) : (
-                                    <>
-                                        <button
-                                            onClick={() => handleSelectConversation(conversation)}
-                                            className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm cursor-pointer"
-                                        >
-                                            <FiMessageSquare className="shrink-0 text-(--text-gray)" />
-                                            <span className="truncate">{conversation.title}</span>
-                                        </button>
-                                        {conversation.pinned && (
-                                            <FiStar className="shrink-0 text-(--sucess) mr-1" size={12} />
-                                        )}
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setDropdownOpenId(dropdownOpenId === conversation.id ? null : conversation.id);
-                                            }}
-                                            className="mr-1 rounded p-1.5 text-(--text-gray) opacity-100 md:opacity-0 hover:text-(--text-light) md:group-hover:opacity-100 cursor-pointer"
-                                            aria-label={`More options for ${conversation.title}`}
-                                        >
-                                            <FiMoreHorizontal size={14} />
-                                        </button>
+                        ) : (
+                            <>
+                                {pinnedConversations.length > 0 && (
+                                    <div className="space-y-1">
+                                        <div className="flex items-center justify-between px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-(--text-gray)">
+                                            <span className="flex items-center gap-1.5">
+                                                <BsPinAngleFill size={12} className="text-(--sucess)" />
+                                                {t('sakupilot.immersive.pinned') || 'Pinned'}
+                                            </span>
+                                            <span className="rounded-full bg-(--pixel) px-2 py-0.5 text-[10px] font-semibold text-(--text-gray)">
+                                                {pinnedConversations.length}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <AnimatePresence mode="popLayout">
+                                                {pinnedConversations.map((conversation) => (
+                                                    <motion.div
+                                                        key={conversation.id}
+                                                        layout
+                                                        initial={{ opacity: 0, y: -4 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, scale: 0.95 }}
+                                                        transition={{ duration: 0.18 }}
+                                                        className={`group relative flex items-center gap-1 rounded-md dropdown-container ${
+                                                            activeConversation.id === conversation.id ? 'bg-(--pixel-hover) font-medium' : 'hover:bg-(--pixel-hover)'
+                                                        }`}
+                                                    >
+                                                        {editingConversationId === conversation.id ? (
+                                                            <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
+                                                                <BsPinAngleFill className="shrink-0 text-(--sucess)" size={13} />
+                                                                <input
+                                                                    autoFocus
+                                                                    value={editTitleValue}
+                                                                    onChange={(e) => setEditTitleValue(e.target.value)}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') handleSaveRename(conversation.id);
+                                                                        if (e.key === 'Escape') handleCancelRename();
+                                                                    }}
+                                                                    onBlur={() => handleSaveRename(conversation.id)}
+                                                                    className="min-w-0 flex-1 border-b border-(--sucess) bg-transparent text-sm outline-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => handleSelectConversation(conversation)}
+                                                                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm cursor-pointer"
+                                                                >
+                                                                    <BsPinAngleFill className="shrink-0 text-(--sucess)" size={13} />
+                                                                    <span className="truncate">{conversation.title}</span>
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handlePinConversation(conversation.id);
+                                                                    }}
+                                                                    className="rounded p-1 text-(--text-gray) opacity-100 md:opacity-0 hover:text-(--sucess) md:group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                                    title={t('sakupilot.immersive.unpin') || 'Unpin'}
+                                                                    aria-label="Unpin chat"
+                                                                >
+                                                                    <BsPinAngleFill size={13} className="text-(--sucess)" />
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setDropdownOpenId(dropdownOpenId === conversation.id ? null : conversation.id);
+                                                                    }}
+                                                                    className="mr-1 rounded p-1.5 text-(--text-gray) opacity-100 md:opacity-0 hover:text-(--text-light) md:group-hover:opacity-100 cursor-pointer"
+                                                                    aria-label={`More options for ${conversation.title}`}
+                                                                >
+                                                                    <FiMoreHorizontal size={14} />
+                                                                </button>
 
-                                        {dropdownOpenId === conversation.id && (
-                                            <div className="absolute right-0 top-full z-[100] mt-1 w-36 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
-                                                <button
-                                                    onClick={() => handlePinConversation(conversation.id)}
-                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
-                                                >
-                                                    <FiStar size={12} className={conversation.pinned ? "fill-(--sucess) text-(--sucess)" : ""} /> 
-                                                    {conversation.pinned ? t('sakupilot.immersive.unpin') : t('sakupilot.immersive.pinchat')}
-                                                </button>
-                                                <button
-                                                    onClick={() => handleRenameConversation(conversation.id, conversation.title)}
-                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover)"
-                                                >
-                                                    <FiEdit2 size={12} /> {t('sakupilot.immersive.rename')}
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteConversation(conversation.id)}
-                                                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 hover:bg-(--pixel-hover)"
-                                                >
-                                                    <FiTrash2 size={12} /> {t('sakupilot.immersive.delete')}
-                                                </button>
+                                                                {dropdownOpenId === conversation.id && (
+                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                        <button
+                                                                            onClick={() => handlePinConversation(conversation.id)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <BsPinAngleFill size={13} className="text-(--sucess)" />
+                                                                            {t('sakupilot.immersive.unpin')}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleRenameConversation(conversation.id, conversation.title)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <FiEdit2 size={12} /> {t('sakupilot.immersive.rename')}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleDeleteConversation(conversation.id)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <FiTrash2 size={12} /> {t('sakupilot.immersive.delete')}
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </motion.div>
+                                                ))}
+                                            </AnimatePresence>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {pinnedConversations.length > 0 && recentConversations.length > 0 && (
+                                    <div className="my-2 border-t border-(--border-light)/40" />
+                                )}
+
+                                {(recentConversations.length > 0 || pinnedConversations.length > 0) && (
+                                    <div className="space-y-1">
+                                        {pinnedConversations.length > 0 && (
+                                            <div className="px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-(--text-gray)">
+                                                {t('sakupilot.immersive.recent')}
                                             </div>
                                         )}
-                                    </>
+                                        <div className="space-y-1">
+                                            <AnimatePresence mode="popLayout">
+                                                {recentConversations.map((conversation) => (
+                                                    <motion.div
+                                                        key={conversation.id}
+                                                        layout
+                                                        initial={{ opacity: 0, y: -4 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, scale: 0.95 }}
+                                                        transition={{ duration: 0.18 }}
+                                                        className={`group relative flex items-center gap-1 rounded-md dropdown-container ${
+                                                            activeConversation.id === conversation.id ? 'bg-(--pixel-hover) font-medium' : 'hover:bg-(--pixel-hover)'
+                                                        }`}
+                                                    >
+                                                        {editingConversationId === conversation.id ? (
+                                                            <div className="flex flex-1 items-center gap-2 px-2 py-1.5">
+                                                                <FiMessageSquare className="shrink-0 text-(--text-gray)" />
+                                                                <input
+                                                                    autoFocus
+                                                                    value={editTitleValue}
+                                                                    onChange={(e) => setEditTitleValue(e.target.value)}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') handleSaveRename(conversation.id);
+                                                                        if (e.key === 'Escape') handleCancelRename();
+                                                                    }}
+                                                                    onBlur={() => handleSaveRename(conversation.id)}
+                                                                    className="min-w-0 flex-1 border-b border-(--sucess) bg-transparent text-sm outline-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => handleSelectConversation(conversation)}
+                                                                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm cursor-pointer"
+                                                                >
+                                                                    <FiMessageSquare className="shrink-0 text-(--text-gray)" />
+                                                                    <span className="truncate">{conversation.title}</span>
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handlePinConversation(conversation.id);
+                                                                    }}
+                                                                    className="rounded p-1 text-(--text-gray) opacity-0 hover:text-(--sucess) group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                                    title={t('sakupilot.immersive.pinchat') || 'Pin chat'}
+                                                                    aria-label="Pin chat"
+                                                                >
+                                                                    <BsPinAngle size={13} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setDropdownOpenId(dropdownOpenId === conversation.id ? null : conversation.id);
+                                                                    }}
+                                                                    className="mr-1 rounded p-1.5 text-(--text-gray) opacity-100 md:opacity-0 hover:text-(--text-light) md:group-hover:opacity-100 cursor-pointer"
+                                                                    aria-label={`More options for ${conversation.title}`}
+                                                                >
+                                                                    <FiMoreHorizontal size={14} />
+                                                                </button>
+
+                                                                {dropdownOpenId === conversation.id && (
+                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                        <button
+                                                                            onClick={() => handlePinConversation(conversation.id)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <BsPinAngle size={13} />
+                                                                            {t('sakupilot.immersive.pinchat')}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleRenameConversation(conversation.id, conversation.title)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <FiEdit2 size={12} /> {t('sakupilot.immersive.rename')}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleDeleteConversation(conversation.id)}
+                                                                            className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 hover:bg-(--pixel-hover) cursor-pointer"
+                                                                        >
+                                                                            <FiTrash2 size={12} /> {t('sakupilot.immersive.delete')}
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </motion.div>
+                                                ))}
+                                            </AnimatePresence>
+                                        </div>
+                                    </div>
                                 )}
-                            </div>
-                        ))}
+                            </>
+                        )}
                     </div>
                 </div>
             </motion.aside>
@@ -689,19 +843,52 @@ const ImmersiveSakuPilot = () => {
                                 {t('sakupilot.immersive.newChat')}
                             </button>
 
-                            <p className="px-4 py-2 text-xs text-(--text-gray)">{t('sakupilot.immersive.recent')}</p>
-                            {filteredConversations.length === 0 ? (
+                            {pinnedConversations.length === 0 && recentConversations.length === 0 ? (
                                 <p className="px-4 py-5 text-sm text-(--text-gray)">{t('sakupilot.immersive.noMatch')}</p>
-                            ) : filteredConversations.map((conversation) => (
-                                <button
-                                    key={conversation.id}
-                                    onClick={() => handleSelectConversation(conversation)}
-                                    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm hover:bg-(--pixel-hover)"
-                                >
-                                    <FiMessageSquare className="shrink-0 text-(--text-gray)" />
-                                    <span className="truncate">{conversation.title}</span>
-                                </button>
-                            ))}
+                            ) : (
+                                <>
+                                    {pinnedConversations.length > 0 && (
+                                        <div className="mb-3">
+                                            <p className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-(--text-gray)">
+                                                <BsPinAngleFill size={12} className="text-(--sucess)" />
+                                                {t('sakupilot.immersive.pinned') || 'Pinned'}
+                                            </p>
+                                            <div className="space-y-1">
+                                                {pinnedConversations.map((conversation) => (
+                                                    <button
+                                                        key={conversation.id}
+                                                        onClick={() => handleSelectConversation(conversation)}
+                                                        className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm hover:bg-(--pixel-hover) cursor-pointer"
+                                                    >
+                                                        <BsPinAngleFill className="shrink-0 text-(--sucess)" size={14} />
+                                                        <span className="truncate">{conversation.title}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {recentConversations.length > 0 && (
+                                        <div>
+                                            <p className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-(--text-gray)">
+                                                {t('sakupilot.immersive.recent')}
+                                            </p>
+                                            <div className="space-y-1">
+                                                {recentConversations.map((conversation) => (
+                                                    <button
+                                                        key={conversation.id}
+                                                        onClick={() => handleSelectConversation(conversation)}
+                                                        className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm hover:bg-(--pixel-hover) cursor-pointer"
+                                                    >
+                                                        <FiMessageSquare className="shrink-0 text-(--text-gray)" />
+                                                        <span className="truncate">{conversation.title}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
