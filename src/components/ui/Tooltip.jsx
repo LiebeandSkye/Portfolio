@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
 
 /**
  * Tooltip that renders via a React Portal so it's never clipped by

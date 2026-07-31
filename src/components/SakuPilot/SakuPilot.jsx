@@ -226,7 +226,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                 scrollRafRef.current = null;
             }
         };
-    }, [typingMessage?.fullText, scheduleScroll]); // only restarts on NEW message
+    }, [typingMessage, scheduleScroll]); // only restarts on NEW message
 
     // ── Chat lifecycle ────────────────────────────────────────────────────────
     const startChat = useCallback((project) => {

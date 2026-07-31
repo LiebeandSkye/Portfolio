@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react';
 import MessageContent from './MessageContent';
 import NavButton from './NavButton';
 
-const NAV_REGEX = /\[NAV:([^\]|]+)\]([^\[]*)\[\/NAV]|\[NAV:([^\]|]+)\|([^\]]+)]/g;
+const NAV_REGEX = /\[NAV:([^\]|]+)\]([^[]*)\[\/NAV]|\[NAV:([^\]|]+)\|([^\]]+)]/g;
 
 function parseNavTokens(content) {
     if (typeof content !== 'string') return [{ type: 'text', value: String(content) }];

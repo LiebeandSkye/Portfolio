@@ -18,7 +18,7 @@ const TypingText = ({ text, speed = 15, onDone, onUpdate }) => {
         }, speed);
 
         return () => clearInterval(interval);
-    }, [text]);
+    }, [text, speed, onDone, onUpdate]);
 
     return <>{displayed}<span className="animate-pulse">|</span></>;
 };

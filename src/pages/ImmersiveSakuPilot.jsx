@@ -288,7 +288,7 @@ const ImmersiveSakuPilot = () => {
             }
             setIsThinking(false);
         }
-    }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext]);
+    }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext, selectedModel]);
 
     const scheduleScroll = useCallback(() => {
         if (scrollRafRef.current) return;
@@ -331,7 +331,7 @@ const ImmersiveSakuPilot = () => {
                 scrollRafRef.current = null;
             }
         };
-    }, [typingMessage?.fullText, scheduleScroll, activeConversation, persistActiveConversation]);
+    }, [typingMessage, scheduleScroll, activeConversation, persistActiveConversation]);
 
     return (
         <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative border-t border-(--border-light) dark:border-(--dark-border)">
