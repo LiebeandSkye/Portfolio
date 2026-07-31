@@ -17,9 +17,9 @@ export const PROJECT_ROUTES = [
   },
   {
     path: '/portfolio/3',
-    name: 'Electronics E-commerce',
-    description: 'Electronics E-commerce is an in-development commerce project by Kry Rithisak focused on Firebase authentication, Firestore, and cart workflows.',
-    keywords: ['electronics e-commerce', 'Firebase', 'Firestore', 'authentication'],
+    name: 'Charm Store KH',
+    description: 'Charm Store KH is a Cambodia-only online store for stationery, plushies, and lifestyle essentials by Kry Rithisak featuring a website-builder style admin dashboard.',
+    keywords: ['Charm Store KH', 'e-commerce', 'Next.js', 'TypeScript', 'Supabase', 'Cloudinary', 'admin dashboard'],
   },
   {
     path: '/portfolio/4',

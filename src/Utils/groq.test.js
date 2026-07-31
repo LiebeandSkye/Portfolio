@@ -9,7 +9,7 @@ test('getChatEndpoint uses local serverless path in production builds', () => {
 
 test('getChatEndpoint uses configured chat API url during local development', () => {
     assert.equal(
-        getChatEndpoint({ DEV: true }, { VITE_CHAT_API_URL: 'https://portfolio.example.com/' }),
+        getChatEndpoint({ DEV: true, VITE_CHAT_API_URL: 'https://portfolio.example.com/' }),
         'https://portfolio.example.com/api/chat'
     );
 });

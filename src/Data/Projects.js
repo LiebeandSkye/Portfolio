@@ -587,12 +587,12 @@ const Projects = [
         percent: { javascript: 85.0, css: 12.0, html: 3.0 },
         Information: {
             title: 'SakiKaraoke',
-            description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users can create a virtual room with a 6-character code, share it with friends, and sing together. Playback is synchronized across all participants using a custom sync architecture, and timestamped LRC lyrics scroll in real-time.',
+            description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users create a virtual room with a 6-character code, share it with friends, hop on a Discord call for live voice chat, and sing together. Powered by Socket.IO websockets for sub-second real-time state synchronization, video playback and timestamped LRC lyrics stay in ultra-low latency sync so singing is seamlessly smooth.',
             coreFeatures: {
                 title: 'Core Features',
                 features1: {
-                    title: 'Room System & Sync',
-                    description: '– Create a room with a 6-digit code, share it, and sing in sync with friends.'
+                    title: 'Room System & Low-Latency Sync',
+                    description: '– Create a room with a 6-digit code, share it, and sing in sync with friends using low-latency Socket.IO websockets.'
                 },
                 features2: {
                     title: 'YouTube Integration',
@@ -605,6 +605,10 @@ const Projects = [
                 features4: {
                     title: 'Singer Rotation & Controls',
                     description: '– Automatic singer rotation per segment or song, with host playback and lyrics offset controls.'
+                },
+                features5: {
+                    title: 'Discord Voice Call Integration',
+                    description: '– Join a Discord voice call for live voice chat while using the website; combined with Socket.IO real-time sync, group singing is seamlessly smooth and lag-free.'
                 }
             },
             WhyThisProject: {
@@ -619,15 +623,15 @@ const Projects = [
                         description: '– The host generates a room code and sets the initial playlist.'
                     },
                     step2: {
-                        title: 'Real-time Synced Playback',
-                        description: '– Host controls are broadcast via Socket.IO with network latency compensation; guests sync positions via heartbeats.'
+                        title: 'Real-time Synced Playback & Discord Call',
+                        description: '– Sing over a Discord voice call while host controls are broadcast via Socket.IO for sub-second low latency, keeping singing seamlessly smooth.'
                     },
                     step3: {
                         title: 'Drift Correction & Lyrics',
                         description: '– Clients verify timing every 2 seconds and re-sync if drifted >300ms, while lyrics scroll using synchronized offsets.'
                     },
                 },
-                description: 'SakiKaraoke combines collaborative features with sub-second synchronization to deliver a premium karaoke experience.',
+                description: 'SakiKaraoke combines Discord voice calls with sub-second Socket.IO synchronization to deliver a seamlessly smooth, lag-free collaborative karaoke experience.',
             },
             HowIBuiltIt: {
                 title: 'How I Built this Project',
