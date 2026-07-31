@@ -44,7 +44,11 @@ export const loadConversations = (storage = window.localStorage) => {
 export const saveConversations = (conversations, storage = window.localStorage) => {
     const sanitized = conversations.map((conv) => ({
         ...conv,
-        messages: conv.messages.map(({ isNew: _isNew, ...msg }) => msg),
+        messages: conv.messages.map((msg) => {
+            const copy = { ...msg };
+            delete copy.isNew;
+            return copy;
+        }),
     }));
     storage.setItem(IMMERSIVE_CHAT_STORAGE_KEY, JSON.stringify(sanitized));
 };

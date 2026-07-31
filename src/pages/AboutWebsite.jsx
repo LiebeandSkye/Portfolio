@@ -42,7 +42,7 @@ const AboutWebsite = () => {
   const { t } = useLanguage();
   const content = t('aboutWebsitePage');
   const articleRef = useRef(null);
-  const navGroups = content.navGroups || [];
+  const navGroups = useMemo(() => content.navGroups || [], [content.navGroups]);
   const navItems = useMemo(() => navGroups.flatMap((group) => group.items), [navGroups]);
   const [activeSection, setActiveSection] = useState(navItems[0]?.id || 'intro-why');
 
