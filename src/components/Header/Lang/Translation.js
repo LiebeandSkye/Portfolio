@@ -19,6 +19,13 @@ const translations = {
         sourceCode: "Source Code",
         share: "Share :",
         pinned: "Pinned",
+        privateRepo: {
+            title: "Private Repository",
+            subtitle: "This project is not publicly available.",
+            body: "Sorry, this is a private repository. The source code for this project is not publicly accessible at this time. it may contain proprietary logic, sensitive configuration, or is simply kept private for now.",
+            note: "If you're genuinely interested in the code, feel free to reach out and I'll be happy to discuss the implementation!",
+            close: "Got it",
+        },
         search: {
             placeholder: 'Search this website...',
             pages: 'Pages',
@@ -80,8 +87,9 @@ const translations = {
                 starter3: 'Compare my projects and suggest what to improve next.',
                 thinking: 'SakuPilot is thinking...',
                 disclaimer: 'SakuPilot can make mistakes. Verify important details.',
-                unpin: 'Unpin',
-                pinchat: 'Pinchat',
+                unpin: 'Unpin chat',
+                pinchat: 'Pin chat',
+                pinned: 'Pinned',
                 messagePlaceholder: 'Message SakuPilot...',
                 tryAgain: 'Try Again',
                 rateLimitExceeded: 'Rate Limit Exceeded',
@@ -187,41 +195,44 @@ const translations = {
                     }
                 },
             },
-            electronics: {
-                title: 'Electronics E-commerce',
-                description: 'An experimental e-commerce platform built for learning purposes, focused on product listings and cart systems.',
+            charmstorekh: {
+                title: 'Charm Store KH',
+                description: 'A Cambodia-only online store for stationery, plushies, and everyday essentials, built around an admin dashboard that works almost like its own website builder.',
                 botQuestions: [
-                    'What is the Electronics E-commerce project?',
-                    'How does the cart and authentication system work?',
-                    'Why is this project still under development?',
+                    'What is Charm Store KH about?',
+                    'How does the admin dashboard let the owner build the site?',
+                    'What tech stack powers Charm Store KH?',
                 ],
                 Information: {
-                    title: 'Electronics E-commerce Website (Incomplete)',
-                    description: 'This project was created mainly for learning advanced concepts such as authentication, cart management, and database integration. It is still under development.',
+                    title: 'Charm Store KH',
+                    description: 'Charm Store KH is a Cambodia-only e-commerce store selling stationery, plushies, and lifestyle essentials. Its real centerpiece is the admin dashboard, a custom text editor and image uploader that lets the owner design products, banners, and even pages with self-made slugs, all without writing code.',
                     coreFeatures: {
                         title: 'Core Features',
-                        features1: { title: 'Product Listings', description: 'Displays electronic products dynamically.' },
-                        features2: { title: 'Cart System', description: 'Add and remove items from shopping cart.' },
-                        features3: { title: 'Database Integration', description: 'Products stored and fetched from the cloud.' }
+                        features1: { title: 'Cart, Checkout & Filtering', description: 'Customers filter products, build a cart, and check out with a personal user ID to send over social media since there is no payment gateway.' },
+                        features2: { title: 'Website-Builder Admin Dashboard', description: 'A custom editor for text, images, banners, and custom slugs, letting the admin run the entire site like a builder.' },
+                        features3: { title: 'Social Login with RLS', description: 'Sign in with Google, Discord, or Facebook through Supabase Auth, protected by row-level security.' },
+                        features4: { title: 'Automatic Image Optimization', description: 'Uploads go through Cloudinary and are auto-converted to WebP to keep storage light.' }
                     },
-                    whyThisProject: 'Built as a personal learning challenge to understand real-world e-commerce architecture.',
+                    whyThisProject: 'I wanted a real store for local use in Cambodia, not just a demo. The bigger challenge was the admin side: building a dashboard that lets a non-technical owner design the storefront, banners, and slugs on their own.',
                     howItWorks: {
                         title: 'How It Works',
-                        step1: { title: 'User Browses Products', description: 'Products dynamically rendered from database.' },
-                        step2: { title: 'Adds to Cart', description: 'Cart state managed using React state.' },
-                        step3: { title: 'Authentication Required', description: 'Users must log in to proceed.' },
+                        step1: { title: 'Customer Signs In & Browses', description: 'Shoppers log in with Google, Discord, or Facebook, then filter and search the catalog.' },
+                        step2: { title: 'Add to Cart & Checkout', description: 'Checkout generates a user ID that the customer sends over social media to confirm the order.' },
+                        step3: { title: 'Admin Builds & Manages Everything', description: 'The dashboard lets the admin edit products, banners, pages, and slugs through a built-in editor.' },
+                        description: 'A simple shopping flow for customers, paired with a powerful, code-free control panel for the store owner.',
                     },
                     howIBuiltIt: {
                         title: 'How I Built this Project',
                         frameworks: {
-                            framework1: { name: 'React + Vite', description: 'Used for a high-performance, reactive user interface.' }
+                            framework1: { name: 'Next.js', description: 'Handles routing, rendering, and the overall app structure.' },
+                            framework2: { name: 'TypeScript', description: 'Keeps the growing codebase, especially the admin dashboard, type-safe.' }
                         },
                         styles: {
-                            style1: { name: 'Tailwind CSS v4', description: 'Utilized for modern, rapid UI development.' }
+                            style1: { name: 'Tailwind CSS', description: 'Utility-first styling for the storefront and dashboard.' }
                         },
                         api: {
-                            api1: { name: 'Browser File API', description: 'Processes data locally for 100% user privacy.' },
-                            api2: { name: 'None', description: 'Zero external API calls to ensure data security.' }
+                            api1: { name: 'Supabase', description: 'Row-level-secured database and auth, including Google, Discord, and Facebook OAuth.' },
+                            api2: { name: 'Cloudinary', description: 'Stores uploads and auto-converts them to WebP to save space.' }
                         },
                     }
                 }
@@ -291,7 +302,7 @@ const translations = {
                     howIBuiltIt: {
                         title: 'How I Built this Project',
                         frameworks: { framework1: { name: 'React + Vite', description: 'Used for fast client-side rendering and gameplay UI updates.' } },
-                        styles: { style1: { name: 'Tailwind CSS v4', description: 'Used to build responsive game panels, role UI, and polished visual states.' } },
+                        styles: { style1: { name: 'Tailwind CSS', description: 'Used to build responsive game panels, role UI, and polished visual states.' } },
                         api: {
                             api1: { name: 'Socket.IO', description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.' },
                             api2: { name: 'Express.js API', description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.' }
@@ -301,7 +312,7 @@ const translations = {
             },
             sakikaraoke: {
                 title: 'SakiKaraoke',
-                description: 'A real-time collaborative karaoke web app. Create a room, share the code, and sing together — everyone stays in sync while you take turns on the mic.',
+                description: 'A real-time collaborative karaoke web app. Create a room, jump on a Discord call, share the code, and sing together — powered by low-latency Socket.IO sync so singing is seamlessly smooth.',
                 botQuestions: [
                     'What is SakiKaraoke about?',
                     'How does the real-time syncing mechanism work?',
@@ -309,21 +320,22 @@ const translations = {
                 ],
                 Information: {
                     title: 'SakiKaraoke Web App',
-                    description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users can create a virtual room with a 6-character code, share it with friends, and sing together. Playback is synchronized across all participants using a custom sync architecture, and timestamped LRC lyrics scroll in real-time.',
+                    description: 'SakiKaraoke is a real-time collaborative karaoke web application. Users create a virtual room with a 6-character code, share it with friends, hop on a Discord call for live voice chat, and sing together. Playback is synchronized across all participants using Socket.IO for ultra-low latency, and timestamped LRC lyrics scroll in real-time for a seamlessly smooth singing experience.',
                     coreFeatures: {
                         title: 'Core Features',
-                        features1: { title: 'Room System & Sync', description: 'Create a room with a 6-digit code, share it, and sing in sync with friends.' },
+                        features1: { title: 'Room System & Low-Latency Sync', description: 'Create a room with a 6-digit code, share it, and sing in sync with friends using low-latency Socket.IO websockets.' },
                         features2: { title: 'YouTube Integration', description: 'Paste any YouTube URL and watch synchronized video playback in real time.' },
                         features3: { title: 'Real-time Lyrics', description: 'Timestamped LRC lyrics fetched from LRCLIB API scroll in sync with the song.' },
-                        features4: { title: 'Singer Rotation & Controls', description: 'Automatic singer rotation per segment or song, with host playback and lyrics offset controls.' }
+                        features4: { title: 'Singer Rotation & Controls', description: 'Automatic singer rotation per segment or song, with host playback and lyrics offset controls.' },
+                        features5: { title: 'Discord Call Integration', description: 'Use Discord for live voice calling alongside the web app for a seamlessly smooth, lag-free singing experience.' }
                     },
                     whyThisProject: 'I wanted to build a high-fidelity real-time collaboration experience. Synced karaoke required solving complex networking challenges like latency-compensated playback synchronization, state propagation, and client-side drift correction.',
                     howItWorks: {
                         title: 'How It Works',
                         step1: { title: 'Host Creates Room', description: 'The host generates a room code and sets the initial playlist.' },
-                        step2: { title: 'Real-time Synced Playback', description: 'Host controls are broadcast via Socket.IO with network latency compensation; guests sync positions via heartbeats.' },
+                        step2: { title: 'Real-time Synced Playback & Discord Call', description: 'Sing over a Discord call while host controls are broadcast via Socket.IO for sub-second low latency, keeping singing seamlessly smooth.' },
                         step3: { title: 'Drift Correction & Lyrics', description: 'Clients verify timing every 2 seconds and re-sync if drifted >300ms, while lyrics scroll using synchronized offsets.' },
-                        description: 'SakiKaraoke combines collaborative features with sub-second synchronization to deliver a premium karaoke experience.',
+                        description: 'SakiKaraoke combines Discord voice calls with sub-second Socket.IO synchronization to deliver a seamlessly smooth, lag-free collaborative karaoke experience.',
                     },
                     howIBuiltIt: {
                         title: 'How I Built this Project',
@@ -832,6 +844,13 @@ const translations = {
         sourceCode: "ソースコード",
         share: 'シェアする : ',
         pinned: 'ピン留め',
+        privateRepo: {
+            title: 'プライベートリポジトリ',
+            subtitle: 'このプロジェクトは公開されていません。',
+            body: '申し訳ありませんが、このリポジトリはプライベートです。このプロジェクトのソースコードは現在公開されていません。独自のロジックや機密設定が含まれているか、単純にプライベートに保たれている可能性があります。',
+            note: 'コードに真剣な関心をお持ちの方は、お気軽にご連絡ください。実装についてお話しすることができます！',
+            close: '了解しました',
+        },
         search: {
             placeholder: 'このウェブサイトを検索...',
             pages: 'ページ',
@@ -894,7 +913,8 @@ const translations = {
                 thinking: 'SakuPilotが考えています...',
                 disclaimer: 'SakuPilotは間違えることがあります。重要な情報は確認してください。',
                 unpin: 'ピン留め解除',
-                pinchat: 'ピン留め',
+                pinchat: 'チャットをピン留め',
+                pinned: 'ピン留め済み',
                 messagePlaceholder: 'SakuPilotにメッセージを送信...',
                 tryAgain: '再試行',
                 rateLimitExceeded: 'レート制限を超えました',
@@ -999,35 +1019,45 @@ const translations = {
                     }
                 },
             },
-            electronics: {
-                title: '電子機器 Eコマース',
-                description: '学習目的で構築された実験的なEコマースプラットフォーム。商品リストとカートシステムに重点を置いています。',
+            charmstorekh: {
+                title: 'Charm Store KH',
+                description: 'カンボジア国内向けの文房具、ぬいぐるみ、生活雑貨を扱うオンラインストア。管理者用ダッシュボードは、ほぼ独自のウェブサイトビルダーのように機能します。',
                 botQuestions: [
-                    '電子機器ECサイトについて教えてください。',
-                    'カートシステムはどのように機能しますか？',
-                    'なぜまだ開発中ですか？',
+                    'Charm Store KHはどんなプロジェクトですか？',
+                    '管理者ダッシュボードはどのようにサイトを構築できるのですか？',
+                    'Charm Store KHにはどんな技術スタックが使われていますか？',
                 ],
                 Information: {
-                    title: '電子機器 Eコマース ウェブサイト (未完成)',
-                    description: 'このプロジェクトは、主に認証、カート管理、データベース統合などの高度な概念を学習するために作成されました。現在も開発中です。',
+                    title: 'Charm Store KH',
+                    description: 'Charm Store KHは、カンボジア国内限定で文房具、ぬいぐるみ、生活雑貨を販売するECサイトです。このプロジェクトの本当の核となるのは管理者ダッシュボードで、独自のテキストエディタと画像アップローダーにより、コードを書かずに商品やバナー、さらには自作のスラッグを使ったページまで設計できます。',
                     coreFeatures: {
                         title: 'コア機能',
-                        features1: { title: '商品リスト', description: '電子機器の商品を動的に表示します。' },
-                        features2: { title: 'カートシステム', description: 'ショッピングカートへの商品の追加と削除。' },
-                        features3: { title: 'データベース統合', description: 'クラウドから商品を保存・取得します。' }
+                        features1: { title: 'カート、チェックアウト、絞り込み検索', description: '商品を絞り込んで検索し、カートに追加してチェックアウトできます。決済機能はないため、チェックアウト時に発行されるユーザーIDをSNS経由で送ってもらい、注文を確定する仕組みです。' },
+                        features2: { title: 'サイトビルダー型の管理者ダッシュボード', description: 'テキスト、画像、バナー、カスタムスラッグを自由に編集できる専用エディタで、管理者はコード不要でサイト全体を運用できます。' },
+                        features3: { title: 'RLS対応のソーシャルログイン', description: 'Supabase Authを通じてGoogle、Discord、Facebookでログインでき、行レベルセキュリティ（RLS）でデータをしっかり保護しています。' },
+                        features4: { title: '画像の自動最適化', description: 'アップロードされたファイルはCloudinaryを経由し、自動的にWebP形式へ変換されるため、ストレージ容量を節約できます。' }
                     },
-                    whyThisProject: '実際のEコマースアーキテクチャを理解するための、個人的な学習チャレンジとして構築されました。',
+                    whyThisProject: 'デモではなく、カンボジアで実際に使える店舗を作りたいと思いました。特に苦労したのは管理者側で、技術に詳しくないオーナーでも、ストアやバナー、スラッグを自分で自由にデザインできるダッシュボードを作ることが一番の課題でした。',
                     howItWorks: {
                         title: '仕組み',
-                        step1: { title: 'ユーザーが商品を閲覧', description: 'データベースから動的にレンダリングされた商品。' },
-                        step2: { title: 'カートに追加', description: 'Reactの状態管理を使用してカートの状態を管理。' },
-                        step3: { title: '認証が必要', description: '続行するにはユーザーがログインする必要があります。' },
+                        step1: { title: 'ログインして商品を閲覧', description: 'ユーザーはGoogle、Discord、Facebookでログインし、カタログを絞り込んだり検索したりします。' },
+                        step2: { title: 'カートに追加してチェックアウト', description: 'チェックアウト時にユーザーIDが発行され、それをSNSで送ることで注文が確定します。' },
+                        step3: { title: '管理者がすべてを構築・管理', description: '管理者はダッシュボード上のエディタで、商品やバナー、ページ、スラッグを自由に編集します。' },
+                        description: 'お客様にはシンプルな購入体験を、そしてオーナーにはコード不要の強力な管理画面を提供しています。',
                     },
                     howIBuiltIt: {
                         title: 'このプロジェクトの構築方法',
-                        frameworks: { framework1: { name: 'React.js', description: 'UIと状態管理のためのコアライブラリ。' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'ユーティリティファーストのCSSフレームワーク。' } },
-                        api: { api1: { name: 'Firebase', description: '認証とDBのためのバックエンドサービス。' } },
+                        frameworks: {
+                            framework1: { name: 'Next.js', description: 'ルーティングとレンダリング、アプリ全体の構造を担当。' },
+                            framework2: { name: 'TypeScript', description: '拡大していくコードベース、特に管理者ダッシュボードの型安全性を保つ。' }
+                        },
+                        styles: {
+                            style1: { name: 'Tailwind CSS', description: 'ストアフロントとダッシュボードUIのスタイリングに使用。' }
+                        },
+                        api: {
+                            api1: { name: 'Supabase', description: 'RLS対応のデータベースと認証を提供し、Google・Discord・FacebookのOAuthにも対応。' },
+                            api2: { name: 'Cloudinary', description: 'アップロードされたファイルを保存し、自動でWebPに変換してストレージを節約。' }
+                        },
                     }
                 }
             },
@@ -1062,7 +1092,7 @@ const translations = {
                             framework1: { name: 'React + Vite', description: '高性能でリアクティブなユーザーインターフェースに使用。' }
                         },
                         styles: {
-                            style1: { name: 'Tailwind CSS v4', description: 'モダンで迅速なUI開発のために採用。' }
+                            style1: { name: 'Tailwind CSS', description: 'モダンで迅速なUI開発のために採用。' }
                         },
                         api: {
                             api1: { name: 'Browser File API', description: '100%のプライバシー保護のため、データをローカルで処理。' },
@@ -1100,7 +1130,7 @@ const translations = {
                     howIBuiltIt: {
                         title: 'このプロジェクトの構築方法',
                         frameworks: { framework1: { name: 'React + Vite', description: '高速なクライアント描画とゲームUI更新に使用。' } },
-                        styles: { style1: { name: 'Tailwind CSS v4', description: 'レスポンシブなゲームパネルや役職UI、視覚演出の構築に使用。' } },
+                        styles: { style1: { name: 'Tailwind CSS', description: 'レスポンシブなゲームパネルや役職UI、視覚演出の構築に使用。' } },
                         api: {
                             api1: { name: 'Socket.IO', description: '双方向イベントでルーム、チャット、投票、行動同期を実現。' },
                             api2: { name: 'Express.js API', description: 'ルーム管理、ゲームループ、ミッション進行のサーバー処理を担当。' }
@@ -1110,7 +1140,7 @@ const translations = {
             },
             sakikaraoke: {
                 title: 'SakiKaraoke',
-                description: 'リアルタイムで共同利用できるカラオケWebアプリ。ルームを作成してコードを共有し、みんなで一緒に歌いましょう。マイクの交代時も全員が完全に同期した状態を維持します。',
+                description: 'リアルタイムで共同利用できるカラオケWebアプリ。ルームを作成し、Discord通話に参加してコードを共有し、みんなで歌いましょう。低遅延Socket.IO同期により、歌唱体験が非常にスムーズになります。',
                 botQuestions: [
                     'SakiKaraokeはどんなプロジェクトですか？',
                     'リアルタイム同期の仕組みはどのようになっていますか？',
@@ -1118,21 +1148,22 @@ const translations = {
                 ],
                 Information: {
                     title: 'SakiKaraoke ウェブアプリ',
-                    description: 'SakiKaraokeは、リアルタイムで共同利用できるカラオケWebアプリケーションです。ユーザーは文6字のコードでバーチャルルームを作成し、友達と共有して一緒に歌うことができます。独自の同期アーキテクチャにより全員の再生状態が同期され、タイムスタンプ付きのLRC歌詞がリアルタイムでスクロールします。',
+                    description: 'SakiKaraokeは、リアルタイムで共同利用できるカラオケWebアプリケーションです。ユーザーは6文字のコードでバーチャルルームを作成し、Discordの音声通話に参加しながら一緒に歌うことができます。Socket.IOによる超低遅延同期アーキテクチャにより、全員の再生状態とタイムスタンプ付きLRC歌詞がリアルタイムでスクロールし、シームレスでスムーズなカラオケ体験を実現します。',
                     coreFeatures: {
                         title: 'コア機能',
-                        features1: { title: 'ルームシステムと同期', description: '6桁のコードでルームを作成・共有し、友達と同期して歌うことができます。' },
+                        features1: { title: 'ルームシステムと低遅延同期', description: '6桁のコードでルームを作成・共有し、Socket.IOの低遅延通信で友達と同期して歌うことができます。' },
                         features2: { title: 'YouTube統合', description: '任意のYouTube URLを貼り付けて、全員で同時に同期されたビデオを視聴可能。' },
                         features3: { title: 'リアルタイム歌詞表示', description: 'LRCLIB APIから取得したタイムスタンプ付きのLRC歌詞がビデオと同期してスクロール。' },
-                        features4: { title: '歌手のターン制ローテーション', description: 'セグメントごとまたは曲ごとの自動歌手交代、およびホストによる再生制御と歌詞オフセット調整機能。' }
+                        features4: { title: '歌手のターン制ローテーション', description: 'セグメントごとまたは曲ごとの自動歌手交代、およびホストによる再生制御と歌詞オフセット調整機能。' },
+                        features5: { title: 'Discord音声通話の活用', description: 'Webアプリと並行してDiscordで通話することで、低遅延Socket同期と組み合わさったシームレスでスムーズなカラオケが楽しめます。' }
                     },
                     whyThisProject: '高品質なリアルタイム共同体験を作りたいと考えました。カラオケの同期には、遅延補償された再生同期、状態伝播、クライアント側のドリフト補正など、複雑なネットワーク課題の解決が必要でした。',
                     howItWorks: {
                         title: '仕組み',
                         step1: { title: 'ホストがルームを作成', description: 'ホストがルームコードを生成し、初期プレイリストを設定します。' },
-                        step2: { title: 'リアルタイム同期再生', description: 'ホストの操作はネットワーク遅延補償付きでSocket.IOを介して配信され、ゲストはハートビートで位置を同期します。' },
+                        step2: { title: 'リアルタイム同期再生とDiscord通話', description: 'Discord通話で声を合わせながら、ホストの操作がSocket.IOを介して超低遅延で配信され、スムーズに同期します。' },
                         step3: { title: 'ドリフト補正と歌詞同期', description: 'クライアントは2秒ごとにタイミングを検証し、300ms以上のズレがあれば再同期。歌詞は同期オフセットでスクロールします。' },
-                        description: 'SakiKaraokeは、共同機能とサブ秒単位の同期を組み合わせて、プレミアムなカラオケ体験を提供します。',
+                        description: 'SakiKaraokeは、Discord音声通話とSocket.IOによるサブ秒単位の低遅延同期を組み合わせ、シームレスでスムーズなカラオケ体験を提供します。',
                     },
                     howIBuiltIt: {
                         title: 'このプロジェクトの構築方法',

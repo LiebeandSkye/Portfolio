@@ -79,12 +79,18 @@ Technical Achievement: Bridging Vanilla JS with Python logic. It showcases the a
 
 Significance: This project demonstrates Kry’s roots in fundamental web technologies and his transition into modern frameworks.
 
-3. Electronics E-commerce (In-Dev, not yet completed)
-Context: A sandbox for mastering Firebase services.
+3. Charm Store KH (ID: 3)
+Context: A live Cambodia-only online e-commerce store for stationery, plushies, and lifestyle essentials.
 
-Technical Achievement: Implementing secure Firebase Authentication and real-time data syncing with Firestore.
+Technical Achievement: Built a website-builder style admin dashboard featuring a custom text editor and image uploader. This allows non-technical store owners to manage products, marketing banners, and build custom pages with personalized URL slugs without writing code.
 
-Focus: State management for complex cart systems and building a secure, scalable user-database relationship.
+Functionality: Features product filtering, catalog browsing, cart management, and a unique social checkout flow (generates a unique User ID at checkout for shoppers to send over social media to confirm orders without requiring a payment gateway).
+
+Authentication & Security: Powered by Supabase Auth with Google, Discord, and Facebook social login, protected by PostgreSQL Row-Level Security (RLS) to ensure all user data is safely scoped.
+
+Media Optimization: All uploaded images pass through Cloudinary and auto-convert to WebP format for fast load times and optimized storage.
+
+Stack Focus: Next.js (TypeScript), Tailwind CSS, Supabase (PostgreSQL + RLS + OAuth), Cloudinary, Vercel.
 
 4. AI MemoryPorter (Privacy-First Utility)
 Context: A high-utility tool for power users of AI (like Kry himself).
@@ -105,11 +111,13 @@ Gameplay Systems: Includes role abilities (Engineer, Doctor, Guardian Angel, Law
 Stack Focus: React + Vite frontend with Tailwind CSS, plus Express + Socket.IO backend for low-latency multiplayer state updates.
 
 6. SakiKaraoke (Real-Time Collaborative Karaoke)
-Context: A real-time collaborative karaoke web app. Create a room, share the code, and sing together.
+Context: A real-time collaborative karaoke web application. Create a room, share the code, and sing together.
+
+Discord Voice Call & Low-Latency Socket Sync: Users jump on a Discord voice call for live voice communication while using the SakiKaraoke web application. Because SakiKaraoke uses Socket.IO WebSocket communication for sub-second real-time state synchronization, video playback and lyric scrolling stay in ultra-low-latency sync, making live singing seamlessly smooth, lag-free, and effortless!
 
 Technical Sync: Custom synchronization and drift-correction architecture (guests ping the server and adjust if they drift >300ms from the host). Real-time timestamped lyrics scroll in sync using LRCLIB API.
 
-Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.IO 4 for real-time state sync.
+Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.IO 4 for real-time state sync, LRCLIB API.
 
 ---
 
@@ -119,7 +127,7 @@ Use EXACTLY this format — no variations, no extra spaces:
 
 [NAV:/portfolio/1]View Continental Project[/NAV]
 [NAV:/portfolio/2]View Discover Cambodia[/NAV]
-[NAV:/portfolio/3]View Electronics E-commerce[/NAV]
+[NAV:/portfolio/3]View Charm Store KH[/NAV]
 [NAV:/portfolio/4]View AI MemoryPorter[/NAV]
 [NAV:/portfolio/5]View Project Nebula[/NAV]
 [NAV:/portfolio/6]View SakiKaraoke[/NAV]
