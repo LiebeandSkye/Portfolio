@@ -1,16 +1,27 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { GoDotFill } from "react-icons/go";
 import { IoCodeOutline, IoEyeOutline } from "react-icons/io5";
 import { useLanguage } from '../context/LanguageContext';
+import PrivateRepoModal from './PrivateRepoModal';
 
 // ─── Single grid card — memoized by project.id + language ────────────────────
 // The Portfolio page may re-render when the user types in a search box.
 // Without memo, every card re-renders on each keystroke even if its data
 // didn't change. With memo, only truly changed cards update.
-const GridCard = memo(function GridCard({ project, t }) {
+const GridCard = memo(function GridCard({ project, t, onPrivateCode }) {
     const projectTitle = t(`projects.${project.langKey}.title`);
     const projectDesc = t(`projects.${project.langKey}.description`);
+
+    const handleCodeClick = useCallback(() => {
+        if (project.code === false) {
+            onPrivateCode(project.title);
+        } else if (typeof project.code === 'string') {
+            window.open(project.code, '_blank', 'noopener,noreferrer');
+        }
+    }, [project.code, project.title, onPrivateCode]);
+
+    const isPrivate = project.code === false;
 
     return (
         <div className="hover:bg-(--pixel) border border-(--border-light) rounded-xl overflow-hidden transition-all flex flex-col group">
@@ -36,11 +47,9 @@ const GridCard = memo(function GridCard({ project, t }) {
                     <h3 className="text-[#58a6ff] text-lg font-bold hover:underline cursor-pointer">
                         <Link to={`/portfolio/${project.id}`}>{projectTitle}</Link>
                     </h3>
-                    {project.public && (
-                        <span className="text-(--text-gray-dark) text-[10px] border border-(--border-light) rounded-full px-2 py-0.5 font-medium uppercase tracking-wide flex-shrink-0">
-                            Public
-                        </span>
-                    )}
+                    <span className="text-(--text-gray-dark) text-[10px] border border-(--border-light) rounded-full px-2 py-0.5 font-medium uppercase tracking-wide flex-shrink-0">
+                        {isPrivate ? 'Private' : 'Public'}
+                    </span>
                 </div>
 
                 <p className="text-(--text-gray) text-sm mb-6 line-clamp-2 leading-relaxed flex-1">
@@ -59,13 +68,13 @@ const GridCard = memo(function GridCard({ project, t }) {
                             {t('portfolio.btnDemo')}
                         </a>
                     )}
-                    {project.code && (
-                        <a href={project.code} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 hover:text-[#58a6ff] hover:underline transition-colors">
-                            <IoCodeOutline />
-                            {t('portfolio.btnCode')}
-                        </a>
-                    )}
+                    <button
+                        onClick={handleCodeClick}
+                        className="flex items-center gap-1.5 hover:text-[#58a6ff] hover:underline transition-colors cursor-pointer"
+                    >
+                        <IoCodeOutline />
+                        {t('portfolio.btnCode')}
+                    </button>
                 </div>
             </div>
         </div>
@@ -75,6 +84,15 @@ const GridCard = memo(function GridCard({ project, t }) {
 // ─── ProjectGrid ──────────────────────────────────────────────────────────────
 const ProjectGrid = memo(function ProjectGrid({ projects }) {
     const { t } = useLanguage();
+    const [modalState, setModalState] = useState({ isOpen: false, projectTitle: '' });
+
+    const handlePrivateCode = useCallback((projectTitle) => {
+        setModalState({ isOpen: true, projectTitle });
+    }, []);
+
+    const handleCloseModal = useCallback(() => {
+        setModalState(prev => ({ ...prev, isOpen: false }));
+    }, []);
 
     if (projects.length === 0) {
         return (
@@ -85,11 +103,18 @@ const ProjectGrid = memo(function ProjectGrid({ projects }) {
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-            {projects.map((project) => (
-                <GridCard key={project.id} project={project} t={t} />
-            ))}
-        </div>
+        <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+                {projects.map((project) => (
+                    <GridCard key={project.id} project={project} t={t} onPrivateCode={handlePrivateCode} />
+                ))}
+            </div>
+            <PrivateRepoModal
+                isOpen={modalState.isOpen}
+                onClose={handleCloseModal}
+                projectTitle={modalState.projectTitle}
+            />
+        </>
     );
 });
 

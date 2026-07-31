@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../components/context/LanguageContext';
 import Projects from '../Data/Projects';
 import Kry_rithisak from '../assets/Kry_Rithisak.optimized.jpg';
 import { useNotification } from '../components/context/NotificationContext';
 import CopyButton from '../components/ui/CopyButton';
+import PrivateRepoModal from '../components/project/PrivateRepoModal';
 // Icons
 import { FaArrowLeft, FaFacebook, FaLinkedin } from "react-icons/fa6";
 import { IoCopySharp } from "react-icons/io5";
@@ -20,8 +21,17 @@ const AboutProject = () => {
     const { projectId } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('readme');
+    const [privateModalOpen, setPrivateModalOpen] = useState(false);
 
     const project = Projects.find(p => String(p.id) === String(projectId));
+
+    const handleCodeClick = useCallback(() => {
+        if (project && project.code === false) {
+            setPrivateModalOpen(true);
+        } else if (project && typeof project.code === 'string') {
+            window.open(project.code, '_blank', 'noopener,noreferrer');
+        }
+    }, [project]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -68,7 +78,9 @@ const AboutProject = () => {
                     <img src={Kry_rithisak} loading='lazy' width="36" height="36" alt="Profile" className="w-9 h-9 rounded-full border border-(--border-light) object-cover" />
                     <h1 className="text-xl font-semibold flex items-center gap-2">
                         <span className="text-(--text-light) hover:underline cursor-pointer">{project.title}</span>
-                        <span className="text-[12px] border border-(--border-light) text-(--text-gray) px-2 py-0.5 rounded-full items-center flex">Public</span>
+                        <span className="text-[12px] border border-(--border-light) text-(--text-gray) px-2 py-0.5 rounded-full items-center flex">
+                            {project.code === false ? 'Private' : 'Public'}
+                        </span>
                     </h1>
                 </div>
 
@@ -91,9 +103,12 @@ const AboutProject = () => {
                 <a href={project.demo} target="_blank" rel="noreferrer" className="bg-[#1f6feb] hover:bg-[#388bfd] text-white px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-all">
                     <BsLayersHalf /> {t('viewDemo')}
                 </a>
-                <a href={project.code} target="_blank" rel="noreferrer" className="bg-[#238636] hover:bg-[#2ea043] text-white px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-all">
+                <button
+                    onClick={handleCodeClick}
+                    className="bg-[#238636] hover:bg-[#2ea043] text-white px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer"
+                >
                     <FiCode /> {t('sourceCode')}
-                </a>
+                </button>
             </div>
 
             <div className="px-0 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
@@ -244,6 +259,12 @@ const AboutProject = () => {
                     </div>
                 </div>
             </div>
+
+            <PrivateRepoModal
+                isOpen={privateModalOpen}
+                onClose={() => setPrivateModalOpen(false)}
+                projectTitle={project.title}
+            />
         </div>
     );
 };

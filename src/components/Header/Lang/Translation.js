@@ -19,6 +19,13 @@ const translations = {
         sourceCode: "Source Code",
         share: "Share :",
         pinned: "Pinned",
+        privateRepo: {
+            title: "Private Repository",
+            subtitle: "This project is not publicly available.",
+            body: "Sorry, this is a private repository. The source code for this project is not publicly accessible at this time — it may contain proprietary logic, sensitive configuration, or is simply kept private for now.",
+            note: "If you're genuinely interested in the code, feel free to reach out and I'll be happy to discuss the implementation!",
+            close: "Got it",
+        },
         search: {
             placeholder: 'Search this website...',
             pages: 'Pages',
@@ -832,6 +839,13 @@ const translations = {
         sourceCode: "ソースコード",
         share: 'シェアする : ',
         pinned: 'ピン留め',
+        privateRepo: {
+            title: 'プライベートリポジトリ',
+            subtitle: 'このプロジェクトは公開されていません。',
+            body: '申し訳ありませんが、このリポジトリはプライベートです。このプロジェクトのソースコードは現在公開されていません。独自のロジックや機密設定が含まれているか、単純にプライベートに保たれている可能性があります。',
+            note: 'コードに真剣な関心をお持ちの方は、お気軽にご連絡ください。実装についてお話しすることができます！',
+            close: '了解しました',
+        },
         search: {
             placeholder: 'このウェブサイトを検索...',
             pages: 'ページ',
