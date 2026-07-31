@@ -392,7 +392,7 @@ const ImmersiveSakuPilot = () => {
                     </button>
 
                     <p className="px-2 pb-2 text-xs font-semibold text-(--text-gray)">{t('sakupilot.immersive.recent')}</p>
-                    <div className="github-scrollbar flex-1 space-y-3 overflow-y-auto pr-1">
+                    <div className="no-scrollbar flex-1 space-y-3 overflow-y-auto pr-1">
                         {pinnedConversations.length === 0 && recentConversations.length === 0 ? (
                             <p className="px-2 py-3 text-xs text-(--text-gray)">{t('sakupilot.immersive.noSavedChats')}</p>
                         ) : (
@@ -692,7 +692,7 @@ const ImmersiveSakuPilot = () => {
                     </button>
                 </div>
 
-                <div ref={scrollRef} className="github-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6">
+                <div ref={scrollRef} className="no-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6">
                     {activeConversation.messages.length === 0 ? (
                         <div className="mx-auto flex min-h-full max-w-[720px] flex-col items-center justify-center text-center">
                             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel)">
@@ -793,7 +793,7 @@ const ImmersiveSakuPilot = () => {
                                 minRows={1}
                                 maxRows={8}
                                 placeholder={t('sakupilot.immersive.messagePlaceholder')}
-                                className="github-scrollbar min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
+                                className="no-scrollbar min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
                                 onKeyDown={(event) => {
                                     if (event.key === 'Enter' && !event.shiftKey) {
                                         event.preventDefault();
@@ -834,7 +834,7 @@ const ImmersiveSakuPilot = () => {
                                 <FiX />
                             </button>
                         </div>
-                        <div className="github-scrollbar flex-1 overflow-y-auto p-3">
+                        <div className="no-scrollbar flex-1 overflow-y-auto p-3">
                             <button
                                 onClick={handleNewChat}
                                 className="mb-3 flex w-full items-center gap-3 rounded-xl bg-(--pixel-hover) px-4 py-3 text-left text-sm font-medium"
