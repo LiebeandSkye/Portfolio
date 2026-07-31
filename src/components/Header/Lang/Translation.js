@@ -194,41 +194,44 @@ const translations = {
                     }
                 },
             },
-            electronics: {
-                title: 'Electronics E-commerce',
-                description: 'An experimental e-commerce platform built for learning purposes, focused on product listings and cart systems.',
+            charmstorekh: {
+                title: 'Charm Store KH',
+                description: 'A Cambodia-only online store for stationery, plushies, and everyday essentials, built around an admin dashboard that works almost like its own website builder.',
                 botQuestions: [
-                    'What is the Electronics E-commerce project?',
-                    'How does the cart and authentication system work?',
-                    'Why is this project still under development?',
+                    'What is Charm Store KH about?',
+                    'How does the admin dashboard let the owner build the site?',
+                    'What tech stack powers Charm Store KH?',
                 ],
                 Information: {
-                    title: 'Electronics E-commerce Website (Incomplete)',
-                    description: 'This project was created mainly for learning advanced concepts such as authentication, cart management, and database integration. It is still under development.',
+                    title: 'Charm Store KH',
+                    description: 'Charm Store KH is a Cambodia-only e-commerce store selling stationery, plushies, and lifestyle essentials. Its real centerpiece is the admin dashboard, a custom text editor and image uploader that lets the owner design products, banners, and even pages with self-made slugs, all without writing code.',
                     coreFeatures: {
                         title: 'Core Features',
-                        features1: { title: 'Product Listings', description: 'Displays electronic products dynamically.' },
-                        features2: { title: 'Cart System', description: 'Add and remove items from shopping cart.' },
-                        features3: { title: 'Database Integration', description: 'Products stored and fetched from the cloud.' }
+                        features1: { title: 'Cart, Checkout & Filtering', description: 'Customers filter products, build a cart, and check out with a personal user ID to send over social media since there is no payment gateway.' },
+                        features2: { title: 'Website-Builder Admin Dashboard', description: 'A custom editor for text, images, banners, and custom slugs, letting the admin run the entire site like a builder.' },
+                        features3: { title: 'Social Login with RLS', description: 'Sign in with Google, Discord, or Facebook through Supabase Auth, protected by row-level security.' },
+                        features4: { title: 'Automatic Image Optimization', description: 'Uploads go through Cloudinary and are auto-converted to WebP to keep storage light.' }
                     },
-                    whyThisProject: 'Built as a personal learning challenge to understand real-world e-commerce architecture.',
+                    whyThisProject: 'I wanted a real store for local use in Cambodia, not just a demo. The bigger challenge was the admin side: building a dashboard that lets a non-technical owner design the storefront, banners, and slugs on their own.',
                     howItWorks: {
                         title: 'How It Works',
-                        step1: { title: 'User Browses Products', description: 'Products dynamically rendered from database.' },
-                        step2: { title: 'Adds to Cart', description: 'Cart state managed using React state.' },
-                        step3: { title: 'Authentication Required', description: 'Users must log in to proceed.' },
+                        step1: { title: 'Customer Signs In & Browses', description: 'Shoppers log in with Google, Discord, or Facebook, then filter and search the catalog.' },
+                        step2: { title: 'Add to Cart & Checkout', description: 'Checkout generates a user ID that the customer sends over social media to confirm the order.' },
+                        step3: { title: 'Admin Builds & Manages Everything', description: 'The dashboard lets the admin edit products, banners, pages, and slugs through a built-in editor.' },
+                        description: 'A simple shopping flow for customers, paired with a powerful, code-free control panel for the store owner.',
                     },
                     howIBuiltIt: {
                         title: 'How I Built this Project',
                         frameworks: {
-                            framework1: { name: 'React + Vite', description: 'Used for a high-performance, reactive user interface.' }
+                            framework1: { name: 'Next.js', description: 'Handles routing, rendering, and the overall app structure.' },
+                            framework2: { name: 'TypeScript', description: 'Keeps the growing codebase, especially the admin dashboard, type-safe.' }
                         },
                         styles: {
-                            style1: { name: 'Tailwind CSS v4', description: 'Utilized for modern, rapid UI development.' }
+                            style1: { name: 'Tailwind CSS', description: 'Utility-first styling for the storefront and dashboard.' }
                         },
                         api: {
-                            api1: { name: 'Browser File API', description: 'Processes data locally for 100% user privacy.' },
-                            api2: { name: 'None', description: 'Zero external API calls to ensure data security.' }
+                            api1: { name: 'Supabase', description: 'Row-level-secured database and auth, including Google, Discord, and Facebook OAuth.' },
+                            api2: { name: 'Cloudinary', description: 'Stores uploads and auto-converts them to WebP to save space.' }
                         },
                     }
                 }
@@ -298,7 +301,7 @@ const translations = {
                     howIBuiltIt: {
                         title: 'How I Built this Project',
                         frameworks: { framework1: { name: 'React + Vite', description: 'Used for fast client-side rendering and gameplay UI updates.' } },
-                        styles: { style1: { name: 'Tailwind CSS v4', description: 'Used to build responsive game panels, role UI, and polished visual states.' } },
+                        styles: { style1: { name: 'Tailwind CSS', description: 'Used to build responsive game panels, role UI, and polished visual states.' } },
                         api: {
                             api1: { name: 'Socket.IO', description: 'Bi-directional events power real-time room, chat, vote, and action synchronization.' },
                             api2: { name: 'Express.js API', description: 'Handles server-side room lifecycle, game loop logic, and mission orchestration.' }
@@ -1013,35 +1016,45 @@ const translations = {
                     }
                 },
             },
-            electronics: {
-                title: '電子機器 Eコマース',
-                description: '学習目的で構築された実験的なEコマースプラットフォーム。商品リストとカートシステムに重点を置いています。',
+            charmstorekh: {
+                title: 'Charm Store KH',
+                description: 'カンボジア国内向けの文房具、ぬいぐるみ、生活雑貨を扱うオンラインストア。管理者用ダッシュボードは、ほぼ独自のウェブサイトビルダーのように機能します。',
                 botQuestions: [
-                    '電子機器ECサイトについて教えてください。',
-                    'カートシステムはどのように機能しますか？',
-                    'なぜまだ開発中ですか？',
+                    'Charm Store KHはどんなプロジェクトですか？',
+                    '管理者ダッシュボードはどのようにサイトを構築できるのですか？',
+                    'Charm Store KHにはどんな技術スタックが使われていますか？',
                 ],
                 Information: {
-                    title: '電子機器 Eコマース ウェブサイト (未完成)',
-                    description: 'このプロジェクトは、主に認証、カート管理、データベース統合などの高度な概念を学習するために作成されました。現在も開発中です。',
+                    title: 'Charm Store KH',
+                    description: 'Charm Store KHは、カンボジア国内限定で文房具、ぬいぐるみ、生活雑貨を販売するECサイトです。このプロジェクトの本当の核となるのは管理者ダッシュボードで、独自のテキストエディタと画像アップローダーにより、コードを書かずに商品やバナー、さらには自作のスラッグを使ったページまで設計できます。',
                     coreFeatures: {
                         title: 'コア機能',
-                        features1: { title: '商品リスト', description: '電子機器の商品を動的に表示します。' },
-                        features2: { title: 'カートシステム', description: 'ショッピングカートへの商品の追加と削除。' },
-                        features3: { title: 'データベース統合', description: 'クラウドから商品を保存・取得します。' }
+                        features1: { title: 'カート、チェックアウト、絞り込み検索', description: '商品を絞り込んで検索し、カートに追加してチェックアウトできます。決済機能はないため、チェックアウト時に発行されるユーザーIDをSNS経由で送ってもらい、注文を確定する仕組みです。' },
+                        features2: { title: 'サイトビルダー型の管理者ダッシュボード', description: 'テキスト、画像、バナー、カスタムスラッグを自由に編集できる専用エディタで、管理者はコード不要でサイト全体を運用できます。' },
+                        features3: { title: 'RLS対応のソーシャルログイン', description: 'Supabase Authを通じてGoogle、Discord、Facebookでログインでき、行レベルセキュリティ（RLS）でデータをしっかり保護しています。' },
+                        features4: { title: '画像の自動最適化', description: 'アップロードされたファイルはCloudinaryを経由し、自動的にWebP形式へ変換されるため、ストレージ容量を節約できます。' }
                     },
-                    whyThisProject: '実際のEコマースアーキテクチャを理解するための、個人的な学習チャレンジとして構築されました。',
+                    whyThisProject: 'デモではなく、カンボジアで実際に使える店舗を作りたいと思いました。特に苦労したのは管理者側で、技術に詳しくないオーナーでも、ストアやバナー、スラッグを自分で自由にデザインできるダッシュボードを作ることが一番の課題でした。',
                     howItWorks: {
                         title: '仕組み',
-                        step1: { title: 'ユーザーが商品を閲覧', description: 'データベースから動的にレンダリングされた商品。' },
-                        step2: { title: 'カートに追加', description: 'Reactの状態管理を使用してカートの状態を管理。' },
-                        step3: { title: '認証が必要', description: '続行するにはユーザーがログインする必要があります。' },
+                        step1: { title: 'ログインして商品を閲覧', description: 'ユーザーはGoogle、Discord、Facebookでログインし、カタログを絞り込んだり検索したりします。' },
+                        step2: { title: 'カートに追加してチェックアウト', description: 'チェックアウト時にユーザーIDが発行され、それをSNSで送ることで注文が確定します。' },
+                        step3: { title: '管理者がすべてを構築・管理', description: '管理者はダッシュボード上のエディタで、商品やバナー、ページ、スラッグを自由に編集します。' },
+                        description: 'お客様にはシンプルな購入体験を、そしてオーナーにはコード不要の強力な管理画面を提供しています。',
                     },
                     howIBuiltIt: {
                         title: 'このプロジェクトの構築方法',
-                        frameworks: { framework1: { name: 'React.js', description: 'UIと状態管理のためのコアライブラリ。' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'ユーティリティファーストのCSSフレームワーク。' } },
-                        api: { api1: { name: 'Firebase', description: '認証とDBのためのバックエンドサービス。' } },
+                        frameworks: {
+                            framework1: { name: 'Next.js', description: 'ルーティングとレンダリング、アプリ全体の構造を担当。' },
+                            framework2: { name: 'TypeScript', description: '拡大していくコードベース、特に管理者ダッシュボードの型安全性を保つ。' }
+                        },
+                        styles: {
+                            style1: { name: 'Tailwind CSS', description: 'ストアフロントとダッシュボードUIのスタイリングに使用。' }
+                        },
+                        api: {
+                            api1: { name: 'Supabase', description: 'RLS対応のデータベースと認証を提供し、Google・Discord・FacebookのOAuthにも対応。' },
+                            api2: { name: 'Cloudinary', description: 'アップロードされたファイルを保存し、自動でWebPに変換してストレージを節約。' }
+                        },
                     }
                 }
             },
@@ -1076,7 +1089,7 @@ const translations = {
                             framework1: { name: 'React + Vite', description: '高性能でリアクティブなユーザーインターフェースに使用。' }
                         },
                         styles: {
-                            style1: { name: 'Tailwind CSS v4', description: 'モダンで迅速なUI開発のために採用。' }
+                            style1: { name: 'Tailwind CSS', description: 'モダンで迅速なUI開発のために採用。' }
                         },
                         api: {
                             api1: { name: 'Browser File API', description: '100%のプライバシー保護のため、データをローカルで処理。' },
@@ -1114,7 +1127,7 @@ const translations = {
                     howIBuiltIt: {
                         title: 'このプロジェクトの構築方法',
                         frameworks: { framework1: { name: 'React + Vite', description: '高速なクライアント描画とゲームUI更新に使用。' } },
-                        styles: { style1: { name: 'Tailwind CSS v4', description: 'レスポンシブなゲームパネルや役職UI、視覚演出の構築に使用。' } },
+                        styles: { style1: { name: 'Tailwind CSS', description: 'レスポンシブなゲームパネルや役職UI、視覚演出の構築に使用。' } },
                         api: {
                             api1: { name: 'Socket.IO', description: '双方向イベントでルーム、チャット、投票、行動同期を実現。' },
                             api2: { name: 'Express.js API', description: 'ルーム管理、ゲームループ、ミッション進行のサーバー処理を担当。' }

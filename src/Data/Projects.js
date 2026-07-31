@@ -13,12 +13,13 @@ import Memory2 from '../assets/AI_MemoryPorter/Memory2.png';
 import nebulaThumb from '../assets/Nebula/WebsiteThumbnail.jpg';
 import nebulaScreenshot1 from '../assets/Nebula/screenshot1.jpg';
 import sakiKaraokeThumb from '../assets/SakiKaraoke/WebsiteThumbnail.png';
+import charmStoreThumb from '../assets/CharmStoreKH/WebsiteThumbnail.png';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
-import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube } from "react-icons/si";
+import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube, SiTypescript, SiSupabase, SiCloudinary } from "react-icons/si";
 import { MdLyrics } from "react-icons/md";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import { BsLayersHalf } from "react-icons/bs";
@@ -237,100 +238,119 @@ const Projects = [
     },
 
     // ===========================
-    // ELECTRONICS E-COMMERCE (ID:3)
+    // CHARM STORE KH (ID:3)
     // ===========================
 
     {
         id: 3,
-        title: 'Electronics E-commerce',
-        langKey: "electronics",
+        title: 'Charm Store KH',
+        langKey: "charmstorekh",
         public: true,
-        red: false,
-        description: 'An experimental e-commerce platform built for learning purposes, focused on product listings, authentication, and cart systems.',
-        bread: '/incomplete',
+        red: true,
+        description: 'A Cambodia-only e-commerce store for stationery, plushies, and everyday essentials, built around an admin dashboard that works almost like its own website builder.',
+        bread: '/portfolio',
         pinned: true,
-        thumbnail: null,
-        designed: false,
-        developed: false,
-        demo: 'https://electronicshop-nine.vercel.app/',
-        code: 'https://github.com/LiebeandSkye/electronic_shop',
-        tags: ['Vanilla', 'Vercel', 'HTML', 'CSS', 'JavaScript', 'E-commerce'],
+        thumbnail: charmStoreThumb,
+        designed: true,
+        developed: true,
+        demo: 'https://charmstorekh.vercel.app/',
+        code: false,
+        tags: ['Next.js', 'TypeScript', 'Supabase', 'Cloudinary', 'E-commerce', 'Admin Dashboard', 'OAuth'],
         summary: {
-            framework: 'React',
-            style: 'CSS / Tailwind',
-            API: 'Firebase',
+            title: 'Development Summary',
+            framework: 'Next.js (TypeScript)',
+            style: 'Tailwind CSS',
+            API: 'Supabase + Cloudinary',
         },
-        percent: { javascript: 70, html: 15, css: 15 },
-        languages: { javascript: 'JavaScript', html: 'HTML', css: 'CSS' },
+        percent: { typescript: 88.4, plpgsql: 2.6, css: 12.0, html: 2.0 },
+        languages: { typescript: 'TypeScript', plpgsql: 'PLpgSQL', css: 'CSS', javascript: 'JavaScript', html: 'HTML' },
         Information: {
-            title: 'Electronics E-commerce',
-            description: 'This project was created mainly for learning advanced concepts such as authentication, cart management, and database integration. It is still under development.',
+            title: 'Charm Store KH',
+            description: 'Charm Store KH is a Cambodia-only online store for stationery, plushies, and lifestyle essentials. The real core of the project is the admin dashboard, which works almost like a private website builder, letting the owner design products, banners, and pages with custom, self-made slugs without writing a single line of code.',
             coreFeatures: {
                 title: 'Core Features',
                 features1: {
-                    title: 'Product Listings',
-                    description: '– Displays electronic products dynamically.'
+                    title: 'Cart, Checkout & Filtering',
+                    description: '– Customers filter products, build a cart, and check out. Since there is no payment gateway, checkout gives them a personal user ID to copy and send over social media to confirm the order.'
                 },
                 features2: {
-                    title: 'Cart System',
-                    description: '– Add and remove items from shopping cart.'
+                    title: 'Website-Builder Admin Dashboard',
+                    description: '– A custom text editor and image uploader let the admin design products, banners, and even pages with custom slugs, essentially running the whole site without code.'
                 },
                 features3: {
-                    title: 'Database Integration',
-                    description: '– Products stored and fetched from Pinterest (lol).'
+                    title: 'Social Login with RLS',
+                    description: '– Users sign in with Google, Discord, or Facebook through Supabase Auth, with row-level security keeping every user\'s data properly scoped.'
+                },
+                features4: {
+                    title: 'Automatic Image Optimization',
+                    description: '– Every uploaded file is stored through Cloudinary and automatically converted to WebP, keeping storage light and pages fast.'
                 }
             },
             WhyThisProject: {
                 title: 'Why This Project?',
-                description: 'Built as a personal learning challenge to understand real-world e-commerce architecture.',
+                description: "I wanted to build something that could actually go live for local use in Cambodia, not just a demo. The bigger challenge was the admin side: instead of hardcoding pages, I built a dashboard that lets a non-technical owner design the storefront, banners, and even URL slugs on their own.",
             },
             HowItWorks: {
                 title: 'How It Works?',
                 steps: {
                     step1: {
-                        title: 'User Browses Products',
-                        description: '– Products dynamically rendered from database.'
+                        title: 'Customer Signs In & Browses',
+                        description: '– Shoppers log in with Google, Discord, or Facebook, then filter and search through the catalog.'
                     },
                     step2: {
-                        title: 'Adds to Cart',
-                        description: '– Cart state managed using React state.'
+                        title: 'Add to Cart & Checkout',
+                        description: '– Items go into the cart, and checkout generates a user ID, which the customer sends over social media to complete the order.'
                     },
                     step3: {
-                        title: 'Authentication Required',
-                        description: '– Users must log in to proceed.'
+                        title: 'Admin Builds & Manages Everything',
+                        description: '– From the dashboard, the admin edits products, banners, and pages, and sets custom slugs, all through a built-in text and image editor.'
                     },
                 },
-                description: 'The goal is to eventually evolve this into a full production-ready e-commerce platform.',
+                description: 'Charm Store KH pairs a simple shopping flow for customers with a powerful, code-free control panel for the person actually running the store.',
             },
             HowIBuiltIt: {
                 title: 'How I Built this Project',
                 frameworks: {
                     framework1: {
-                        icon: None,
-                        name: 'None (Vanilla)',
-                        description: 'HTML CSS and Javascript.',
-                        color: '#8e8e93',
+                        icon: RiNextjsFill,
+                        name: 'Next.js',
+                        description: 'Handles routing, rendering, and the overall app structure.',
+                        color: '#ffffff',
+                    },
+                    framework2: {
+                        icon: SiTypescript,
+                        name: 'TypeScript',
+                        description: 'Keeps the growing codebase, especially the admin dashboard, type-safe and easier to maintain.',
+                        color: '#3178c6',
                     },
                 },
                 Styles: {
                     style1: {
                         icon: RiTailwindCssFill,
                         name: 'Tailwind CSS',
-                        description: 'Utility-first CSS framework.',
+                        description: 'Utility-first styling for both the storefront and the dashboard UI.',
                         color: '#38bdf8',
                     },
                 },
                 Api: {
                     api1: {
-                        icon: None,
-                        name: 'None',
-                        description: 'No API integration.',
-                        color: '#8b949e',
+                        icon: SiSupabase,
+                        name: 'Supabase',
+                        description: 'Row-level-secured database plus authentication, including Google, Discord, and Facebook OAuth.',
+                        color: '#3ecf8e',
+                    },
+                    api2: {
+                        icon: SiCloudinary,
+                        name: 'Cloudinary',
+                        description: 'Stores every uploaded file and auto-converts it to WebP to save storage space.',
+                        color: '#3448c5',
                     },
                 },
             },
+            screenshots: {
+                screenshot1: charmStoreThumb,
+            },
         },
-
     },
     // ===========================
     // AI_MEMORYPORTER (ID:4)
@@ -551,7 +571,7 @@ const Projects = [
         red: true,
         description: 'A real-time collaborative karaoke web app. Create a room, share the code, and sing together — everyone stays in sync while you take turns on the mic.',
         bread: '/portfolio',
-        code: false,
+        code: 'https://github.com/LiebeandSkye/SakiKaraoke.git',
         demo: 'https://sakikaraoke.vercel.app/',
         designed: true,
         developed: true,

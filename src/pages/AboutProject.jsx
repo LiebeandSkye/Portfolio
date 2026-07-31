@@ -42,18 +42,23 @@ const AboutProject = () => {
     const info = project.Information;
     const languageStyles = {
         javascript: { label: 'JavaScript', color: '#f1e05a' },
+        typescript: { label: 'TypeScript', color: '#3178c6' },
         css: { label: 'CSS', color: '#563d7c' },
         html: { label: 'HTML', color: '#e34c26' },
         python: { label: 'Python', color: '#3572A5' },
+        plpgsql: { label: 'PLpgSQL', color: '#336790' },
     };
     const languageBreakdown = Object.entries(project.percent)
         .filter(([, percent]) => Number(percent) > 0)
-        .map(([key, percent]) => ({
-            key,
-            percent,
-            label: languageStyles[key]?.label || key,
-            color: languageStyles[key]?.color || '#8b949e',
-        }));
+        .map(([key, percent]) => {
+            const normalizedKey = key.toLowerCase();
+            return {
+                key,
+                percent,
+                label: languageStyles[normalizedKey]?.label || key,
+                color: languageStyles[normalizedKey]?.color || '#8b949e',
+            };
+        });
 
     const shareLinks = {
         twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`,
