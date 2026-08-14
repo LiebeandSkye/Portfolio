@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
         const modelNames = {
             'llama': 'Llama 3.3 70B',
-            'gemini': 'Gemini 2.5 Flash'
+            'gemini': 'Gemini 2.0 Flash'
         };
         const humanModelName = modelNames[activeModel] || activeModel;
 
@@ -177,14 +177,19 @@ Current context: ${projectContext
                 ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech}). Answer as a developer who built this project.`
                 : 'General conversation about Kry Rithisak, his portfolio, and skills.'}`;
 
+        const sanitizedHistory = (Array.isArray(chatHistory) ? chatHistory : []).map(msg => ({
+            role: msg.role === 'assistant' ? 'assistant' : 'user',
+            content: typeof msg.content === 'string' ? msg.content : String(msg.content || '')
+        }));
+
         if (activeModel === 'gemini') {
             const genModel = genAI.getGenerativeModel({
-                model: "gemini-2.5-flash",
+                model: "gemini-2.0-flash",
                 systemInstruction: systemMessage
             });
 
             const chat = genModel.startChat({
-                history: chatHistory.map(msg => ({
+                history: sanitizedHistory.map(msg => ({
                     role: msg.role === 'assistant' ? 'model' : 'user',
                     parts: [{ text: msg.content }],
                 })),
@@ -204,7 +209,7 @@ Current context: ${projectContext
                 chatCompletion = await groq.chat.completions.create({
                     messages: [
                         { role: "system", content: systemMessage },
-                        ...chatHistory,
+                        ...sanitizedHistory,
                         { role: "user", content: userInput },
                     ],
                     model: "llama-3.3-70b-versatile",
@@ -217,7 +222,7 @@ Current context: ${projectContext
                 chatCompletion = await groq.chat.completions.create({
                     messages: [
                         { role: "system", content: systemMessage },
-                        ...chatHistory,
+                        ...sanitizedHistory,
                         { role: "user", content: userInput },
                     ],
                     model: "llama-3.1-8b-instant",
