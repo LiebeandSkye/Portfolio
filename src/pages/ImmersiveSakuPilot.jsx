@@ -50,6 +50,8 @@ const ImmersiveSakuPilot = () => {
 
     const [conversations, setConversations] = useState(() => loadConversations());
     const [activeConversation, setActiveConversation] = useState(() => createConversation());
+    const activeConversationRef = useRef(activeConversation);
+    activeConversationRef.current = activeConversation;
     const [inputValue, setInputValue] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [isThinking, setIsThinking] = useState(false);
@@ -147,6 +149,8 @@ const ImmersiveSakuPilot = () => {
             setConversations((prev) => upsertConversation(prev, conversation));
         }
     }, []);
+    const persistActiveConversationRef = useRef(persistActiveConversation);
+    persistActiveConversationRef.current = persistActiveConversation;
 
     const handleGoBack = useCallback(() => {
         if (window.history.length > 1) navigate(-1);
@@ -323,8 +327,8 @@ const ImmersiveSakuPilot = () => {
     }, [isNearBottom]);
 
     useEffect(() => {
-        if (!typingMessage) return;
-        const { fullText } = typingMessage;
+        if (!typingMessage?.fullText) return;
+        const fullText = typingMessage.fullText;
         let idx = 0;
 
         const interval = setInterval(() => {
@@ -335,9 +339,10 @@ const ImmersiveSakuPilot = () => {
 
             if (idx >= fullText.length) {
                 clearInterval(interval);
-                persistActiveConversation({
-                    ...activeConversation,
-                    messages: [...activeConversation.messages, { role: 'assistant', content: fullText, isNew: true }],
+                const currentConv = activeConversationRef.current;
+                persistActiveConversationRef.current({
+                    ...currentConv,
+                    messages: [...currentConv.messages, { role: 'assistant', content: fullText, isNew: true }],
                     updatedAt: new Date().toISOString(),
                 });
                 setTypingMessage(null);
@@ -352,7 +357,7 @@ const ImmersiveSakuPilot = () => {
                 scrollRafRef.current = null;
             }
         };
-    }, [typingMessage, scheduleScroll, activeConversation, persistActiveConversation]);
+    }, [typingMessage?.fullText, scheduleScroll]);
 
     return (
         <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative border-t border-(--border-light) dark:border-(--dark-border)">
@@ -653,7 +658,7 @@ const ImmersiveSakuPilot = () => {
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
                         >
                             <span className="text-sm font-semibold text-(--text-light) flex items-center gap-2">
-                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'llama' ? 'Llama 3.3 70B' : 'Gemini 2.5 Flash'}
+                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'llama' ? 'Llama 3.3 70B' : 'Gemini 2.0 Flash'}
                             </span>
                             <FiChevronDown className={`text-(--text-gray) transition-transform duration-200 ${isModelMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -669,7 +674,7 @@ const ImmersiveSakuPilot = () => {
                                 >
                                     {[
                                         { id: 'llama', name: 'Llama 3.3 70B', desc: 'Groq API', icon: LlamaIcon },
-                                        { id: 'gemini', name: 'Gemini 2.5 Flash', desc: 'Google AI', icon: GeminiIcon }
+                                        { id: 'gemini', name: 'Gemini 2.0 Flash', desc: 'Google AI', icon: GeminiIcon }
                                     ].map((m) => (
                                         <button
                                             key={m.id}

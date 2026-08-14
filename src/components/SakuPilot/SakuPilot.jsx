@@ -201,8 +201,8 @@ const SakuPilot = ({ isOpen, onClose }) => {
     // Interval: 30ms (was 15ms) — still ~60 chars/sec, imperceptible difference
     // Scroll: RAF-throttled — max once per frame (~16ms) instead of every 15ms
     useEffect(() => {
-        if (!typingMessage) return;
-        const { fullText } = typingMessage;
+        if (!typingMessage?.fullText) return;
+        const fullText = typingMessage.fullText;
         let idx = 0;
 
         const interval = setInterval(() => {
@@ -226,7 +226,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                 scrollRafRef.current = null;
             }
         };
-    }, [typingMessage, scheduleScroll]); // only restarts on NEW message
+    }, [typingMessage?.fullText, scheduleScroll]);
 
     // ── Chat lifecycle ────────────────────────────────────────────────────────
     const startChat = useCallback((project) => {
