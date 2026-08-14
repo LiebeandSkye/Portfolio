@@ -7,7 +7,7 @@ const MDLi = ({ children }) => <li className="mb-2 last:mb-0 text-(--text-light)
 const MDUl = ({ children }) => <ul className="list-disc pl-5 space-y-1.5 my-3 text-(--text-light)">{children}</ul>;
 const MDOl = ({ children }) => <ol className="list-decimal pl-5 space-y-1.5 my-3 text-(--text-light)">{children}</ol>;
 const MDStrong = ({ children }) => <strong className="font-semibold text-(--text-light)">{children}</strong>;
-const MDP = ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed text-(--text-light) whitespace-pre-wrap break-words overflow-wrap-anywhere">{children}</p>;
+const MDP = ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed text-(--text-light) whitespace-pre-wrap break-words [overflow-wrap:anywhere]">{children}</p>;
 const MDH1 = ({ children }) => <h2 className="mb-3 last:mb-0 font-semibold text-2xl text-(--text-light) break-words">{children}</h2>;
 const MDH2 = ({ children }) => <h2 className="mb-3 last:mb-0 font-semibold text-(--text-light) break-words">{children}</h2>;
 const MDH3 = ({ children }) => <h3 className="mb-3 last:mb-0 font-semibold text-lg text-(--text-light) break-words">{children}</h3>;
@@ -26,20 +26,27 @@ const MDTr = ({ children }) => <tr className="transition-colors last:border-0">{
 
 const MessageContent = memo(({ content }) => {
     const processedContent = typeof content === 'string'
-        ? content.replace(/â€¢/g, '\nâ€¢')
+        ? content.replace(/â€¢/g, '\n•')
         : content;
 
     const components = useMemo(() => ({
-        code({ inline, className, children, ...props }) {
+        pre({ children }) {
+            return <>{children}</>;
+        },
+        code({ inline, className, children, node, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            if (inline || !match) {
+            const contentStr = String(children);
+            const isMultiline = contentStr.includes('\n');
+            const isInline = inline || (!match && !isMultiline && (!node?.position || node.position.start.line === node.position.end.line));
+
+            if (isInline) {
                 return (
-                    <code className="text-(--sucess) font-mono text-sm font-medium break-all whitespace-pre-wrap" {...props}>
+                    <code className="text-(--sucess) font-mono text-xs font-medium break-all whitespace-pre-wrap bg-(--pixel) px-1.5 py-0.5 rounded border border-(--border-light)" {...props}>
                         {children}
                     </code>
                 );
             }
-            return <CodeBlock language={match[1]} code={String(children).replace(/\n$/, '')} />;
+            return <CodeBlock language={match ? match[1] : 'code'} code={contentStr.replace(/\n$/, '')} />;
         },
         li: MDLi,
         ul: MDUl,
@@ -58,7 +65,7 @@ const MessageContent = memo(({ content }) => {
     }), []);
 
     return (
-        <div className="overflow-x-hidden w-full min-w-0">
+        <div className="overflow-x-auto w-full min-w-0 max-w-full">
             <ReactMarkdown remarkPlugins={[remarkGithubSafe]} rehypePlugins={[rehypeRaw]} components={components}>
                 {processedContent}
             </ReactMarkdown>

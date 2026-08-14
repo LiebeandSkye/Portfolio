@@ -105,14 +105,14 @@ const ChatView = memo(function ChatView({
 // ─── Individual message bubble — memoized so it never re-renders after commit ─
 const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate }) {
     return (
-        <div className={`flex gap-2 ${isUser ? 'justify-end' : 'justify-start items-start'}`}>
+        <div className={`flex gap-2 ${isUser ? 'justify-end' : 'justify-start items-start'} w-full min-w-0`}>
             {!isUser && (
                 <div className="flex-shrink-0 w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center mt-0.5">
                     <GoDependabot size={14} className="text-(--sucess)" />
                 </div>
             )}
             <div className={`
-                max-w-[82%] rounded-xl text-sm min-h-[1.5em] overflow-hidden
+                min-w-0 max-w-[85%] rounded-xl text-sm min-h-[1.5em] overflow-visible
                 ${isUser ? 'bg-(--pixel) px-3 py-2.5' : 'px-1 py-0.5'}
             `}>
                 {isUser && msg.files?.length > 0 && (
@@ -126,7 +126,7 @@ const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate 
                     </div>
                 )}
                 {isUser ? (
-                    <div className="overflow-x-hidden break-words whitespace-pre-wrap w-full min-w-0">
+                    <div className="overflow-x-auto break-words whitespace-pre-wrap w-full min-w-0">
                         <MessageContent content={msg.content} />
                     </div>
                 ) : (

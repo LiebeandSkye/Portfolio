@@ -259,6 +259,7 @@ const ImmersiveSakuPilot = () => {
             updatedAt: new Date().toISOString(),
         };
 
+        userScrolledUp.current = false;
         persistActiveConversation(nextConversation);
         const lastInput = text.trim();
         setInputValue('');
@@ -290,16 +291,36 @@ const ImmersiveSakuPilot = () => {
         }
     }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext, selectedModel]);
 
+    const userScrolledUp = useRef(false);
+    const lastScrollTop = useRef(0);
+
+    const isNearBottom = useCallback(() => {
+        const c = scrollRef.current;
+        if (!c) return true;
+        return c.scrollHeight - c.scrollTop - c.clientHeight < 120;
+    }, []);
+
+    const handleScroll = useCallback(() => {
+        const c = scrollRef.current;
+        if (!c) return;
+        const scrollingUp = c.scrollTop < lastScrollTop.current;
+        lastScrollTop.current = c.scrollTop;
+        if (scrollingUp && !isNearBottom()) userScrolledUp.current = true;
+        else if (isNearBottom()) userScrolledUp.current = false;
+    }, [isNearBottom]);
+
     const scheduleScroll = useCallback(() => {
         if (scrollRafRef.current) return;
         scrollRafRef.current = requestAnimationFrame(() => {
             scrollRafRef.current = null;
-            scrollRef.current?.scrollTo({
-                top: scrollRef.current.scrollHeight,
-                behavior: 'auto',
-            });
+            if (!userScrolledUp.current || isNearBottom()) {
+                scrollRef.current?.scrollTo({
+                    top: scrollRef.current.scrollHeight,
+                    behavior: 'auto',
+                });
+            }
         });
-    }, []);
+    }, [isNearBottom]);
 
     useEffect(() => {
         if (!typingMessage) return;
@@ -612,7 +633,7 @@ const ImmersiveSakuPilot = () => {
 
             {isSidebarOpen && <button className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
 
-            <div className="flex min-w-0 flex-1 flex-col bg-(--light)">
+            <div className="flex min-w-0 flex-1 flex-col bg-(--light) min-h-0">
                 <div className="relative flex h-14 shrink-0 items-center px-3 md:px-5">
                     <div className="flex items-center gap-1">
                         {/* Sidebar toggle */}
@@ -692,7 +713,7 @@ const ImmersiveSakuPilot = () => {
                     </button>
                 </div>
 
-                <div ref={scrollRef} className="no-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6">
+                <div ref={scrollRef} onScroll={handleScroll} className="no-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6 min-h-0">
                     {activeConversation.messages.length === 0 ? (
                         <div className="mx-auto flex min-h-full max-w-[720px] flex-col items-center justify-center text-center">
                             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel)">
@@ -749,7 +770,7 @@ const ImmersiveSakuPilot = () => {
                     )}
                 </div>
 
-                <div className="bg-(--light) px-3 pb-6 pt-2 sm:px-5">
+                <div className="shrink-0 bg-(--light) px-3 pb-6 pt-2 sm:px-5">
                     <div className="mx-auto max-w-[720px]">
                         {projectContext && (
                             <div className="mb-2 flex w-fit items-center gap-2 rounded-md border border-(--border-light) bg-(--pixel2) px-3 py-1.5 text-xs">
@@ -902,7 +923,7 @@ const ChatMessage = ({ message, handleNavigate }) => {
     const isNew = message.isNew === true;
     return (
         <motion.article
-            className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
+            className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} w-full min-w-0`}
             initial={isNew ? { opacity: 0, y: 10 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
@@ -912,7 +933,7 @@ const ChatMessage = ({ message, handleNavigate }) => {
                     <GoDependabot className="text-(--sucess)" />
                 </div>
             )}
-            <div className={`min-w-0 max-w-[88%] ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1'}`}>
+            <div className={`min-w-0 max-w-[88%] overflow-visible ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1'}`}>
                 {isUser && message.files?.length > 0 && (
                     <div className="mb-2 flex flex-wrap gap-2">
                         {message.files.map((file) => (

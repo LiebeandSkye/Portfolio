@@ -11,11 +11,11 @@ import BotMessage from './BotMessage';
  */
 const TypingMessage = memo(function TypingMessage({ content, onNavigate }) {
     return (
-        <div className="flex gap-2 justify-start items-start px-4 pb-2">
+        <div className="flex gap-2 justify-start items-start px-4 pb-2 w-full min-w-0">
             <div className="flex-shrink-0 w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center mt-0.5">
                 <GoDependabot size={14} className="text-(--sucess)" />
             </div>
-            <div className="max-w-[82%] rounded-xl text-sm overflow-hidden px-1 py-0.5">
+            <div className="min-w-0 max-w-[85%] rounded-xl text-sm overflow-visible px-1 py-0.5">
                 <BotMessage content={content} onNavigate={onNavigate} />
             </div>
         </div>

@@ -14,7 +14,7 @@ function parseNavTokens(content) {
 
     while ((match = NAV_REGEX.exec(content)) !== null) {
         if (match.index > lastIndex) {
-            const chunk = content.slice(lastIndex, match.index).trim();
+            const chunk = content.slice(lastIndex, match.index);
             if (chunk) parts.push({ type: 'text', value: chunk });
         }
         const path  = match[1] || match[3];
@@ -24,7 +24,7 @@ function parseNavTokens(content) {
     }
 
     if (lastIndex < content.length) {
-        const remaining = content.slice(lastIndex).trim();
+        const remaining = content.slice(lastIndex);
         if (remaining) parts.push({ type: 'text', value: remaining });
     }
 
@@ -40,13 +40,13 @@ const BotMessage = memo(function BotMessage({ content, onNavigate }) {
     const parts = useMemo(() => parseNavTokens(content), [content]);
 
     return (
-        <div className="flex flex-col gap-1 overflow-x-hidden w-full min-w-0">
+        <div className="flex flex-col gap-1 overflow-x-auto w-full min-w-0 max-w-full">
             {parts.map((part, i) =>
                 part.type === 'nav' ? (
                     <NavButton key={i} path={part.path} label={part.label} onClick={onNavigate} />
                 ) : (
                     part.value && (
-                        <div key={i} className="overflow-x-hidden break-words w-full min-w-0">
+                        <div key={i} className="overflow-x-auto break-words w-full min-w-0 max-w-full">
                             <MessageContent content={part.value} />
                         </div>
                     )
