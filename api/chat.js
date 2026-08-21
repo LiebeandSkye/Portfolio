@@ -2,26 +2,38 @@ import Groq from "groq-sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
-    const groq = new Groq({
-        apiKey: process.env.GROQ_API_KEY
-    });
-
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
-        const { userInput, chatHistory, projectContext, mode, model } = req.body;
+        const groqApiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
+        const geminiApiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+
+        const groq = new Groq({
+            apiKey: groqApiKey || 'missing-key'
+        });
+
+        const genAI = new GoogleGenerativeAI(geminiApiKey || 'missing-key');
+
+        const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+        const { userInput, chatHistory, projectContext, mode, model } = body;
         const isImmersive = mode === 'immersive';
-        const activeModel = model || 'llama';
+        const activeModel = (model === 'gemini') ? 'gemini' : 'groq';
+
+        if (activeModel === 'gemini' && !geminiApiKey) {
+            return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in production environment variables.' });
+        }
+        if (activeModel !== 'gemini' && !groqApiKey) {
+            return res.status(500).json({ error: 'GROQ_API_KEY is not configured in production environment variables.' });
+        }
 
         const modelNames = {
-            'llama': 'Llama 3.3 70B',
-            'gemini': 'Gemini 2.0 Flash'
+            'groq': 'GPT-OSS 120B',
+            'llama': 'GPT-OSS 120B',
+            'gemini': 'Gemini 3.7 Flash'
         };
-        const humanModelName = modelNames[activeModel] || activeModel;
+        const humanModelName = modelNames[model] || modelNames[activeModel];
 
         console.log(`🤖 Chat request received. Model: ${humanModelName} (${activeModel}), Mode: ${mode}`);
 
@@ -183,55 +195,73 @@ Current context: ${projectContext
         }));
 
         if (activeModel === 'gemini') {
-            const genModel = genAI.getGenerativeModel({
-                model: "gemini-2.0-flash",
-                systemInstruction: systemMessage
-            });
+            const geminiModelCandidates = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash'];
+            let lastGeminiError = null;
+            let responseText = null;
 
-            const chat = genModel.startChat({
-                history: sanitizedHistory.map(msg => ({
-                    role: msg.role === 'assistant' ? 'model' : 'user',
-                    parts: [{ text: msg.content }],
-                })),
-                generationConfig: {
-                    maxOutputTokens: isImmersive ? 4096 : 2048,
-                    temperature: isImmersive ? 0.72 : 0.75,
-                },
-            });
+            for (const geminiModelId of geminiModelCandidates) {
+                try {
+                    const genModel = genAI.getGenerativeModel({
+                        model: geminiModelId,
+                        systemInstruction: systemMessage
+                    });
 
-            const result = await chat.sendMessage(userInput);
-            const response = await result.response;
-            return res.status(200).json({ content: response.text() });
-        } else {
-            // Default to llama
-            let chatCompletion;
-            try {
-                chatCompletion = await groq.chat.completions.create({
-                    messages: [
-                        { role: "system", content: systemMessage },
-                        ...sanitizedHistory,
-                        { role: "user", content: userInput },
-                    ],
-                    model: "llama-3.3-70b-versatile",
-                    temperature: isImmersive ? 0.72 : 0.75,
-                    max_tokens: isImmersive ? 4096 : 2048,
-                    top_p: 0.92,
-                });
-            } catch (error) {
-                console.warn("Primary model failed, trying fallback:", error.message);
-                chatCompletion = await groq.chat.completions.create({
-                    messages: [
-                        { role: "system", content: systemMessage },
-                        ...sanitizedHistory,
-                        { role: "user", content: userInput },
-                    ],
-                    model: "llama-3.1-8b-instant",
-                    temperature: isImmersive ? 0.72 : 0.75,
-                    max_tokens: isImmersive ? 4096 : 2048,
-                    top_p: 0.92,
-                });
+                    const chat = genModel.startChat({
+                        history: sanitizedHistory.map(msg => ({
+                            role: msg.role === 'assistant' ? 'model' : 'user',
+                            parts: [{ text: msg.content }],
+                        })),
+                        generationConfig: {
+                            maxOutputTokens: isImmersive ? 4096 : 2048,
+                            temperature: isImmersive ? 0.72 : 0.75,
+                        },
+                    });
+
+                    const result = await chat.sendMessage(userInput);
+                    const response = await result.response;
+                    responseText = response.text();
+                    if (responseText) break;
+                } catch (err) {
+                    lastGeminiError = err;
+                    console.warn(`Gemini model ${geminiModelId} failed, trying fallback:`, err.message);
+                }
             }
-            return res.status(200).json({ content: chatCompletion.choices[0].message.content });
+
+            if (responseText) {
+                return res.status(200).json({ content: responseText });
+            }
+            throw lastGeminiError || new Error("Failed to get response from Gemini.");
+        } else {
+            // Default to Groq (GPT-OSS 120B with resilient fallbacks)
+            const groqModelCandidates = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'groq/compound-mini'];
+            let lastGroqError = null;
+            let responseContent = null;
+
+            for (const groqModelId of groqModelCandidates) {
+                try {
+                    const chatCompletion = await groq.chat.completions.create({
+                        messages: [
+                            { role: "system", content: systemMessage },
+                            ...sanitizedHistory,
+                            { role: "user", content: userInput },
+                        ],
+                        model: groqModelId,
+                        temperature: isImmersive ? 0.72 : 0.75,
+                        max_tokens: isImmersive ? 4096 : 2048,
+                        top_p: 0.92,
+                    });
+                    responseContent = chatCompletion.choices?.[0]?.message?.content;
+                    if (responseContent) break;
+                } catch (error) {
+                    lastGroqError = error;
+                    console.warn(`Groq model ${groqModelId} failed, trying fallback:`, error.message);
+                }
+            }
+
+            if (responseContent) {
+                return res.status(200).json({ content: responseContent });
+            }
+            throw lastGroqError || new Error("Failed to get response from Groq.");
         }
 
     } catch (error) {
