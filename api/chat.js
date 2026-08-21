@@ -2,20 +2,31 @@ import Groq from "groq-sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
-    const groq = new Groq({
-        apiKey: process.env.GROQ_API_KEY
-    });
-
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
-        const { userInput, chatHistory, projectContext, mode, model } = req.body;
+        const groqApiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
+        const geminiApiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+
+        const groq = new Groq({
+            apiKey: groqApiKey || 'missing-key'
+        });
+
+        const genAI = new GoogleGenerativeAI(geminiApiKey || 'missing-key');
+
+        const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+        const { userInput, chatHistory, projectContext, mode, model } = body;
         const isImmersive = mode === 'immersive';
         const activeModel = (model === 'gemini') ? 'gemini' : 'groq';
+
+        if (activeModel === 'gemini' && !geminiApiKey) {
+            return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in production environment variables.' });
+        }
+        if (activeModel !== 'gemini' && !groqApiKey) {
+            return res.status(500).json({ error: 'GROQ_API_KEY is not configured in production environment variables.' });
+        }
 
         const modelNames = {
             'groq': 'GPT-OSS 120B',
