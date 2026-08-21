@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         const modelNames = {
             'groq': 'GPT-OSS 120B',
             'llama': 'GPT-OSS 120B',
-            'gemini': 'Gemini 3.0 Flash'
+            'gemini': 'Gemini 3.7 Flash'
         };
         const humanModelName = modelNames[model] || modelNames[activeModel];
 
@@ -184,7 +184,7 @@ Current context: ${projectContext
         }));
 
         if (activeModel === 'gemini') {
-            const geminiModelCandidates = ['gemini-3-flash-preview', 'gemini-3.5-flash', 'gemini-2.5-flash'];
+            const geminiModelCandidates = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash'];
             let lastGeminiError = null;
             let responseText = null;
 

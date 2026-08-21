@@ -24,8 +24,8 @@ import {
 import { BsPinAngle, BsPinAngleFill } from 'react-icons/bs';
 import { GoDependabot } from 'react-icons/go';
 
-import GroqIcon from '../assets/Tools/groq.png';
-import GeminiIcon from '../assets/Models/gemini.webp';
+import GroqIcon from '../assets/Tools/chatgpt.png';
+import GeminiIcon from '../assets/Models/gemini.jpg';
 
 import Projects from '../Data/Projects';
 import { useLanguage } from '../components/context/LanguageContext';
@@ -662,7 +662,7 @@ const ImmersiveSakuPilot = () => {
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
                         >
                             <span className="text-sm font-semibold text-(--text-light) flex items-center gap-2">
-                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'gemini' ? 'Gemini 3.0 Flash' : 'GPT-OSS 120B'}
+                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'gemini' ? 'Gemini 3.7 Flash' : 'GPT-OSS 120B'}
                             </span>
                             <FiChevronDown className={`text-(--text-gray) transition-transform duration-200 ${isModelMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -677,8 +677,8 @@ const ImmersiveSakuPilot = () => {
                                     className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-(--pixel2) border border-(--border-light) rounded-xl shadow-2xl overflow-hidden p-1"
                                 >
                                     {[
-                                        { id: 'groq', name: 'GPT-OSS 120B', desc: 'Groq API', icon: GroqIcon },
-                                        { id: 'gemini', name: 'Gemini 3.0 Flash', desc: 'Google AI', icon: GeminiIcon }
+                                        { id: 'groq', name: 'GPT-OSS 120B', desc: 'Chatgpt', icon: GroqIcon },
+                                        { id: 'gemini', name: 'Gemini 3.7 Flash', desc: 'Google AI', icon: GeminiIcon }
                                     ].map((m) => (
                                         <button
                                             key={m.id}
@@ -689,14 +689,10 @@ const ImmersiveSakuPilot = () => {
                                             className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-(--pixel-hover) transition-colors text-left group cursor-pointer"
                                         >
                                             <div className="relative flex-shrink-0">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden border ${selectedModel === m.id || (m.id === 'groq' && selectedModel === 'llama') ? 'border-(--sucess)' : 'border-(--border-light)'}`}>
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden  ${selectedModel === m.id || (m.id === 'groq' && selectedModel === 'llama') ? 'border-(--sucess)' : ''}`}>
                                                     <img src={m.icon} alt={m.name} className="w-full h-full object-contain p-0.5" />
                                                 </div>
-                                                {(selectedModel === m.id || (m.id === 'groq' && selectedModel === 'llama')) && (
-                                                    <div className="absolute -top-1 -left-1 bg-(--light) rounded-full p-0.5 border border-(--border-light)">
-                                                        <FiCheck className="text-(--sucess)" size={10} />
-                                                    </div>
-                                                )}
+                                                
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="text-sm font-bold text-(--text-light) truncate">{m.name}</div>
