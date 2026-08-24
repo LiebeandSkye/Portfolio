@@ -5,6 +5,7 @@ import QuizTopicSelect from '../components/quiz/QuizTopicSelect';
 import QuizPlay from '../components/quiz/QuizPlay';
 import QuizResult from '../components/quiz/QuizResult';
 import QuizReview from '../components/quiz/QuizReview';
+import ConfirmQuitModal from '../components/quiz/ConfirmQuitModal';
 import { QUIZ_CATEGORIES, QUIZ_QUESTIONS } from '../Data/quizData';
 
 // Utility to shuffle an array (Fisher-Yates)
@@ -20,6 +21,9 @@ function shuffleArray(array) {
 const DevQuiz = () => {
   // Step state: 'welcome' | 'select' | 'quiz' | 'result' | 'review'
   const [step, setStep] = useState('welcome');
+
+  // Quit confirmation modal state
+  const [isQuitModalOpen, setIsQuitModalOpen] = useState(false);
 
   // Selected categories (all checked by default as requested)
   const [selectedCategories, setSelectedCategories] = useState(() =>
@@ -107,11 +111,14 @@ const DevQuiz = () => {
     setStep('select');
   };
 
-  // Quit / cancel active quiz
-  const handleQuitQuiz = () => {
-    if (window.confirm('Are you sure you want to quit the quiz? Your current progress will be lost.')) {
-      setStep('welcome');
-    }
+  // Quit modal triggers
+  const handleOpenQuitModal = () => {
+    setIsQuitModalOpen(true);
+  };
+
+  const handleConfirmQuit = () => {
+    setIsQuitModalOpen(false);
+    setStep('welcome');
   };
 
   return (
@@ -141,7 +148,7 @@ const DevQuiz = () => {
             selectedAnswer={selectedAnswer}
             onSelectAnswer={handleSelectAnswer}
             onNextQuestion={handleNextQuestion}
-            onQuitQuiz={handleQuitQuiz}
+            onQuitQuiz={handleOpenQuitModal}
           />
         )}
 
@@ -165,6 +172,15 @@ const DevQuiz = () => {
           />
         )}
       </div>
+
+      {/* Modern Custom Quit Confirmation Modal */}
+      <ConfirmQuitModal
+        isOpen={isQuitModalOpen}
+        onCancel={() => setIsQuitModalOpen(false)}
+        onConfirm={handleConfirmQuit}
+        currentQuestion={currentIndex + 1}
+        totalQuestions={activeQuestions.length}
+      />
     </MainLayout>
   );
 };

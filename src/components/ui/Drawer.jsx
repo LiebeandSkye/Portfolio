@@ -9,6 +9,7 @@ import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { FaHome, FaRandom } from "react-icons/fa";
 import { FaBrain } from "react-icons/fa6";
+import { LuBrain } from "react-icons/lu";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { GoDependabot } from 'react-icons/go';
@@ -16,7 +17,7 @@ import profile from '../../assets/Kry_Rithisak.optimized.jpg';
 
 const ICON_HOME    = <FaHome />;
 const ICON_CODE    = <MdOutlineCode />;
-const ICON_BRAIN   = <FaBrain />;
+const ICON_BRAIN   = <LuBrain />;
 const ICON_MESSAGE = <RiMessage2Line />;
 
 const LINK_DEFS = [
