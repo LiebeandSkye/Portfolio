@@ -163,7 +163,7 @@ const QuizTopicSelect = ({
                     : 'border-(--border-light) bg-(--pixel) text-(--text-light) hover:border-(--text-gray)'
                 }`}
               >
-                {count === 'All' ? `All (${totalAvailableQuestions})` : `${count} Questions`}
+                {count === 'All' ? `All availables` : `${count} Questions`}
               </button>
             );
           })}
