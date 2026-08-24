@@ -9,6 +9,7 @@ const Contact = lazy(() => import('../pages/Contact'));
 const AboutProject = lazy(() => import('../pages/AboutProject'));
 const ImmersiveSakuPilot = lazy(() => import('../pages/ImmersiveSakuPilot'));
 const AboutWebsite = lazy(() => import('../pages/AboutWebsite'));
+const DevQuiz = lazy(() => import('../pages/DevQuiz'));
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: 'about-website',
                 element: <Suspense fallback={null}><AboutWebsite /></Suspense>,
+            },
+            {
+                path: 'dev-quiz',
+                element: <Suspense fallback={null}><DevQuiz /></Suspense>,
             },
             {
                 path: '*',

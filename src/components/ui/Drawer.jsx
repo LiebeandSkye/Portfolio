@@ -8,6 +8,7 @@ import { RxCross2 } from "react-icons/rx";
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { FaHome, FaRandom } from "react-icons/fa";
+import { FaBrain } from "react-icons/fa6";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { GoDependabot } from 'react-icons/go';
@@ -15,11 +16,13 @@ import profile from '../../assets/Kry_Rithisak.optimized.jpg';
 
 const ICON_HOME    = <FaHome />;
 const ICON_CODE    = <MdOutlineCode />;
+const ICON_BRAIN   = <FaBrain />;
 const ICON_MESSAGE = <RiMessage2Line />;
 
 const LINK_DEFS = [
     { path: '/',          icon: ICON_HOME,    labelKey: 'links.welcome'   },
     { path: '/portfolio', icon: ICON_CODE,    labelKey: 'links.portfolio' },
+    { path: '/dev-quiz',  icon: ICON_BRAIN,   labelKey: 'links.devQuiz'   },
     { path: '/contact',   icon: ICON_MESSAGE, labelKey: 'links.contact'   },
 ];
 
@@ -34,25 +37,25 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
 
     // Body scroll lock
     useEffect(() => {
-    const body = document.body;
+        const body = document.body;
 
-    if (isOpen) {
-        const sw = window.innerWidth - document.documentElement.clientWidth;
+        if (isOpen) {
+            const sw = window.innerWidth - document.documentElement.clientWidth;
 
-        requestAnimationFrame(() => {
-            body.style.overflow = 'hidden';
-            body.style.paddingRight = `${sw}px`;
-        });
-    } else {
-        body.style.overflow = '';
-        body.style.paddingRight = '';
-    }
+            requestAnimationFrame(() => {
+                body.style.overflow = 'hidden';
+                body.style.paddingRight = `${sw}px`;
+            });
+        } else {
+            body.style.overflow = '';
+            body.style.paddingRight = '';
+        }
 
-    return () => {
-        body.style.overflow = '';
-        body.style.paddingRight = '';
-    };
-}, [isOpen]);
+        return () => {
+            body.style.overflow = '';
+            body.style.paddingRight = '';
+        };
+    }, [isOpen]);
 
     const randomizeQuote = useCallback(() => {
         const quotes = t('quotes');

@@ -63,6 +63,7 @@ const translations = {
         links: {
             welcome: 'Welcome',
             portfolio: 'Portfolio',
+            devQuiz: 'Dev Quiz',
             contact: 'Get in Touch',
         },
         sakupilot: {
@@ -888,6 +889,7 @@ const translations = {
         links: {
             welcome: 'ホーム',
             portfolio: 'ポートフォリオ',
+            devQuiz: 'Devクイズ',
             contact: 'お問い合わせ'
         },
         sakupilot: {

@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import { FaHome } from 'react-icons/fa';
+import { FaBrain } from 'react-icons/fa6';
 import { MdOutlineCode, MdFullscreen } from 'react-icons/md';
 import { RiMessage2Line } from 'react-icons/ri';
 import { GoDependabot } from 'react-icons/go';
@@ -14,6 +15,7 @@ const SearchPalette = lazy(() => import('./SearchPalette'));
 const PAGE_DEFS = [
     { id: 'welcome',   path: '/',          icon: <FaHome size={14} />,         labelKey: 'links.welcome',   actionKey: 'search.visit' },
     { id: 'portfolio', path: '/portfolio', icon: <MdOutlineCode size={14} />,  labelKey: 'links.portfolio', actionKey: 'search.visit' },
+    { id: 'dev-quiz',  path: '/dev-quiz',  icon: <FaBrain size={14} />,        labelKey: 'links.devQuiz',   actionKey: 'search.visit' },
     { id: 'contact',   path: '/contact',   icon: <RiMessage2Line size={14} />, labelKey: 'links.contact',   actionKey: 'search.visit' },
 ];
 
