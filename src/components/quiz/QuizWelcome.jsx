@@ -5,7 +5,7 @@ const QuizWelcome = ({ onStart }) => {
   return (
     <div className="border border-(--border-light) w-full py-4 px-4 sm:px-6 flex flex-col items-center justify-center min-h-[460px] text-center">
       <div className="w-full flex items-center justify-between text-xs text-(--text-light) mb-6 pb-2">
-        <p>
+        <p className="whitespace-nowrap">
           Kry-Rithisak<span className="text-(--text-gray)"> / </span>DevQuiz
           <span className="text-(--text-gray)">.jsx</span>
         </p>
@@ -34,17 +34,17 @@ const QuizWelcome = ({ onStart }) => {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-(--text-gray) my-8 tracking-wide font-medium">
-          <span>Pick a topic</span>
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm text-(--text-gray) my-6 sm:my-8 tracking-wide font-medium">
+          <span className="whitespace-nowrap">Pick a topic</span>
           <span className="text-(--sucess) font-bold">&gt;</span>
-          <span>Set the number of questions</span>
+          <span className="whitespace-nowrap">Set question count</span>
           <span className="text-(--sucess) font-bold">&gt;</span>
-          <span className="text-(--text-light) font-semibold">START</span>
+          <span className="text-(--text-light) font-semibold whitespace-nowrap">START</span>
         </div>
 
         <button
           onClick={onStart}
-          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-6 rounded-lg shadow-sm hover:shadow transition-all duration-200 cursor-pointer transform active:translate-y-0 text-sm sm:text-base flex items-center gap-2"
+          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-6 rounded-lg shadow-sm hover:shadow transition-all duration-200 cursor-pointer transform active:translate-y-0 text-sm sm:text-base flex items-center justify-center gap-2 whitespace-nowrap"
         >
           Start Quiz
         </button>

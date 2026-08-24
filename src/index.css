@@ -274,3 +274,105 @@ html::-webkit-scrollbar-button {
 html::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* ========================= */
+/* 🤖 CHAT TYPOGRAPHY & LISTS */
+/* ========================= */
+
+.chat-ol {
+  counter-reset: chat-step;
+  list-style: none !important;
+  padding-left: 0 !important;
+}
+
+.chat-ol > li {
+  counter-increment: chat-step;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.chat-ol > li::before {
+  content: counter(chat-step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.18rem;
+  background-color: var(--pixel);
+  color: var(--text-light);
+  border: 1px solid var(--border-light);
+}
+
+/* ========================= */
+/* 🎨 PRISM SYNTAX HIGHLIGHTING */
+/* ========================= */
+
+.code-theme-dark .token.comment,
+.code-theme-dark .token.prolog,
+.code-theme-dark .token.doctype,
+.code-theme-dark .token.cdata {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.code-theme-dark .token.punctuation {
+  color: #c9d1d9;
+}
+
+.code-theme-dark .token.property,
+.code-theme-dark .token.tag,
+.code-theme-dark .token.boolean,
+.code-theme-dark .token.number,
+.code-theme-dark .token.constant,
+.code-theme-dark .token.symbol {
+  color: #79c0ff;
+}
+
+.code-theme-dark .token.selector,
+.code-theme-dark .token.attr-name,
+.code-theme-dark .token.string,
+.code-theme-dark .token.char,
+.code-theme-dark .token.builtin,
+.code-theme-dark .token.inserted {
+  color: #7ee787;
+}
+
+.code-theme-dark .token.operator,
+.code-theme-dark .token.entity,
+.code-theme-dark .token.url {
+  color: #ff7b72;
+}
+
+.code-theme-dark .token.atrule,
+.code-theme-dark .token.attr-value,
+.code-theme-dark .token.keyword {
+  color: #ff7b72;
+}
+
+.code-theme-dark .token.function,
+.code-theme-dark .token.class-name {
+  color: #d2a8ff;
+}
+
+.code-theme-dark .token.regex,
+.code-theme-dark .token.important,
+.code-theme-dark .token.variable {
+  color: #ffa657;
+}
+
+.code-theme-dark .token.important,
+.code-theme-dark .token.bold {
+  font-weight: 600;
+}
+
+.code-theme-dark .token.italic {
+  font-style: italic;
+}
