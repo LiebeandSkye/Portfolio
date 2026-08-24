@@ -50,12 +50,12 @@ const QuizResult = ({
   return (
     <div className="border border-(--border-light) w-full py-8 px-4 sm:px-8 flex flex-col items-center">
       {/* Top Breadcrumb */}
-      <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-6 pb-2 border-b border-(--border-light)/40">
-        <p>
+      <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-6 pb-2 border-b border-(--border-light)/40 flex-wrap gap-2">
+        <p className="whitespace-nowrap">
           Kry-Rithisak<span className="text-(--text-gray)"> / </span>DevQuiz
           <span className="text-(--text-gray)"> / Results</span>
         </p>
-        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border border-(--border-light) bg-(--pixel)">
+        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border border-(--border-light) bg-(--pixel) whitespace-nowrap shrink-0">
           <FaBrain className="text-(--sucess)" size={12} /> Score Report
         </span>
       </div>
@@ -66,7 +66,7 @@ const QuizResult = ({
           <FaTrophy size={28} />
         </div>
 
-        <div className={`px-3 py-1 rounded-full border text-xs font-semibold mb-3 ${badgeColor}`}>
+        <div className={`px-3 py-1 rounded-full border text-xs sm:text-sm font-semibold mb-3 whitespace-nowrap text-center ${badgeColor}`}>
           {masteryTitle}
         </div>
 
@@ -84,20 +84,20 @@ const QuizResult = ({
       </div>
 
       {/* Summary Cards: Right vs Wrong */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-lg mb-8">
-        <div className="p-4 rounded-xl border border-green-500/30 bg-green-500/5 flex items-center gap-3">
-          <FaCheckCircle className="text-green-400 shrink-0" size={24} />
-          <div>
-            <p className="text-xl sm:text-2xl font-bold text-green-400">{score}</p>
-            <p className="text-xs text-(--text-gray) font-medium">Correct Answers</p>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-lg mb-8">
+        <div className="p-3 sm:p-4 rounded-xl border border-green-500/30 bg-green-500/5 flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <FaCheckCircle className="text-green-400 shrink-0" size={22} />
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-green-400 leading-tight">{score}</p>
+            <p className="text-[11px] sm:text-xs text-(--text-gray) font-medium whitespace-nowrap truncate">Correct Answers</p>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/5 flex items-center gap-3">
-          <FaTimesCircle className="text-red-400 shrink-0" size={24} />
-          <div>
-            <p className="text-xl sm:text-2xl font-bold text-red-400">{incorrectCount}</p>
-            <p className="text-xs text-(--text-gray) font-medium">Incorrect Answers</p>
+        <div className="p-3 sm:p-4 rounded-xl border border-red-500/30 bg-red-500/5 flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <FaTimesCircle className="text-red-400 shrink-0" size={22} />
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-red-400 leading-tight">{incorrectCount}</p>
+            <p className="text-[11px] sm:text-xs text-(--text-gray) font-medium whitespace-nowrap truncate">Incorrect Answers</p>
           </div>
         </div>
       </div>
@@ -112,12 +112,12 @@ const QuizResult = ({
             const catPercent = Math.round((stats.correct / stats.total) * 100);
             return (
               <div key={stats.id} className="flex flex-col gap-1 text-xs">
-                <div className="flex items-center justify-between text-(--text-light)">
-                  <div className="flex items-center gap-2">
-                    <TopicIcon categoryId={stats.id} size={12} className="w-4 h-4 rounded-xs border-0 bg-transparent" />
-                    <span className="font-medium">{stats.name}</span>
+                <div className="flex items-center justify-between text-(--text-light) gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <TopicIcon categoryId={stats.id} size={12} className="w-4 h-4 rounded-xs border-0 bg-transparent shrink-0" />
+                    <span className="font-medium truncate text-xs">{stats.name}</span>
                   </div>
-                  <span className="font-mono text-(--text-gray)">
+                  <span className="font-mono text-(--text-gray) text-xs shrink-0 whitespace-nowrap">
                     {stats.correct}/{stats.total} ({catPercent}%)
                   </span>
                 </div>
@@ -140,27 +140,27 @@ const QuizResult = ({
       </div>
 
       {/* Prominent Actions */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-lg justify-center">
+      <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 w-full max-w-lg justify-center">
         <button
           onClick={onViewResults}
-          className="w-full sm:w-auto bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2.5 px-6 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 text-sm shadow-sm"
+          className="w-full sm:w-auto bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2.5 px-4 sm:px-5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 text-xs sm:text-sm shadow-sm whitespace-nowrap"
         >
-          <FaListCheck size={14} />
-          View Results & Explanations
-          <FaArrowRight size={12} />
+          <FaListCheck size={13} className="shrink-0" />
+          <span>View Results & Explanations</span>
+          <FaArrowRight size={11} className="shrink-0" />
         </button>
 
         <button
           onClick={onRetakeQuiz}
-          className="w-full sm:w-auto border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) font-semibold py-2.5 px-5 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 text-sm"
+          className="w-full sm:w-auto border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) font-semibold py-2.5 px-4 sm:px-5 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 text-xs sm:text-sm whitespace-nowrap"
         >
-          <FaRotateLeft size={13} />
-          Retake Quiz
+          <FaRotateLeft size={12} className="shrink-0" />
+          <span>Retake Quiz</span>
         </button>
 
         <button
           onClick={onChangeTopics}
-          className="w-full sm:w-auto text-xs text-(--text-gray) hover:text-(--text-light) py-2 px-3 transition-colors cursor-pointer text-center"
+          className="w-full sm:w-auto text-xs text-(--text-gray) hover:text-(--text-light) py-2 px-3 transition-colors cursor-pointer text-center whitespace-nowrap"
         >
           Change Topics
         </button>

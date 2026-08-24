@@ -26,22 +26,22 @@ const QuizPlay = ({
     <div className="border border-(--border-light) w-full py-6 px-4 sm:px-6 flex flex-col">
       {/* Header bar: Progress & Topic */}
       <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-4 pb-3 border-b border-(--border-light)/50 flex-wrap gap-2">
-        <div className="flex items-center gap-2.5">
-          <span className="font-semibold text-(--text-light)">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <span className="font-semibold text-(--text-light) whitespace-nowrap">
             Question {currentIndex + 1} of {totalQuestions}
           </span>
-          <span className="text-(--text-gray)">•</span>
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light)">
-            <TopicIcon categoryId={question.category} size={13} className="w-4 h-4 rounded-sm border-0 bg-transparent" />
-            <span>{question.categoryName}</span>
+          <span className="text-(--text-gray) hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 sm:py-1 rounded-md text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light) whitespace-nowrap shrink-0">
+            <TopicIcon categoryId={question.category} size={13} className="w-4 h-4 rounded-sm border-0 bg-transparent shrink-0" />
+            <span className="truncate max-w-[130px] sm:max-w-none">{question.categoryName}</span>
           </div>
         </div>
 
         <button
           onClick={onQuitQuiz}
-          className="flex items-center gap-1 text-(--text-gray) hover:text-red-400 transition-colors text-xs cursor-pointer"
+          className="flex items-center gap-1 text-(--text-gray) hover:text-red-400 transition-colors text-xs cursor-pointer whitespace-nowrap shrink-0 ml-auto sm:ml-0"
         >
-          <FaRotateLeft size={11} /> Quit Quiz
+          <FaRotateLeft size={11} className="shrink-0" /> Quit Quiz
         </button>
       </div>
 
@@ -96,7 +96,7 @@ const QuizPlay = ({
               type="button"
               disabled={isAnswered}
               onClick={() => onSelectAnswer(optIndex)}
-              className={`w-full text-left p-3 sm:p-3.5 rounded-lg border text-xs sm:text-sm transition-all duration-150 flex items-start gap-3 cursor-pointer disabled:cursor-default ${optionStyle}`}
+              className={`w-full text-left p-2.5 sm:p-3.5 rounded-lg border text-xs sm:text-sm transition-all duration-150 flex items-start gap-2.5 sm:gap-3 cursor-pointer disabled:cursor-default ${optionStyle}`}
             >
               {/* Option Letter Pill */}
               <div
@@ -112,7 +112,7 @@ const QuizPlay = ({
               </div>
 
               {/* Option Text */}
-              <span className="flex-1 pt-0.5 leading-relaxed text-(--text-light)">
+              <span className="flex-1 pt-0.5 leading-relaxed text-(--text-light) min-w-0 break-words">
                 <FormattedText text={optionText} />
               </span>
             </button>
@@ -123,19 +123,21 @@ const QuizPlay = ({
       {/* Explanation Container (Appears immediately after selecting an answer) */}
       {isAnswered && (
         <div
-          className={`p-4 rounded-lg border mb-6 transition-all duration-200 ${
+          className={`p-3.5 sm:p-4 rounded-lg border mb-6 transition-all duration-200 ${
             isCorrect
               ? 'bg-green-500/5 border-green-500/30'
               : 'bg-orange-500/5 border-orange-500/30'
           }`}
         >
-          <div className="flex items-center gap-2 mb-2">
-            <FaLightbulb className={isCorrect ? 'text-green-400' : 'text-orange-400'} size={15} />
-            <h3 className="font-bold text-sm text-(--text-light)">
-              Explanation
-            </h3>
+          <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <FaLightbulb className={isCorrect ? 'text-green-400' : 'text-orange-400'} size={15} />
+              <h3 className="font-bold text-sm text-(--text-light)">
+                Explanation
+              </h3>
+            </div>
             <span
-              className={`ml-auto text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
+              className={`text-[11px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                 isCorrect
                   ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                   : 'bg-red-500/20 text-red-400 border border-red-500/30'
@@ -164,10 +166,10 @@ const QuizPlay = ({
         <div className="flex justify-end pt-3 border-t border-(--border-light)">
           <button
             onClick={onNextQuestion}
-            className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-6 rounded-md transition-all cursor-pointer flex items-center gap-2 text-sm shadow-sm"
+            className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-4 sm:px-6 rounded-md transition-all cursor-pointer flex items-center justify-center gap-2 text-xs sm:text-sm shadow-sm whitespace-nowrap"
           >
-            {isLastQuestion ? 'Finish Quiz & View Score' : 'Next Question'}
-            <FaArrowRight size={12} />
+            <span>{isLastQuestion ? 'Finish Quiz & View Score' : 'Next Question'}</span>
+            <FaArrowRight size={12} className="shrink-0" />
           </button>
         </div>
       )}

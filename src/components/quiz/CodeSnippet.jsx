@@ -109,27 +109,27 @@ const CodeSnippet = ({ code, language = 'javascript' }) => {
     <div className="my-3 rounded-lg border border-(--border-light) bg-[#f6f8fa] dark:bg-[#0d1117] overflow-hidden shadow-xs">
       {/* Header bar */}
       <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#eaeef2] dark:bg-[#161b22] border-b border-(--border-light) text-[11px] text-(--text-gray)">
-        <div className="flex items-center gap-2 font-mono uppercase tracking-wider font-semibold">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block" />
-          <span className="ml-1 text-(--text-light) opacity-80">{language}</span>
+        <div className="flex items-center gap-2 font-mono uppercase tracking-wider font-semibold whitespace-nowrap shrink-0">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block shrink-0" />
+          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block shrink-0" />
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block shrink-0" />
+          <span className="ml-1 text-(--text-light) opacity-80 whitespace-nowrap">{language}</span>
         </div>
 
         <button
           type="button"
           onClick={handleCopy}
-          className="flex items-center gap-1 text-[11px] text-(--text-gray) hover:text-(--text-light) transition-colors cursor-pointer px-1.5 py-0.5 rounded hover:bg-(--pixel-hover)"
+          className="flex items-center gap-1 text-[11px] text-(--text-gray) hover:text-(--text-light) transition-colors cursor-pointer px-1.5 py-0.5 rounded hover:bg-(--pixel-hover) whitespace-nowrap shrink-0"
           title="Copy code"
         >
           {copied ? (
             <>
-              <FaCheck size={11} className="text-(--sucess)" />
+              <FaCheck size={11} className="text-(--sucess) shrink-0" />
               <span className="text-(--sucess) font-medium">Copied</span>
             </>
           ) : (
             <>
-              <FaCopy size={11} />
+              <FaCopy size={11} className="shrink-0" />
               <span>Copy</span>
             </>
           )}

@@ -49,14 +49,14 @@ const QuizTopicSelect = ({
   return (
     <div className="border border-(--border-light) w-full py-6 px-4 sm:px-6 flex flex-col">
       {/* Top Header */}
-      <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-6 pb-2 border-b border-(--border-light)/40">
+      <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-6 pb-2 border-b border-(--border-light)/40 flex-wrap gap-2">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-(--text-light) hover:text-(--sucess) transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-(--text-light) hover:text-(--sucess) transition-colors cursor-pointer whitespace-nowrap shrink-0"
         >
           <FaArrowLeft size={12} /> Back to Welcome
         </button>
-        <span className="text-[11px] text-(--text-gray)">
+        <span className="text-[11px] text-(--text-gray) whitespace-nowrap shrink-0">
           {selectedCategories.length} of {QUIZ_CATEGORIES.length} topics selected
         </span>
       </div>
@@ -76,20 +76,20 @@ const QuizTopicSelect = ({
           <button
             type="button"
             onClick={handleSelectAll}
-            className="flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-md border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-md border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             <LuCheckCheck size={14} className="text-(--sucess)" /> Select All
           </button>
           <button
             type="button"
             onClick={handleDeselectAll}
-            className="flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-md border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-md border border-(--border-light) bg-(--pixel) hover:bg-(--pixel-hover) text-(--text-light) transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             <LuX size={14} className="text-red-400" /> Deselect All
           </button>
         </div>
 
-        <span className="text-xs text-(--text-gray)">
+        <span className="text-xs text-(--text-gray) whitespace-nowrap">
           {totalAvailableQuestions} questions available in bank
         </span>
       </div>
@@ -131,7 +131,7 @@ const QuizTopicSelect = ({
               {/* Topic Info */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm text-(--text-light)">
+                  <span className="font-semibold text-sm text-(--text-light) truncate">
                     {cat.name}
                   </span>
                 </div>
@@ -157,13 +157,13 @@ const QuizTopicSelect = ({
                 key={count}
                 type="button"
                 onClick={() => setQuestionCount(count)}
-                className={`py-1.5 px-4 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+                className={`py-1.5 px-3 sm:px-4 rounded-md text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
                   isSelected
                     ? 'bg-(--sucess) border-(--sucess) text-white shadow-sm'
                     : 'border-(--border-light) bg-(--pixel) text-(--text-light) hover:border-(--text-gray)'
                 }`}
               >
-                {count === 'All' ? `All Available (${totalAvailableQuestions})` : `${count} Questions`}
+                {count === 'All' ? `All (${totalAvailableQuestions})` : `${count} Questions`}
               </button>
             );
           })}
@@ -174,7 +174,7 @@ const QuizTopicSelect = ({
       <div className="flex items-center justify-between pt-4 border-t border-(--border-light) flex-wrap gap-3">
         <button
           onClick={onBack}
-          className="text-xs sm:text-sm text-(--text-gray) hover:text-(--text-light) py-2 px-3 rounded-md hover:bg-(--pixel) transition-colors cursor-pointer"
+          className="text-xs sm:text-sm text-(--text-gray) hover:text-(--text-light) py-2 px-3 rounded-md hover:bg-(--pixel) transition-colors cursor-pointer whitespace-nowrap"
         >
           Cancel
         </button>
@@ -182,10 +182,10 @@ const QuizTopicSelect = ({
         <button
           onClick={handleStart}
           disabled={selectedCategories.length === 0}
-          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-6 rounded-md transition-all cursor-pointer flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-4 sm:px-6 rounded-md transition-all cursor-pointer flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-sm whitespace-nowrap"
         >
-          <FaPlay size={12} />
-          Start Quiz ({selectedCategories.length} Topics)
+          <FaPlay size={11} className="shrink-0" />
+          <span>Start Quiz ({selectedCategories.length} Topics)</span>
         </button>
       </div>
     </div>

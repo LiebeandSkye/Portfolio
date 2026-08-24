@@ -17,7 +17,7 @@ const FormattedText = ({ text, className = '' }) => {
           return (
             <code
               key={index}
-              className="mx-0.5 px-1.5 py-0.5 rounded-md font-mono text-[0.9em] font-medium bg-(--pixel) text-(--code-inline-text) border border-(--border-light) inline-block align-baseline tracking-tight"
+              className="mx-0.5 px-1.5 py-0.5 rounded font-mono text-[0.85em] font-medium bg-(--pixel) text-(--code-inline-text) border border-(--border-light) inline align-baseline tracking-tight"
             >
               {codeContent}
             </code>
