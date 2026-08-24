@@ -30,6 +30,7 @@ import GeminiIcon from '../assets/Models/gemini.jpg';
 import Projects from '../Data/Projects';
 import { useLanguage } from '../components/context/LanguageContext';
 import { getGroqResponse } from '../Utils/groq';
+import { getProjectTechSummary } from '../Utils/projectContext';
 import MessageContent from '../components/SakuPilot/MessageContent';
 import BotMessage from '../components/SakuPilot/BotMessage';
 import TypingMessage from '../components/SakuPilot/TypingMessage';
@@ -219,12 +220,14 @@ const ImmersiveSakuPilot = () => {
     }, []);
 
     const handleProjectSelect = useCallback((project) => {
+        const tech = getProjectTechSummary(project);
         setProjectContext({
-            title: project.displayTitle,
-            tech: project.tech?.join(', '),
+            id: project.id,
+            title: project.displayTitle || project.title,
+            tech,
+            description: project.description,
             role: 'Developer',
         });
-        setInputValue((value) => value || `Let's talk about ${project.displayTitle}.`);
         if (window.innerWidth < 768) setIsSidebarOpen(false);
     }, []);
 
@@ -255,6 +258,7 @@ const ImmersiveSakuPilot = () => {
             role: 'user',
             content: text.trim() || `Uploaded ${attachments.length} attachment(s)`,
             files: attachments.map(({ name, type }) => ({ name, type })),
+            project: projectContext ? { title: projectContext.title } : undefined,
         };
 
         const baseConversation = activeConversation.messages.length === 0
@@ -939,10 +943,17 @@ const ChatMessage = ({ message, handleNavigate }) => {
                 </div>
             )}
             <div className={`min-w-0 max-w-[88%] overflow-visible ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1'}`}>
-                {isUser && message.files?.length > 0 && (
+                {isUser && (message.files?.length > 0 || message.project) && (
                     <div className="mb-2 flex flex-wrap gap-2">
-                        {message.files.map((file) => (
-                            <span key={file.name} className="rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs text-(--text-gray)">
+                        {message.project && (
+                            <span className="flex items-center gap-1.5 rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs text-(--text-light) font-medium">
+                                <FiFolder className="text-(--sucess)" size={12} />
+                                {message.project.title || message.project}
+                            </span>
+                        )}
+                        {message.files?.map((file) => (
+                            <span key={file.name} className="flex items-center gap-1 rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs text-(--text-gray)">
+                                <FiPaperclip size={11} />
                                 {file.name}
                             </span>
                         ))}

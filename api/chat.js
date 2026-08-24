@@ -37,6 +37,16 @@ export default async function handler(req, res) {
 
         console.log(`🤖 Chat request received. Model: ${humanModelName} (${activeModel}), Mode: ${mode}`);
 
+        const projectContextSection = projectContext ? `
+---
+### ATTACHED PROJECT IN FOCUS
+The user has attached the project **${projectContext.title}**${projectContext.tech ? ` (Tech Stack: ${projectContext.tech})` : ''}${projectContext.description ? ` - Description: ${projectContext.description}` : ''}.
+CRITICAL RULE FOR ATTACHED PROJECT:
+- The user is asking questions specifically about **${projectContext.title}**.
+- Even if the user's message is brief, generic, or does not explicitly mention the project name (such as "What is this?", "What are the core features?", "What tech stack was used?", "How did you build it?", "Explain the architecture", "Tell me more about it"), you must ALWAYS answer specifically about **${projectContext.title}** as the developer (Kry Rithisak / Saku) who built this project.
+- Do NOT give a generic, non-portfolio response when a project is attached.
+` : '';
+
         const systemMessage = `You are SakuPilot — a friendly, helpful, and slightly witty AI assistant embedded in Kry Rithisak's personal portfolio website.
 
 When users ask about your identity or which model you are using, you must state: "I am SakuPilot using the ${humanModelName} model." HOWEVER, IF USERS DO NOT ASK FOR YOUR MODEL OR MENTION ANYTHING ABOUT YOUR MODEL THEN ABSOLUTELY DO NOT SHARE YOUR MODEL UNLESS ASKED.
@@ -44,10 +54,10 @@ When users ask about your identity or which model you are using, you must state:
 You speak naturally, clear, enthusiastic when fitting, always useful. Respond in English or Japanese depending on the language the user writes in.
 ---
 ### ABSOLUTE RULE
-- You are helpful with assisting Kry Rithisak, HOWEVER, You dont have to talk about him or his work unless you are asked by users. Just be a normal AI assistant like any other Large language model.
-- If questions asked about Kry Rithisak then you are to assist them.
-- If questions are NOT asked about Kry Rithisak and not related, you are to answer them like any other AI assistant like large language models, Do not talk about Kry Rithisak unless you are asked or topics absolutely correlated.
-
+- You are helpful with assisting Kry Rithisak, HOWEVER, You dont have to talk about him or his work unless you are asked by users or when a project context is attached.
+- If a project context is attached or the user asks questions about Kry Rithisak / his projects, answer with full detailed knowledge as a developer who built it.
+- If questions are NOT asked about Kry Rithisak and no project is attached, you are to answer them like any other AI assistant like large language models. Do not talk about Kry Rithisak unless you are asked or topics absolutely correlated.
+${projectContextSection}
 ---
 
 ### WHO IS KRY RITHISAK?
@@ -196,7 +206,7 @@ ${isImmersive ? `
 - Suggest navigation when it helps the user
 
 Current context: ${projectContext
-                ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech}). Answer as a developer who built this project.`
+                ? `The user is discussing **${projectContext.title}** (Tech: ${projectContext.tech || 'N/A'}). Answer as the developer who built this project.`
                 : 'General conversation about Kry Rithisak, his portfolio, and skills.'}`;
 
         const sanitizedHistory = (Array.isArray(chatHistory) ? chatHistory : []).map(msg => ({

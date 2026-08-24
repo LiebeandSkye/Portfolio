@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { GoDependabot } from "react-icons/go";
 import { IoDocumentOutline } from "react-icons/io5";
+import { HiOutlineCodeBracket } from "react-icons/hi2";
 import MessageContent from './MessageContent';
 import BotMessage from './BotMessage';
 
@@ -115,9 +116,17 @@ const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate 
                 min-w-0 max-w-[85%] rounded-xl text-sm min-h-[1.5em] overflow-visible
                 ${isUser ? 'bg-(--pixel) px-3 py-2.5' : 'px-1 py-0.5'}
             `}>
-                {isUser && msg.files?.length > 0 && (
+                {isUser && (msg.files?.length > 0 || msg.project) && (
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                        {msg.files.map((file, fi) => (
+                        {msg.project && (
+                            <div className="flex items-center gap-1.5 bg-(--pixel2) border border-(--border-light) rounded-md px-2 py-1">
+                                <HiOutlineCodeBracket size={11} className="text-(--sucess) flex-shrink-0" />
+                                <span className="text-[11px] text-(--text-light) font-medium truncate max-w-[150px]">
+                                    {msg.project.title || msg.project}
+                                </span>
+                            </div>
+                        )}
+                        {msg.files?.map((file, fi) => (
                             <div key={fi} className="flex items-center gap-1.5 bg-(--pixel2) border border-(--border-light) rounded-md px-2 py-1">
                                 <IoDocumentOutline size={11} className="text-(--text-gray) flex-shrink-0" />
                                 <span className="text-[11px] text-(--text-gray) truncate max-w-[110px]">{file.name}</span>

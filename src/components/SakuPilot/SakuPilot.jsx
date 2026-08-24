@@ -7,6 +7,7 @@ import { GoDependabot } from "react-icons/go";
 
 import Projects from '../../Data/Projects';
 import { getGroqResponse } from '../../Utils/groq';
+import { getProjectTechSummary } from '../../Utils/projectContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
 import Tooltip from '../ui/Tooltip';
@@ -174,19 +175,23 @@ const SakuPilot = ({ isOpen, onClose }) => {
             fileContext = '\n\nAttached Files:\n' + contents.join('\n\n');
         }
 
+        const projectTitle = selectedProject ? t(`projects.${selectedProject.langKey}.title`) : null;
+        const projectContext = selectedProject ? {
+            id: selectedProject.id,
+            title: projectTitle,
+            tech: getProjectTechSummary(selectedProject),
+            description: selectedProject.description,
+            role: 'Developer',
+        } : null;
+
         setMessages(prev => [...prev, {
             role: 'user',
             content: text || `Uploaded ${attachedFiles.length} file(s)`,
             files: filesMeta.length > 0 ? filesMeta : undefined,
+            project: projectTitle ? { title: projectTitle } : undefined,
         }]);
         setInputValue('');
         setAttachedFiles([]);
-
-        const projectContext = selectedProject ? {
-            title: t(`projects.${selectedProject.langKey}.title`),
-            tech: selectedProject.tech?.join(', '),
-            role: 'Developer',
-        } : null;
 
         // Use a snapshot of messages BEFORE the user msg was added
         // (the setMessages above is async in React 18, so we pass the pre-update array)
