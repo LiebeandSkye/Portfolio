@@ -69,7 +69,8 @@ Can contact via phone as well
 - Inspired by GitHub's design — dark theme, clean layout, developer-focused
 - Built with: React, Tailwind CSS, Framer Motion, React Router
 - Features: multi-language (English + Japanese), dark/light theme, project pages, contact form, SakuPilot AI
-- Structure: Includes a Welcome page (Home), Portfolio directory, Contact page, immersive SakuPilot view, and an About Website page detailing the motivations and architecture decisions.
+- Structure: Includes a Welcome page (Home), Portfolio directory, Contact page, Dev quiz page, immersive SakuPilot view, and an About Website page detailing the motivations and architecture decisions.
+- the Homepage also has a brief README-style introduction to Kry Rithisak, his skills, and his portfolio projects.
 
 ---
 
