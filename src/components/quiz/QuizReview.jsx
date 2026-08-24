@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { FaArrowLeft, FaCheck, FaXmark, FaRotateLeft } from 'react-icons/fa6';
 import { FaLightbulb, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import CodeSnippet from './CodeSnippet';
+import FormattedText from './FormattedText';
+import TopicIcon from './TopicIcon';
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -102,9 +105,10 @@ const QuizReview = ({ history, onBackToScore, onRetakeQuiz, onChangeTopics }) =>
                   <span className="font-bold text-xs text-(--text-gray)">
                     #{index + 1}
                   </span>
-                  <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light)">
-                    {question.categoryName}
-                  </span>
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light)">
+                    <TopicIcon categoryId={question.category} size={12} className="w-4 h-4 rounded-sm border-0 bg-transparent" />
+                    <span>{question.categoryName}</span>
+                  </div>
                 </div>
 
                 <span
@@ -128,14 +132,12 @@ const QuizReview = ({ history, onBackToScore, onRetakeQuiz, onChangeTopics }) =>
 
               {/* Question Text */}
               <h3 className="font-semibold text-sm sm:text-base text-(--text-light) mb-3 leading-relaxed">
-                {question.question}
+                <FormattedText text={question.question} />
               </h3>
 
-              {/* Code Snippet if applicable */}
+              {/* Formatted Code Snippet */}
               {question.codeSnippet && (
-                <div className="mb-4 p-3 bg-(--code-block-bg) rounded-lg border border-(--border-light)/30 overflow-x-auto text-xs font-mono text-gray-200">
-                  <pre>{question.codeSnippet}</pre>
-                </div>
+                <CodeSnippet code={question.codeSnippet} language={question.language || question.category} />
               )}
 
               {/* Options */}
@@ -166,7 +168,7 @@ const QuizReview = ({ history, onBackToScore, onRetakeQuiz, onChangeTopics }) =>
                         {OPTION_LABELS[optIdx]}
                       </div>
                       <span className="flex-1 pt-0.5 leading-relaxed text-(--text-light)">
-                        {optText}
+                        <FormattedText text={optText} />
                       </span>
                       {isUserPick && !isRightAnswer && (
                         <span className="text-[10px] uppercase font-bold text-red-400 tracking-wider shrink-0 mt-0.5">
@@ -190,7 +192,7 @@ const QuizReview = ({ history, onBackToScore, onRetakeQuiz, onChangeTopics }) =>
                   <span>Explanation:</span>
                 </div>
                 <p className="text-xs sm:text-sm text-(--text-light)/90 leading-relaxed">
-                  {question.explanation}
+                  <FormattedText text={question.explanation} />
                 </p>
               </div>
             </div>

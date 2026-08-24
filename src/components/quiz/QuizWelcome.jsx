@@ -3,15 +3,12 @@ import { FaBrain } from 'react-icons/fa6';
 
 const QuizWelcome = ({ onStart }) => {
   return (
-    <div className="border border-(--border-light) w-full py-6 px-4 sm:px-8 flex flex-col items-center justify-center min-h-[460px] text-center">
-      <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-6 pb-2 border-b border-(--border-light)/40">
+    <div className="border border-(--border-light) w-full py-4 px-4 sm:px-6 flex flex-col items-center justify-center min-h-[460px] text-center">
+      <div className="w-full flex items-center justify-between text-xs text-(--text-light) mb-6 pb-2">
         <p>
           Kry-Rithisak<span className="text-(--text-gray)"> / </span>DevQuiz
           <span className="text-(--text-gray)">.jsx</span>
         </p>
-        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border border-(--border-light) bg-(--pixel)">
-          <FaBrain className="text-(--sucess)" size={12} /> Interactive
-        </span>
       </div>
 
       <div className="max-w-2xl mx-auto flex flex-col items-center my-4">
@@ -47,9 +44,8 @@ const QuizWelcome = ({ onStart }) => {
 
         <button
           onClick={onStart}
-          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2.5 px-8 rounded-lg shadow-sm hover:shadow transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 text-sm sm:text-base flex items-center gap-2"
+          className="bg-(--sucess) hover:bg-(--sucess-hover) text-white font-semibold py-2 px-6 rounded-lg shadow-sm hover:shadow transition-all duration-200 cursor-pointer transform active:translate-y-0 text-sm sm:text-base flex items-center gap-2"
         >
-          <FaBrain size={16} />
           Start Quiz
         </button>
       </div>

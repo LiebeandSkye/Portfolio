@@ -1,6 +1,9 @@
 import React from 'react';
 import { FaCheck, FaXmark, FaArrowRight, FaRotateLeft } from 'react-icons/fa6';
-import { FaLightbulb } from 'react-icons/fa';
+import { FaLightbulb, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import CodeSnippet from './CodeSnippet';
+import FormattedText from './FormattedText';
+import TopicIcon from './TopicIcon';
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -23,14 +26,15 @@ const QuizPlay = ({
     <div className="border border-(--border-light) w-full py-6 px-4 sm:px-6 flex flex-col">
       {/* Header bar: Progress & Topic */}
       <div className="w-full flex items-center justify-between text-xs text-(--text-gray) mb-4 pb-3 border-b border-(--border-light)/50 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <span className="font-semibold text-(--text-light)">
             Question {currentIndex + 1} of {totalQuestions}
           </span>
           <span className="text-(--text-gray)">•</span>
-          <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light)">
-            {question.categoryName}
-          </span>
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium bg-(--pixel) text-(--text-light) border border-(--border-light)">
+            <TopicIcon categoryId={question.category} size={13} className="w-4 h-4 rounded-sm border-0 bg-transparent" />
+            <span>{question.categoryName}</span>
+          </div>
         </div>
 
         <button
@@ -52,14 +56,12 @@ const QuizPlay = ({
       {/* Question Text */}
       <div className="mb-5">
         <h2 className="text-base sm:text-lg font-semibold text-(--text-light) leading-relaxed">
-          {question.question}
+          <FormattedText text={question.question} />
         </h2>
 
-        {/* Code Snippet if applicable */}
+        {/* Formatted Code Snippet */}
         {question.codeSnippet && (
-          <div className="mt-3 p-3 bg-(--code-block-bg) rounded-lg border border-(--border-light)/30 overflow-x-auto text-xs sm:text-sm font-mono text-gray-200">
-            <pre>{question.codeSnippet}</pre>
-          </div>
+          <CodeSnippet code={question.codeSnippet} language={question.language || question.category} />
         )}
       </div>
 
@@ -111,7 +113,7 @@ const QuizPlay = ({
 
               {/* Option Text */}
               <span className="flex-1 pt-0.5 leading-relaxed text-(--text-light)">
-                {optionText}
+                <FormattedText text={optionText} />
               </span>
             </button>
           );
@@ -133,18 +135,26 @@ const QuizPlay = ({
               Explanation
             </h3>
             <span
-              className={`ml-auto text-xs font-semibold px-2 py-0.5 rounded-full ${
+              className={`ml-auto text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
                 isCorrect
                   ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                   : 'bg-red-500/20 text-red-400 border border-red-500/30'
               }`}
             >
-              {isCorrect ? 'Correct! 🎉' : `Incorrect (Correct: Option ${OPTION_LABELS[question.correctIndex]})`}
+              {isCorrect ? (
+                <>
+                  <FaCheckCircle size={12} /> Correct
+                </>
+              ) : (
+                <>
+                  <FaTimesCircle size={12} /> Incorrect (Option {OPTION_LABELS[question.correctIndex]})
+                </>
+              )}
             </span>
           </div>
 
           <p className="text-xs sm:text-sm text-(--text-light) leading-relaxed">
-            {question.explanation}
+            <FormattedText text={question.explanation} />
           </p>
         </div>
       )}

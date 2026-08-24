@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaTrophy, FaRotateLeft, FaListCheck, FaArrowRight, FaBrain } from 'react-icons/fa6';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import TopicIcon from './TopicIcon';
 
 const QuizResult = ({
   score,
@@ -15,32 +16,33 @@ const QuizResult = ({
 
   // Compute category breakdown
   const categoryStats = history.reduce((acc, item) => {
-    const cat = item.question.categoryName;
-    if (!acc[cat]) {
-      acc[cat] = { correct: 0, total: 0 };
+    const catId = item.question.category;
+    const catName = item.question.categoryName;
+    if (!acc[catId]) {
+      acc[catId] = { id: catId, name: catName, correct: 0, total: 0 };
     }
-    acc[cat].total += 1;
+    acc[catId].total += 1;
     if (item.isCorrect) {
-      acc[cat].correct += 1;
+      acc[catId].correct += 1;
     }
     return acc;
   }, {});
 
   // Mastery badge logic
-  let masteryTitle = 'Good Effort! Keep Practicing 💪';
+  let masteryTitle = 'Good Effort! Keep Practicing';
   let masteryDesc = 'Review your mistakes below to turn your knowledge gaps into strengths.';
   let badgeColor = 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10';
 
   if (percentage === 100) {
-    masteryTitle = 'Perfect Score! Absolute Master 🏆';
+    masteryTitle = 'Perfect Score! Absolute Master';
     masteryDesc = 'You demonstrated complete mastery across all tested developer domains!';
     badgeColor = 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
   } else if (percentage >= 80) {
-    masteryTitle = 'Excellent Performance! 🚀';
+    masteryTitle = 'Excellent Performance!';
     masteryDesc = 'You have a deep and solid understanding of these core technologies.';
     badgeColor = 'text-blue-400 border-blue-500/30 bg-blue-500/10';
   } else if (percentage >= 60) {
-    masteryTitle = 'Well Done! On the Path to Mastery ⭐';
+    masteryTitle = 'Well Done! On the Path to Mastery';
     masteryDesc = 'Solid foundation. A quick review will make you unstoppable.';
     badgeColor = 'text-purple-400 border-purple-500/30 bg-purple-500/10';
   }
@@ -100,25 +102,28 @@ const QuizResult = ({
         </div>
       </div>
 
-      {/* Breakdown By Category */}
+      {/* Breakdown By Category with TopicIcons */}
       <div className="w-full max-w-lg mb-8 border border-(--border-light) rounded-xl p-4 sm:p-5 bg-(--pixel)/40">
         <h3 className="text-xs font-bold text-(--text-gray) uppercase tracking-wider mb-3">
           Topic Breakdown
         </h3>
-        <div className="flex flex-col gap-2.5">
-          {Object.entries(categoryStats).map(([category, stats]) => {
+        <div className="flex flex-col gap-3">
+          {Object.values(categoryStats).map((stats) => {
             const catPercent = Math.round((stats.correct / stats.total) * 100);
             return (
-              <div key={category} className="flex flex-col gap-1 text-xs">
+              <div key={stats.id} className="flex flex-col gap-1 text-xs">
                 <div className="flex items-center justify-between text-(--text-light)">
-                  <span className="font-medium">{category}</span>
+                  <div className="flex items-center gap-2">
+                    <TopicIcon categoryId={stats.id} size={12} className="w-4 h-4 rounded-xs border-0 bg-transparent" />
+                    <span className="font-medium">{stats.name}</span>
+                  </div>
                   <span className="font-mono text-(--text-gray)">
                     {stats.correct}/{stats.total} ({catPercent}%)
                   </span>
                 </div>
                 <div className="w-full bg-(--border-light)/40 h-1.5 rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full ${
+                    className={`h-full rounded-full transition-all duration-300 ${
                       catPercent >= 80
                         ? 'bg-green-500'
                         : catPercent >= 50

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { QUIZ_CATEGORIES } from '../../Data/quizData';
 import { FaCheck, FaArrowLeft, FaPlay } from 'react-icons/fa6';
 import { LuCheckCheck, LuX } from 'react-icons/lu';
+import TopicIcon from './TopicIcon';
 
 const QUESTION_COUNT_OPTIONS = [5, 10, 15, 20, 'All'];
 
@@ -115,7 +116,7 @@ const QuizTopicSelect = ({
             >
               {/* Checkbox Icon */}
               <div
-                className={`mt-0.5 w-5 h-5 rounded flex items-center justify-center shrink-0 border transition-colors ${
+                className={`mt-1 w-5 h-5 rounded flex items-center justify-center shrink-0 border transition-colors ${
                   isChecked
                     ? 'bg-(--sucess) border-(--sucess) text-white'
                     : 'border-(--border-light) bg-(--pixel)'
@@ -124,10 +125,12 @@ const QuizTopicSelect = ({
                 {isChecked && <FaCheck size={10} />}
               </div>
 
+              {/* Authentic Topic Icon */}
+              <TopicIcon categoryId={cat.id} size={16} className="mt-0.5" />
+
               {/* Topic Info */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-base">{cat.icon}</span>
                   <span className="font-semibold text-sm text-(--text-light)">
                     {cat.name}
                   </span>
