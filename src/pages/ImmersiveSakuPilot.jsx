@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,8 +23,8 @@ import {
     FiClock
 } from 'react-icons/fi';
 import { BsPinAngle, BsPinAngleFill } from 'react-icons/bs';
-import { GoDependabot } from 'react-icons/go';
 
+import SakuPilotIcon from '../assets/Tools/SakuPilotIcon.poster.png';
 import GroqIcon from '../assets/Tools/chatgpt.png';
 import GeminiIcon from '../assets/Models/gemini.jpg';
 
@@ -99,6 +100,15 @@ const ImmersiveSakuPilot = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        if (!isSearchOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') setIsSearchOpen(false);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isSearchOpen]);
 
     useEffect(() => {
         // Close sidebar by default on mobile
@@ -380,10 +390,9 @@ const ImmersiveSakuPilot = () => {
                     >
                         <div className="w-[290px] h-full flex flex-col p-3">
                     <div className="mb-3 flex items-center justify-between px-2 py-1">
-                        <div className="flex items-center gap-2 text-sm font-semibold">
-                            <GoDependabot className="text-(--sucess)" />
+                        <span className="text-base font-bold tracking-tight text-(--text-light)">
                             SakuPilot
-                        </div>
+                        </span>
                         <button className="rounded-md p-2 hover:bg-(--pixel-hover) md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar">
                             <FiX />
                         </button>
@@ -725,9 +734,33 @@ const ImmersiveSakuPilot = () => {
                 <div ref={scrollRef} onScroll={handleScroll} className="no-scrollbar flex-1 overflow-y-auto px-3 py-6 sm:px-5 md:px-6 min-h-0">
                     {activeConversation.messages.length === 0 ? (
                         <div className="mx-auto flex min-h-full max-w-[720px] flex-col items-center justify-center text-center">
-                            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel)">
-                                <GoDependabot size={24} className="text-(--sucess)" />
+                            {/* 3D Floating Mascot with Optical Depth Illusion */}
+                            <div className="relative mb-6 flex flex-col items-center justify-center select-none">
+                                {/* Ambient Monochrome Depth Glow */}
+                                <div className="absolute -inset-6 rounded-full bg-gradient-to-b from-white/30 via-neutral-400/20 to-black/30 dark:from-white/15 dark:via-neutral-700/20 dark:to-black/60 blur-2xl pointer-events-none" />
+                                
+                                {/* Floating 3D Character */}
+                                <motion.div
+                                    animate={{ y: [0, -8, 0] }}
+                                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+                                    className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center select-none pointer-events-none"
+                                >
+                                    <img
+                                        src={SakuPilotIcon}
+                                        alt="SakuPilot"
+                                        className="w-full h-full object-contain filter drop-shadow-[0_16px_20px_rgba(0,0,0,0.45)] drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)] drop-shadow-[0_1px_2px_rgba(255,255,255,0.2)] select-none pointer-events-none"
+                                        draggable={false}
+                                    />
+                                </motion.div>
+
+                                {/* 3D Optical Ground Shadow (dynamic height illusion) */}
+                                <motion.div
+                                    animate={{ scale: [1, 0.72, 1], opacity: [0.55, 0.22, 0.55] }}
+                                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+                                    className="w-20 sm:w-24 h-3 -mt-1 rounded-[50%] bg-black/45 dark:bg-black/70 blur-[3px] select-none pointer-events-none"
+                                />
                             </div>
+
                             <h2 className="mb-3 text-2xl font-semibold md:text-3xl">{t('sakupilot.immersive.whereToBegin')}</h2>
                             <p className="mb-6 max-w-xl text-sm leading-6 text-(--text-gray)">
                                 {t('sakupilot.immersive.description')}
@@ -760,15 +793,21 @@ const ImmersiveSakuPilot = () => {
                                 />
                             )}
                             {isThinking && !typingMessage && (
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-3.5">
                                     <motion.div
-                                        animate={{ scale: [1, 1.12, 1] }}
-                                        transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel2)"
+                                        animate={{ y: [0, -3, 0] }}
+                                        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                                        className="relative flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center select-none"
                                     >
-                                        <GoDependabot className="text-(--sucess)" />
+                                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_4px_12px_rgba(0,0,0,0.2)] animate-pulse" />
+                                        <img
+                                            src={SakuPilotIcon}
+                                            alt="SakuPilot"
+                                            className="relative z-10 w-full h-full object-contain p-1 filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] select-none pointer-events-none"
+                                            draggable={false}
+                                        />
                                     </motion.div>
-                                    <span className="animate-thinking text-sm">{t('sakupilot.immersive.thinking')}</span>
+                                    <span className="animate-thinking text-sm font-medium">{t('sakupilot.immersive.thinking')}</span>
                                 </div>
                             )}
 
@@ -845,9 +884,17 @@ const ImmersiveSakuPilot = () => {
                 </div>
             </div>
 
-            {isSearchOpen && (
-                <div className="fixed inset-0 z-[120] flex items-start justify-center bg-black/45 px-4 pt-20 backdrop-blur-[1px]">
-                    <div className="flex max-h-[70vh] w-full max-w-[760px] flex-col overflow-hidden rounded-2xl border border-(--border-light) bg-(--pixel2) shadow-2xl">
+            {isSearchOpen && typeof document !== 'undefined' && createPortal(
+                <div 
+                    className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/50 px-4 pt-20 backdrop-blur-[1px] cursor-pointer"
+                    onClick={() => setIsSearchOpen(false)}
+                    role="dialog"
+                    aria-modal="true"
+                >
+                    <div 
+                        className="flex max-h-[70vh] w-full max-w-[760px] flex-col overflow-hidden rounded-2xl border border-(--border-light) bg-(--pixel2) shadow-2xl cursor-default"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="flex items-center gap-3 border-b border-(--border-light) px-5 py-4">
                             <FiSearch className="shrink-0 text-(--text-gray)" />
                             <input
@@ -860,14 +907,14 @@ const ImmersiveSakuPilot = () => {
                                     if (event.key === 'Escape') setIsSearchOpen(false);
                                 }}
                             />
-                            <button onClick={() => setIsSearchOpen(false)} className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)" aria-label="Close search">
+                            <button onClick={() => setIsSearchOpen(false)} className="rounded-md p-2 text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light) cursor-pointer" aria-label="Close search">
                                 <FiX />
                             </button>
                         </div>
                         <div className="no-scrollbar flex-1 overflow-y-auto p-3">
                             <button
                                 onClick={handleNewChat}
-                                className="mb-3 flex w-full items-center gap-3 rounded-xl bg-(--pixel-hover) px-4 py-3 text-left text-sm font-medium"
+                                className="mb-3 flex w-full items-center gap-3 rounded-xl bg-(--pixel-hover) px-4 py-3 text-left text-sm font-medium cursor-pointer"
                             >
                                 <FiEdit3 />
                                 {t('sakupilot.immersive.newChat')}
@@ -921,7 +968,8 @@ const ImmersiveSakuPilot = () => {
                             )}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </section>
     );
@@ -938,8 +986,14 @@ const ChatMessage = ({ message, handleNavigate }) => {
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
         >
             {!isUser && (
-                <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-(--border-light) bg-(--pixel2)">
-                    <GoDependabot className="text-(--sucess)" />
+                <div className="relative mt-0.5 flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center select-none">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.15)]" />
+                    <img
+                        src={SakuPilotIcon}
+                        alt="SakuPilot"
+                        className="relative z-10 w-full h-full object-contain p-1 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)] select-none pointer-events-none transition-transform duration-200 hover:scale-110"
+                        draggable={false}
+                    />
                 </div>
             )}
             <div className={`min-w-0 max-w-[88%] overflow-visible ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1'}`}>

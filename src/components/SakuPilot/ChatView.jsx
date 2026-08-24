@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-import { GoDependabot } from "react-icons/go";
 import { IoDocumentOutline } from "react-icons/io5";
 import { HiOutlineCodeBracket } from "react-icons/hi2";
 import MessageContent from './MessageContent';
 import BotMessage from './BotMessage';
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 /**
  * ChatView — renders committed messages only.
@@ -43,9 +43,9 @@ const ChatView = memo(function ChatView({
                         animate={{ opacity: 1, y: 0 }}
                         className="flex flex-col gap-2"
                     >
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className="w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center flex-shrink-0">
-                                <GoDependabot size={15} className="text-(--sucess)" />
+                        <div className="flex items-center gap-2.5 mb-1">
+                            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 flex items-center justify-center flex-shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(0,0,0,0.15)] select-none">
+                                <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none pointer-events-none" draggable={false} />
                             </div>
                             <p className="text-xs text-(--text-gray)">
                                 Ask me anything about{' '}
@@ -89,11 +89,11 @@ const ChatView = memo(function ChatView({
 
                 {/* Thinking dots */}
                 {isThinking && (
-                    <div className="flex items-center gap-2">
-                        <div className="flex-shrink-0 w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center">
-                            <GoDependabot size={14} className="text-(--sucess)" />
+                    <div className="flex items-center gap-2.5">
+                        <div className="relative flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(0,0,0,0.15)] select-none">
+                            <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none pointer-events-none" draggable={false} />
                         </div>
-                        <span className="animate-thinking text-sm">
+                        <span className="animate-thinking text-sm font-medium">
                             SakuPilot is thinking...
                         </span>
                     </div>
@@ -106,10 +106,10 @@ const ChatView = memo(function ChatView({
 // ─── Individual message bubble — memoized so it never re-renders after commit ─
 const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate }) {
     return (
-        <div className={`flex gap-2 ${isUser ? 'justify-end' : 'justify-start items-start'} w-full min-w-0`}>
+        <div className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start items-start'} w-full min-w-0`}>
             {!isUser && (
-                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center mt-0.5">
-                    <GoDependabot size={14} className="text-(--sucess)" />
+                <div className="relative flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 flex items-center justify-center mt-0.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(0,0,0,0.15)] select-none">
+                    <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none pointer-events-none" draggable={false} />
                 </div>
             )}
             <div className={`

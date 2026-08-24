@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { IoClose, IoAddOutline } from "react-icons/io5";
 import { HiOutlineCodeBracket } from "react-icons/hi2";
-import { GoDependabot } from "react-icons/go";
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 import Projects from '../../Data/Projects';
 import { getGroqResponse } from '../../Utils/groq';
@@ -335,8 +335,8 @@ const SakuPilot = ({ isOpen, onClose }) => {
                         {/* Header */}
                         <div className="flex-shrink-0 p-4 border-b border-(--border-light) flex justify-between items-center">
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center">
-                                    <GoDependabot size={14} className="text-(--sucess)" />
+                                <div className="relative w-7 h-7 rounded-lg bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] select-none">
+                                    <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none pointer-events-none" draggable={false} />
                                 </div>
                                 <span className="text-sm font-semibold text-(--text-light)">SakuPilot</span>
                             </div>

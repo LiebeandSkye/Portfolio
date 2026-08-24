@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { createPortal } from 'react-dom';
 import DarkTheme from '../Header/DarkTheme';
 import Language from '../Header/Lang/Language';
 import Information from '../../Data/Contacts';
@@ -58,6 +59,18 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
         };
     }, [isOpen]);
 
+    // Close on Escape key
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                toggleSidebar();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, toggleSidebar]);
+
     const randomizeQuote = useCallback(() => {
         const quotes = t('quotes');
         if (Array.isArray(quotes) && quotes.length > 0) {
@@ -76,16 +89,23 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
         setNotification({ show: true, message: t('copyMessage') });
     }, [t]);
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <>
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black/65 backdrop-blur-[1px] z-[99990]"
                     onClick={toggleSidebar}
+                    aria-hidden="true"
                 />
             )}
 
-            <div className={`
+            <div
+                role="dialog"
+                aria-modal="true"
+                aria-label="Navigation Menu"
+                className={`
                 fixed top-0 right-0 h-full w-74 md:w-100
                 bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text)
                 shadow-2xl z-[99999] border-l border-(--border-light)
@@ -97,7 +117,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
             `}>
                 {/* Close */}
                 <div className="flex justify-end p-6">
-                    <button onClick={toggleSidebar} className="text-lg cursor-pointer">
+                    <button onClick={toggleSidebar} className="text-lg cursor-pointer" aria-label="Close Menu">
                         <RxCross2 />
                     </button>
                 </div>
@@ -230,7 +250,8 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                     </div>
                 </div>
             </div>
-        </>
+        </>,
+        document.body
     );
 });
 

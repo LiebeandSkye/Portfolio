@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTriangleExclamation, FaArrowRightFromBracket, FaXmark } from 'react-icons/fa6';
 
@@ -22,7 +23,9 @@ const ConfirmQuitModal = ({ isOpen, onCancel, onConfirm, currentQuestion, totalQ
     };
   }, [isOpen, handleKeyDown]);
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div
@@ -97,7 +100,8 @@ const ConfirmQuitModal = ({ isOpen, onCancel, onConfirm, currentQuestion, totalQ
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
