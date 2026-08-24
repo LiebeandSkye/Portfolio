@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { createPortal } from 'react-dom';
 import DarkTheme from '../Header/DarkTheme';
 import Language from '../Header/Lang/Language';
 import Information from '../../Data/Contacts';
@@ -8,6 +9,8 @@ import { RxCross2 } from "react-icons/rx";
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { FaHome, FaRandom } from "react-icons/fa";
+import { FaBrain } from "react-icons/fa6";
+import { LuBrain } from "react-icons/lu";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { GoDependabot } from 'react-icons/go';
@@ -15,11 +18,13 @@ import profile from '../../assets/Kry_Rithisak.optimized.jpg';
 
 const ICON_HOME    = <FaHome />;
 const ICON_CODE    = <MdOutlineCode />;
+const ICON_BRAIN   = <LuBrain />;
 const ICON_MESSAGE = <RiMessage2Line />;
 
 const LINK_DEFS = [
     { path: '/',          icon: ICON_HOME,    labelKey: 'links.welcome'   },
     { path: '/portfolio', icon: ICON_CODE,    labelKey: 'links.portfolio' },
+    { path: '/dev-quiz',  icon: ICON_BRAIN,   labelKey: 'links.devQuiz'   },
     { path: '/contact',   icon: ICON_MESSAGE, labelKey: 'links.contact'   },
 ];
 
@@ -34,25 +39,37 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
 
     // Body scroll lock
     useEffect(() => {
-    const body = document.body;
+        const body = document.body;
 
-    if (isOpen) {
-        const sw = window.innerWidth - document.documentElement.clientWidth;
+        if (isOpen) {
+            const sw = window.innerWidth - document.documentElement.clientWidth;
 
-        requestAnimationFrame(() => {
-            body.style.overflow = 'hidden';
-            body.style.paddingRight = `${sw}px`;
-        });
-    } else {
-        body.style.overflow = '';
-        body.style.paddingRight = '';
-    }
+            requestAnimationFrame(() => {
+                body.style.overflow = 'hidden';
+                body.style.paddingRight = `${sw}px`;
+            });
+        } else {
+            body.style.overflow = '';
+            body.style.paddingRight = '';
+        }
 
-    return () => {
-        body.style.overflow = '';
-        body.style.paddingRight = '';
-    };
-}, [isOpen]);
+        return () => {
+            body.style.overflow = '';
+            body.style.paddingRight = '';
+        };
+    }, [isOpen]);
+
+    // Close on Escape key
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                toggleSidebar();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, toggleSidebar]);
 
     const randomizeQuote = useCallback(() => {
         const quotes = t('quotes');
@@ -72,16 +89,23 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
         setNotification({ show: true, message: t('copyMessage') });
     }, [t]);
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <>
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black/65 backdrop-blur-[1px] z-[99990]"
                     onClick={toggleSidebar}
+                    aria-hidden="true"
                 />
             )}
 
-            <div className={`
+            <div
+                role="dialog"
+                aria-modal="true"
+                aria-label="Navigation Menu"
+                className={`
                 fixed top-0 right-0 h-full w-74 md:w-100
                 bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text)
                 shadow-2xl z-[99999] border-l border-(--border-light)
@@ -93,7 +117,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
             `}>
                 {/* Close */}
                 <div className="flex justify-end p-6">
-                    <button onClick={toggleSidebar} className="text-lg cursor-pointer">
+                    <button onClick={toggleSidebar} className="text-lg cursor-pointer" aria-label="Close Menu">
                         <RxCross2 />
                     </button>
                 </div>
@@ -226,7 +250,8 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                     </div>
                 </div>
             </div>
-        </>
+        </>,
+        document.body
     );
 });
 

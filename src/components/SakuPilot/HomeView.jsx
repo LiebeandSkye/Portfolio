@@ -1,16 +1,17 @@
 import React, { memo } from 'react';
-import { GoArrowRight, GoDependabot } from "react-icons/go";
+import { GoArrowRight } from "react-icons/go";
 import { IoSearchOutline } from "react-icons/io5";
 import Kry_Rithisak from '../../assets/Kry_Rithisak.optimized.jpg';
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 // memo — only re-renders when filteredProjects or searchQuery changes
 const HomeView = memo(function HomeView({ filteredProjects, searchQuery, setSearchQuery, startChat, t }) {
     return (
         <div className="flex flex-col items-center p-6">
-            <div className="relative w-24 h-24 flex items-center justify-center mb-6 mt-4">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#3fb950] via-[#ab7df8] to-[#2f81f7] animate-rotate-gradient blur-[1px]" />
-                <div className="absolute inset-[3px] bg-(--pixel) rounded-full flex items-center justify-center">
-                    <GoDependabot size={40} className="text-(--text-light)" />
+            <div className="relative w-24 h-24 flex items-center justify-center mb-6 mt-4 select-none">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 via-neutral-500/20 to-black/40 dark:from-white/15 dark:via-neutral-700/20 dark:to-black/60 blur-[3px] opacity-90 pointer-events-none" />
+                <div className="absolute inset-[3px] bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center p-2 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)] select-none">
+                    <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.35)] select-none pointer-events-none" draggable={false} />
                 </div>
             </div>
 

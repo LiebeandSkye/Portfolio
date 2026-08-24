@@ -39,7 +39,7 @@ const BotButton = () => {
                 onClick={() => setIsChatOpen(!isChatOpen)}
                 className="fixed bottom-8 right-4 md:w-32 md:h-32 w-24 h-24 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
             >
-                <img src={SakuPilotIcon} alt="SakuPilotIcon" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full" />
+                <img src={SakuPilotIcon} alt="SakuPilotIcon" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full select-none pointer-events-none" draggable={false} />
             </button>
 
             {/* Chat Window */}

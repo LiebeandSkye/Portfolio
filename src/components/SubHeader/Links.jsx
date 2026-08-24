@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import '../../index.css';
 import { useLanguage } from '../context/LanguageContext';
 import { FaHome } from "react-icons/fa";
+import { FaBrain } from "react-icons/fa6";
+import { LuBrain } from "react-icons/lu";
 import { MdOutlineCode } from "react-icons/md";
 import { RiMessage2Line } from "react-icons/ri";
 import { BsThreeDots } from "react-icons/bs";
@@ -17,6 +19,7 @@ const Links = () => {
     const allLinks = [
         { name: t('links')?.welcome || 'Welcome', path: '/', icon: <FaHome size={14} /> },
         { name: t('links')?.portfolio || 'Portfolio', path: '/portfolio', icon: <MdOutlineCode size={14} /> },
+        { name: t('links')?.devQuiz || 'Dev Quiz', path: '/dev-quiz', icon: <LuBrain size={14} /> },
         { name: t('links')?.contact || 'Get in Touch', path: '/contact', icon: <RiMessage2Line size={14} /> },
     ];
 

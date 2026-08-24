@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Kry_rithisak from '../assets/Kry_Rithisak.optimized.jpg'
 import { useLanguage } from './context/LanguageContext';
@@ -6,6 +7,20 @@ import { useLanguage } from './context/LanguageContext';
 const InfoMobile = () => {
     const { t } = useLanguage();
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Close on ESC and lock body scroll
+    useEffect(() => {
+        if (!isModalOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') setIsModalOpen(false);
+        };
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isModalOpen]);
 
     return (
         <div className='md:hidden border border-(--border-light) w-full py-4 px-4 flex flex-col '>
@@ -29,29 +44,34 @@ const InfoMobile = () => {
             </div>
 
             {/* Image Closer Modal */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div 
-                        onClick={() => setIsModalOpen(false)}
-                        className="fixed inset-0 z-[200] flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.98)_100%)] backdrop-blur-md cursor-pointer"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.92, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.92, opacity: 0 }}
-                            transition={{ type: "spring", stiffness: 350, damping: 26 }}
-                            onClick={(e) => e.stopPropagation()}
-                            className="relative max-w-[90vw] max-h-[85vh] overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-black/40 cursor-default"
+            {typeof document !== 'undefined' && createPortal(
+                <AnimatePresence>
+                    {isModalOpen && (
+                        <div 
+                            onClick={() => setIsModalOpen(false)}
+                            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.98)_100%)] backdrop-blur-md cursor-pointer"
+                            role="dialog"
+                            aria-modal="true"
                         >
-                            <img
-                                src={Kry_rithisak}
-                                alt="Kry Rithisak closer look"
-                                className="w-full h-auto max-h-[85vh] object-contain select-none"
-                            />
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+                            <motion.div
+                                initial={{ scale: 0.92, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.92, opacity: 0 }}
+                                transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="relative max-w-[90vw] max-h-[85vh] overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-black/40 cursor-default"
+                            >
+                                <img
+                                    src={Kry_rithisak}
+                                    alt="Kry Rithisak closer look"
+                                    className="w-full h-auto max-h-[85vh] object-contain select-none"
+                                />
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </div>
     )
 }

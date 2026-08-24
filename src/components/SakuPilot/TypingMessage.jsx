@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import { GoDependabot } from "react-icons/go";
 import BotMessage from './BotMessage';
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 /**
  * TypingMessage — isolated component that updates every 30ms during typing.
@@ -11,11 +11,17 @@ import BotMessage from './BotMessage';
  */
 const TypingMessage = memo(function TypingMessage({ content, onNavigate }) {
     return (
-        <div className="flex gap-2 justify-start items-start px-4 pb-2 w-full min-w-0">
-            <div className="flex-shrink-0 w-7 h-7 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center mt-0.5">
-                <GoDependabot size={14} className="text-(--sucess)" />
+        <div className="flex gap-3 justify-start items-start w-full min-w-0">
+            <div className="relative mt-0.5 flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center select-none">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.15)]" />
+                <img
+                    src={SakuPilotIcon}
+                    alt="SakuPilot"
+                    className="relative z-10 w-full h-full object-contain p-1 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)] select-none pointer-events-none"
+                    draggable={false}
+                />
             </div>
-            <div className="min-w-0 max-w-[85%] rounded-xl text-sm overflow-visible px-1 py-0.5">
+            <div className="min-w-0 max-w-[88%] rounded-xl text-sm overflow-visible py-1">
                 <BotMessage content={content} onNavigate={onNavigate} />
             </div>
         </div>

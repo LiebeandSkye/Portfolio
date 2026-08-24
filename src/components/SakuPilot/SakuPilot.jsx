@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { IoClose, IoAddOutline } from "react-icons/io5";
 import { HiOutlineCodeBracket } from "react-icons/hi2";
-import { GoDependabot } from "react-icons/go";
+import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 
 import Projects from '../../Data/Projects';
 import { getGroqResponse } from '../../Utils/groq';
+import { getProjectTechSummary } from '../../Utils/projectContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
 import Tooltip from '../ui/Tooltip';
@@ -174,19 +175,23 @@ const SakuPilot = ({ isOpen, onClose }) => {
             fileContext = '\n\nAttached Files:\n' + contents.join('\n\n');
         }
 
+        const projectTitle = selectedProject ? t(`projects.${selectedProject.langKey}.title`) : null;
+        const projectContext = selectedProject ? {
+            id: selectedProject.id,
+            title: projectTitle,
+            tech: getProjectTechSummary(selectedProject),
+            description: selectedProject.description,
+            role: 'Developer',
+        } : null;
+
         setMessages(prev => [...prev, {
             role: 'user',
             content: text || `Uploaded ${attachedFiles.length} file(s)`,
             files: filesMeta.length > 0 ? filesMeta : undefined,
+            project: projectTitle ? { title: projectTitle } : undefined,
         }]);
         setInputValue('');
         setAttachedFiles([]);
-
-        const projectContext = selectedProject ? {
-            title: t(`projects.${selectedProject.langKey}.title`),
-            tech: selectedProject.tech?.join(', '),
-            role: 'Developer',
-        } : null;
 
         // Use a snapshot of messages BEFORE the user msg was added
         // (the setMessages above is async in React 18, so we pass the pre-update array)
@@ -330,8 +335,8 @@ const SakuPilot = ({ isOpen, onClose }) => {
                         {/* Header */}
                         <div className="flex-shrink-0 p-4 border-b border-(--border-light) flex justify-between items-center">
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-(--pixel) border border-(--border-light) flex items-center justify-center">
-                                    <GoDependabot size={14} className="text-(--sucess)" />
+                                <div className="relative w-7 h-7 rounded-lg bg-gradient-to-b from-white/20 via-(--pixel2) to-black/20 dark:from-white/10 dark:via-(--pixel2) dark:to-black/40 border border-black/10 dark:border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] select-none">
+                                    <img src={SakuPilotIcon} alt="SakuPilot" className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] select-none pointer-events-none" draggable={false} />
                                 </div>
                                 <span className="text-sm font-semibold text-(--text-light)">SakuPilot</span>
                             </div>
