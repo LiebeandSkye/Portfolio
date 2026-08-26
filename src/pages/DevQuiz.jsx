@@ -18,6 +18,20 @@ function shuffleArray(array) {
   return arr;
 }
 
+// Randomize question options and recalculate correctIndex
+function shuffleQuestionOptions(question) {
+  const optionsWithMeta = question.options.map((opt, idx) => ({
+    text: opt,
+    isCorrect: idx === question.correctIndex,
+  }));
+  const shuffledOptions = shuffleArray(optionsWithMeta);
+  return {
+    ...question,
+    options: shuffledOptions.map((item) => item.text),
+    correctIndex: shuffledOptions.findIndex((item) => item.isCorrect),
+  };
+}
+
 const DevQuiz = () => {
   // Step state: 'welcome' | 'select' | 'quiz' | 'result' | 'review'
   const [step, setStep] = useState('welcome');
@@ -58,7 +72,7 @@ const DevQuiz = () => {
         ? shuffled.length
         : Math.min(Number(questionCount), shuffled.length);
 
-    const quizBatch = shuffled.slice(0, count);
+    const quizBatch = shuffled.slice(0, count).map(shuffleQuestionOptions);
 
     setActiveQuestions(quizBatch);
     setCurrentIndex(0);

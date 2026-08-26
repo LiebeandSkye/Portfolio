@@ -43,25 +43,25 @@ const Info = memo(function Info() {
     }, [addNotification, t]);
 
     return (
-        <div className="w-full md:w-[280px] px-4 md:px-6 flex-shrink-0 hidden md:block">
+        <div className="w-full hidden md:block">
             <div className="flex flex-col justify-center gap-5">
                 {/* Avatar */}
-                <div className="relative w-max mx-auto md:mx-1">
+                <div className="relative w-full max-w-[280px] mx-auto">
                     <div 
                         onClick={() => setIsModalOpen(true)}
-                        className="w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden cursor-pointer border border-(--border-light) group"
+                        className="w-full aspect-square rounded-full overflow-hidden cursor-pointer border border-(--border-light) group"
                     >
                         <img
                             src={Kry_rithisak}
                             alt="Kry Rithisak"
                             width="256"
                             height="256"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                             loading="lazy"
                         />
                     </div>
                     {/* Status Badge */}
-                    <div className="absolute bottom-[12%] left-[85%] z-20 bg-(--light) border border-(--border-light) rounded-full flex items-center p-1.5 md:p-2 cursor-pointer shadow-lg hover:pr-3 md:hover:pr-4 group/badge transition-all duration-300">
+                    <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 z-20 bg-(--light) border border-(--border-light) rounded-full flex items-center p-1.5 md:p-2 cursor-pointer shadow-lg hover:pr-3 md:hover:pr-4 group/badge transition-all duration-300">
                         <span className="shrink-0 leading-none text-base md:text-md">🚀</span>
                         <span className="text-[10px] md:text-xs text-(--text-light) font-medium max-w-0 opacity-0 overflow-hidden whitespace-nowrap transition-all duration-300 group-hover/badge:max-w-xs group-hover/badge:ml-1.5 md:group-hover/badge:ml-2 group-hover/badge:opacity-100">
                             Hello World
@@ -71,21 +71,21 @@ const Info = memo(function Info() {
 
                 {/* Name */}
                 <div className="flex flex-col gap-1">
-                    <p className="font-semibold text-(--text-light) text-3xl">{t('name')}</p>
-                    <p className="text-(--text-gray) font-semibold text-lg leading-relaxed">{t('job')}</p>
+                    <p className="font-semibold text-(--text-light) text-3xl break-words">{t('name')}</p>
+                    <p className="text-(--text-gray) font-semibold text-lg leading-relaxed break-words">{t('job')}</p>
                 </div>
 
                 {/* Description */}
-                <p className="text-(--text-light) leading-relaxed">{t('description')}</p>
+                <p className="text-(--text-light) leading-relaxed break-words">{t('description')}</p>
 
                 {/* Contact info */}
                 <div className="flex flex-col gap-1 border-t border-(--border-light) border-b py-8">
                     {Information.map((info, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                            <div className="flex items-center text-(--text-gray)">{info.icon}</div>
+                        <div key={index} className="flex items-center gap-3 min-w-0">
+                            <div className="flex items-center text-(--text-gray) shrink-0">{info.icon}</div>
                             {info.copy ? (
-                                <div className="flex items-center">
-                                    <span className="text-(--text-light)">{info.name}</span>
+                                <div className="flex items-center min-w-0">
+                                    <span className="text-(--text-light) truncate">{info.name}</span>
                                     <CopyButton text={info.name} onCopy={handleCopy} />
                                 </div>
                             ) : (
@@ -93,7 +93,7 @@ const Info = memo(function Info() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={info.type === 'email' ? `mailto:${info.url}` : info.url}
-                                    className={`text-(--text-light) ${info.blue ? 'hover:text-blue-500 hover:underline' : ''}`}
+                                    className={`text-(--text-light) truncate ${info.blue ? 'hover:text-blue-500 hover:underline' : ''}`}
                                 >
                                     {info.name}
                                 </a>
