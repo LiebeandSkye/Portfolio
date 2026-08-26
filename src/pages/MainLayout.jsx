@@ -3,7 +3,7 @@ import Info from '../components/Info'
 import InfoMobile from '../components/InfoMobile'
 const MainLayout = ({ children }) => {
     return (
-        <div className="max-w-[1400px] mx-auto px-0 sm:px-8 lg:px-24 py-6">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-24 py-6">
 
             <div className="flex flex-col md:flex-row gap-6">
 
