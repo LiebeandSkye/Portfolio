@@ -152,6 +152,8 @@ const MessageContent = memo(({ content }) => {
         if (typeof content !== 'string') return content;
         return content
             .replace(/â€¢/g, '\n•')
+            // Remove standalone "undefined" or "null" lines accidentally emitted between blocks
+            .replace(/(^|\n)\s*(?:undefined|null)\s*(?=\n|$)/gi, '$1')
             // Convert markdown arrow prefixes like "^-> " or "\n-> " to styled arrow bullets
             .replace(/(^|\n)->\s+/g, '$1- → ')
             .replace(/(^|\n)▸\s+/g, '$1- ▸ ')
@@ -164,7 +166,14 @@ const MessageContent = memo(({ content }) => {
         },
         code({ inline, className, children, node, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            const contentStr = String(children);
+            const contentStr = String(children || '');
+            const trimmed = contentStr.trim();
+
+            // Guard against accidental "undefined" or null output from AI models
+            if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
+                return null;
+            }
+
             const isMultiline = contentStr.includes('\n');
             const isInline = inline || (!match && !isMultiline && (!node?.position || node.position.start.line === node.position.end.line));
 
