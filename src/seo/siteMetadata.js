@@ -39,6 +39,12 @@ export const PROJECT_ROUTES = [
     description: 'SakiKaraoke is a real-time collaborative karaoke web application by Kry Rithisak utilizing React, Express, and Socket.IO for synchronized playback and lyrics.',
     keywords: ['SakiKaraoke', 'real-time karaoke', 'Socket.IO', 'React', 'collaborative web app'],
   },
+  {
+    path: '/portfolio/7',
+    name: 'Saku • 咲く',
+    description: 'Saku is a minimal spaced repetition Japanese flashcard Android widget and AI graded reader by Kry Rithisak, featuring 100% on-device AnkiDroid FSRS sync with zero login.',
+    keywords: ['Saku', 'Android widget', 'Japanese flashcards', 'AnkiDroid', 'FSRS', 'Jetpack Compose', 'Gemini Flash', 'Kotlin'],
+  },
 ];
 
 const ROUTES = [
@@ -174,7 +180,7 @@ const currentProjectSchema = (path) => {
     description: project.description,
     url: `${BASE_URL}${project.path}`,
     author: { '@id': `${BASE_URL}/#person` },
-    programmingLanguage: project.keywords.filter((keyword) => ['React', 'JavaScript', 'Socket.IO'].includes(keyword)),
+    programmingLanguage: project.keywords.filter((keyword) => ['React', 'JavaScript', 'Socket.IO', 'Kotlin', 'TypeScript'].includes(keyword)),
   };
 };
 

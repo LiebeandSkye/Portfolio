@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="120" height="120" x="4" y="4" rx="28" fill="#15171C" stroke="#2F3440" stroke-width="4"/>
+  <circle cx="98" cy="30" r="5" fill="#52C47C"/>
+  <text x="64" y="78" font-family="'Noto Sans JP', system-ui, -apple-system, sans-serif" font-weight="900" font-size="34" fill="#E8EAF0" text-anchor="middle" letter-spacing="-1">アンキ</text>
+</svg>

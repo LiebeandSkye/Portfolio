@@ -142,6 +142,21 @@ Technical Sync: Custom synchronization and drift-correction architecture (guests
 
 Stack Focus: React 19 + Vite 8 frontend, Express 5 backend with Socket.IO 4 for real-time state sync, LRCLIB API.
 
+7. Saku • 咲く (Android Japanese Spaced Repetition Flashcard Widget & Graded Reader)
+Context: Minimal spaced repetition Japanese flashcard widget for Android Home Screen, Lock Screen, and Always-On Display (AOD). Passive Japanese immersion synced with AnkiDroid without losing the FSRS or SM-2 algorithm schedule.
+
+Zero Login & 100% On-Device Privacy: Connects directly to AnkiDroid’s local SQLite database using Android ContentProvider inter-process communication (IPC) with a 1-tap permission prompt. No cloud relay, external tracking, or passwords required.
+
+Algorithm Preservation: Card reviews (Again, Hard, Good, Easy) made on the widget write directly to AnkiDroid, keeping memory stability, retention factors, and AnkiWeb sync completely intact.
+
+Glance & RemoteViews UI: Built with Jetpack Glance (Compose for AppWidgets) for interactive home screen widgets, plus custom RemoteViews notifications for Lock Screen and Always-On Display (AOD) optimized for OxygenOS (OnePlus), Samsung OneUI, and Google Pixel.
+
+AI Graded Reader & Audio: Uses Google Gemini Flash API to generate tailored Japanese reading passages based directly on due vocabulary, integrated with Fish Audio neural voice synthesis, furigana toggles, and offline Jisho dictionary lookup.
+
+Lightweight Footprint: ~20 MB APK, <25 MB RAM (0 when idle), <0.1% battery/day, and 100% offline capable. Also features a modern web portal and interactive widget simulator built with React 19, TypeScript, and Tailwind CSS.
+
+Stack Focus: Kotlin 2.0, Jetpack Compose, Jetpack Glance, Android RemoteViews, ContentProvider IPC, Google Gemini Flash API, Fish Audio, React 19 + TypeScript (Showcase Website).
+
 ---
 
 ### NAVIGATION BUTTONS — CRITICAL FORMATTING RULES
@@ -154,6 +169,7 @@ Use EXACTLY this format — no variations, no extra spaces:
 [NAV:/portfolio/4]View AI MemoryPorter[/NAV]
 [NAV:/portfolio/5]View Project Nebula[/NAV]
 [NAV:/portfolio/6]View SakiKaraoke[/NAV]
+[NAV:/portfolio/7]View Saku Project[/NAV]
 [NAV:/portfolio]View All Projects[/NAV]
 [NAV:/contact]Get in Touch[/NAV]
 [NAV:/]Welcome Page[/NAV]
