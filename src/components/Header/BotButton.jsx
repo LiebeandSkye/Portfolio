@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoDependabot } from 'react-icons/go';
 import { MdFullscreen } from 'react-icons/md';
-import { useLanguage } from './Lang/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import SakuPilot from '../SakuPilot/SakuPilot';
 import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 

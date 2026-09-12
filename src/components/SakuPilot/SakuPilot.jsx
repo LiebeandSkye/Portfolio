@@ -134,20 +134,15 @@ const SakuPilot = ({ isOpen, onClose }) => {
             document.body.style.position = 'fixed';
             document.body.style.width    = '100%';
             document.body.style.top      = `-${y}px`;
-        } else {
-            const top = document.body.style.top;
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width    = '';
-            document.body.style.top      = '';
-            if (top) window.scrollTo(0, -parseInt(top));
+
+            return () => {
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.width    = '';
+                document.body.style.top      = '';
+                window.scrollTo(0, y);
+            };
         }
-        return () => {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width    = '';
-            document.body.style.top      = '';
-        };
     }, [isOpen]);
 
     // ── Navigation ────────────────────────────────────────────────────────────

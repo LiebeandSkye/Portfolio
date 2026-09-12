@@ -702,7 +702,7 @@ const Projects = [
         langKey: "saku",
         public: true,
         red: false,
-        description: 'A minimal spaced repetition Japanese flashcard widget for Android Home Screen, Lock Screen, and Always-On Display — seamlessly synced on-device with AnkiDroid (FSRS & SM-2 algorithms) with zero login required.',
+        description: 'A minimal spaced repetition Japanese flashcard widget for Android Home Screen, Lock Screen, and Always-On Display and seamlessly synced on-device with AnkiDroid (FSRS & SM-2 algorithms) with zero login required.',
         bread: '/portfolio',
         code: 'https://github.com/LiebeandSkye/saku',
         demo: 'https://sakuofficialapp.vercel.app',

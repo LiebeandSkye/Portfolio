@@ -116,10 +116,14 @@ const Search = ({ onOpenChat }) => {
         // Step 1: close palette (restores body scroll synchronously via effect)
         close();
 
-        if (item._type === 'pilot' && item.pilotAction === 'openChat') {
-            // Step 2: call onOpenChat via ref — always points to the current
-            // Header state setter, never stale.
-            onOpenChatRef.current?.();
+        if (item._type === 'pilot') {
+            if (item.pilotAction === 'openChat') {
+                // Step 2: call onOpenChat via ref — always points to the current
+                // Header state setter, never stale.
+                onOpenChatRef.current?.();
+            } else if (item.pilotAction === 'openImmersive') {
+                navigate('/sakupilot');
+            }
         } else if (item.path) {
             navigate(item.path);
         }
