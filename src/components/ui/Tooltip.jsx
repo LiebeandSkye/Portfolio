@@ -4,8 +4,7 @@ import React from 'react';
  * Tooltip that renders via a React Portal so it's never clipped by
  * overflow-hidden parents (e.g. the SakuPilot panel).
  *
- * Style matches BotButton.jsx: dark gray pill, arrow pointing up toward trigger,
- * tooltip appears BELOW the trigger (same as BotButton's `top-10` placement).
+ * Style: dark gray pill, arrow pointing toward trigger.
  * Auto-flips to appear ABOVE if there isn't enough space below the viewport.
  */
 

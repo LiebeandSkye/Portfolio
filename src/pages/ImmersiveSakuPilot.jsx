@@ -306,6 +306,14 @@ const ImmersiveSakuPilot = () => {
             console.error(err);
             setError(err);
             setInputValue(lastInput); // Restore input on error
+
+            // Roll back the user message that was already appended
+            const rolledBack = {
+                ...activeConversationRef.current,
+                messages: activeConversationRef.current.messages.slice(0, -1),
+            };
+            persistActiveConversation(rolledBack);
+
             if (err.code === 'RATE_LIMIT') {
                 setRetryCountdown(err.retryAfter || 60);
             }

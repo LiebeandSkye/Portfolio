@@ -188,14 +188,21 @@ const SakuPilot = ({ isOpen, onClose }) => {
         setInputValue('');
         setAttachedFiles([]);
 
-        // Use a snapshot of messages BEFORE the user msg was added
-        // (the setMessages above is async in React 18, so we pass the pre-update array)
-        const response = await getGroqResponse(`${text}${fileContext}`, messages, projectContext);
-        setIsThinking(false);
+        try {
+            // Use a snapshot of messages BEFORE the user msg was added
+            // (the setMessages above is async in React 18, so we pass the pre-update array)
+            const response = await getGroqResponse(`${text}${fileContext}`, messages, projectContext);
 
-        // Start typing animation — does NOT touch `messages` yet
-        setTypingMessage({ fullText: response, displayText: '' });
-    }, [inputValue, attachedFiles, messages, selectedProject, t]);
+            // Start typing animation — does NOT touch `messages` yet
+            setTypingMessage({ fullText: response, displayText: '' });
+        } catch (err) {
+            console.error('SakuPilot API error:', err);
+            addNotification(err.message || 'Failed to get a response. Please try again.', 'error');
+            setInputValue(text); // Restore input so user can retry
+        } finally {
+            setIsThinking(false);
+        }
+    }, [inputValue, attachedFiles, messages, selectedProject, t, addNotification]);
 
     // ── Typing animation — runs in isolation, only TypingMessage re-renders ───
     // Interval: 30ms (was 15ms) — still ~60 chars/sec, imperceptible difference
@@ -358,7 +365,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                         <div
                             ref={messagesContainerRef}
                             onScroll={handleScroll}
-                            className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar min-h-0"
+                            className="flex-1 overflow-y-auto overflow-x-hidden github-scrollbar min-h-0"
                         >
                             {view === 'home' ? (
                                 <HomeView
