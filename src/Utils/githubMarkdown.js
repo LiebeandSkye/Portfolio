@@ -57,6 +57,11 @@ export default function remarkGithubSafe(options) {
     const toMarkdownExtensions = data.toMarkdownExtensions || (data.toMarkdownExtensions = []);
 
     micromarkExtensions.push(gfmWithoutAutolinkLiteral(settings));
+    micromarkExtensions.push({
+        disable: {
+            null: ['codeIndented'],
+        },
+    });
     fromMarkdownExtensions.push(gfmFromMarkdownWithoutAutolinkLiteral());
     toMarkdownExtensions.push(gfmToMarkdownWithoutAutolinkLiteral(settings));
 }

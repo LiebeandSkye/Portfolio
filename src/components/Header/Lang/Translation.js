@@ -108,7 +108,15 @@ const translations = {
             { text: '"We are what we pretend to be, so we must be careful about what we pretend to be."', author: '― Kurt Vonnegut' },
             { text: '"But better to get hurt by the truth than comforted with a lie."', author: '― Khaled Hosseini' },
             { text: '"Instead of worrying about what you cannot control, shift your energy to what you can create."', author: '― Roy T. Bennett' },
-            { text: '"Sometimes it takes a good fall to really know where you stand"', author: '― Hayley Williams' },
+            { text: '"Sometimes it takes a good fall to really know where you stand."', author: '― Hayley Williams' },
+            { text: '"It always seems impossible until it is done."', author: '― Nelson Mandela' },
+            { text: '"The only way to do great work is to love what you do."', author: '― Steve Jobs' },
+            { text: '"Whether you think you can or you think you cannot, you are right."', author: '― Henry Ford' },
+            { text: '"Fall seven times, stand up eight."', author: '― Japanese Proverb' },
+            { text: '"The best time to plant a tree was 20 years ago. The second best time is now."', author: '― Chinese Proverb' },
+            { text: '"Do not wait for the perfect moment, take the moment and make it perfect."', author: '― Unknown' },
+            { text: '"What lies behind us and what lies before us are tiny matters compared to what lies within us."', author: '― Ralph Waldo Emerson' },
+            { text: '"You miss 100% of the shots you do not take."', author: '― Wayne Gretzky' },
         ],
         portfolio: {
             noMatches: 'No matches found',
@@ -352,6 +360,55 @@ const translations = {
                             api2: { name: 'Express 5', description: 'Manages server routing, room states, and proxies requests to the LRCLIB API.' },
                             api3: { name: 'LRCLIB API', description: 'Fetches timestamped LRC lyrics for synchronized, line-by-line scrolling.' },
                             api4: { name: 'YouTube IFrame API', description: 'Powers video playback and synchronization through react-player controls.' }
+                        },
+                    }
+                }
+            },
+            saku: {
+                title: 'Saku • 咲く',
+                description: 'A minimal spaced repetition Japanese flashcard widget for Android Home Screen, Lock Screen, and Always-On Display — seamlessly synced on-device with AnkiDroid (FSRS & SM-2 algorithms) with zero login required.',
+                botQuestions: [
+                    'What makes Saku different from other flashcard apps?',
+                    'How does Saku sync with AnkiDroid on-device?',
+                    'How does the AI Graded Reader work with Gemini Flash?',
+                ],
+                Information: {
+                    title: 'Saku • 咲く (Android Japanese Flashcard Widget)',
+                    description: 'Saku brings Japanese language immersion directly to the phone surfaces you interact with hundreds of times a day: your Lock Screen, Always-On Display (AOD), and Home Screen widget. By connecting directly to AnkiDroid via Android ContentProvider IPC, Saku preserves your exact FSRS and SM-2 spaced repetition intervals on-device with zero login or cloud relay required. It also includes an AI Graded Reader powered by Google Gemini Flash and neural voice synthesis.',
+                    coreFeatures: {
+                        title: 'Core Features',
+                        features1: { title: '100% On-Device & Zero Login', description: 'Connects directly to local AnkiDroid databases using Android ContentProvider IPC with a 1-tap permission prompt. No cloud accounts, external tracking, or passwords required.' },
+                        features2: { title: 'Preserves FSRS & SM-2 Scheduling', description: 'Card reviews submitted on the widget write straight into AnkiDroid’s scheduling engine. Retention factors, interval stability, and AnkiWeb cloud sync stay 100% intact.' },
+                        features3: { title: 'Lock Screen & Always-On Display (AOD)', description: 'Pinned high-contrast card right under the lock screen clock optimized for OxygenOS (OnePlus), Samsung OneUI, Google Pixel, and modern Android devices.' },
+                        features4: { title: 'Interactive Glance Widget', description: 'Built with Jetpack Glance (Compose for AppWidgets). Flip cards, cycle through due cards, or submit ratings directly from your home screen without opening the app.' },
+                        features5: { title: 'AI Graded Reader & Audio Narration', description: 'Generates customized Japanese reading passages tailored to your due vocabulary using Google Gemini Flash, with Fish Audio neural voice synthesis, furigana toggles, and tap-to-define lookup.' },
+                        features6: { title: 'Offline Jisho Dictionary', description: 'Comprehensive offline Kanji and vocabulary dictionary with JLPT levels and stroke orders in an ultra-lean ~20 MB APK using <25 MB RAM and <0.1% battery per day.' }
+                    },
+                    whyThisProject: 'Traditional flashcard study requires opening heavy apps, which adds friction to busy days. I wanted to achieve effortless passive Japanese immersion by bringing spaced repetition directly to the phone surfaces people look at hundreds of times daily—the lock screen and home screen—without breaking the sophisticated FSRS algorithm schedules in AnkiDroid.',
+                    howItWorks: {
+                        title: 'How It Works',
+                        step1: { title: '1-Tap IPC Query', description: 'Saku queries due cards from AnkiDroid’s local SQLite database via content://com.ichi2.anki.flashcards/cards without intermediate cloud servers.' },
+                        step2: { title: 'Glance & RemoteViews Surface Rendering', description: 'Jetpack Glance renders reactive home screen widgets, while a custom foreground service updates high-contrast lock screen and AOD notifications.' },
+                        step3: { title: 'Instant Algorithm Grade Submission', description: 'Rating a card sends ease grades (1-4) straight to AnkiDroid’s ContentProvider to recalculate spaced repetition intervals on the spot.' },
+                        step4: { title: 'AI Reading Passage Generation', description: 'Due or studied cards feed into Google Gemini Flash to generate contextual graded stories with clickable vocabulary lookup and neural TTS.' },
+                        description: 'Saku blends Android inter-process communication, modern Jetpack Compose architecture, and Gemini Flash AI to make language learning an effortless, continuous habit.',
+                    },
+                    howIBuiltIt: {
+                        title: 'How I Built this Project',
+                        frameworks: {
+                            framework1: { name: 'Kotlin 2.0', description: 'Modern, safe programming language powering the native Android architecture and coroutines.' },
+                            framework2: { name: 'Jetpack Compose & Glance', description: 'Declarative UI toolkit for both in-app screens and reactive home screen widgets.' },
+                            framework3: { name: 'React 19 & TypeScript', description: 'Powering the interactive showcase website and live widget simulator portal.' }
+                        },
+                        styles: {
+                            style1: { name: 'Material 3 & RemoteViews', description: 'Glassmorphic design system with high-contrast OLED lock screen notifications and custom themes.' },
+                            style2: { name: 'Tailwind CSS', description: 'Utility-first CSS powering the responsive web showcase and simulator.' }
+                        },
+                        api: {
+                            api1: { name: 'AnkiDroid ContentProvider IPC', description: 'Inter-process communication API for reading flashcards and recording review grades on-device.' },
+                            api2: { name: 'Google Gemini Flash API', description: 'High-speed AI model generating tailored Japanese reading stories from user flashcard vocabulary.' },
+                            api3: { name: 'Fish Audio & Android TTS', description: 'Neural voice synthesis for natural Japanese story narration with on-device TTS fallback.' },
+                            api4: { name: 'Offline Jisho Dictionary', description: 'Local Japanese-English dictionary and Kanji JLPT database bundled directly into the app.' }
                         },
                     }
                 }
@@ -934,7 +991,15 @@ const translations = {
             { text: '「人は自分が演じているものになる。だからこそ、何を演じるかには気をつけなければならない。」', author: '― カート・ヴォネガット' },
             { text: '「嘘に慰められるより、真実に傷つくほうがいい。」', author: '― カーレド・ホッセイニ' },
             { text: '「コントロールできないことを心配するより、自分が生み出せることにエネルギーを使おう。」', author: '― ロイ・T・ベネット' },
-            { text: '「大きく転んで初めて、自分の立ち位置がわかることもある。」', author: '― ヘイリー・ウィリアムス' }
+            { text: '「大きく転んで初めて、自分の立ち位置がわかることもある。」', author: '― ヘイリー・ウィリアムス' },
+            { text: '「達成されるまでは、すべては不可能に見えるものだ。」', author: '― ネルソン・マンデラ' },
+            { text: '「偉大な仕事を成し遂げる唯一の方法は、自分の仕事を愛することだ。」', author: '― スティーブ・ジョブズ' },
+            { text: '「できると思おうが、できないと思おうが、あなたは正しい。」', author: '― ヘンリー・フォード' },
+            { text: '「七転び八起き。」', author: '― 日本のことわざ' },
+            { text: '「木を植える一番いい時期は20年前だった。次にいい時期は今だ。」', author: '― 中国のことわざ' },
+            { text: '「完璧な瞬間を待つな。その瞬間をつかんで、完璧にすればいい。」', author: '― 作者不明' },
+            { text: '「私たちの背後にあるものも、前方にあるものも、私たちの内側にあるものに比べれば、些細なことだ。」', author: '― ラルフ・ワルド・エマーソン' },
+            { text: '「打たなかったシュートは100%外れる。」', author: '― ウェイン・グレツキー' },
         ],
         portfolio: {
             noMatches: '該当する作品は見つかりませんでした。',
@@ -1181,6 +1246,55 @@ const translations = {
                             api2: { name: 'Express 5', description: 'サーバーのルーティング、ルーム状態の管理、およびLRCLIB APIへのプロキシ要求を処理。' },
                             api3: { name: 'LRCLIB API', description: '同期されたラインごとのスクロール用に、タイムスタンプ付きLRC歌詞を取得。' },
                             api4: { name: 'YouTube IFrame API', description: 'react-player制御を介してビデオ再生と同期機能を提供。' }
+                        },
+                    }
+                }
+            },
+            saku: {
+                title: 'Saku • 咲く',
+                description: 'Androidのホーム画面、ロック画面、常時表示ディスプレイ（AOD）で利用できるミニマルな分散学習日本語単語カードウィジェット。ログイン不要で、AnkiDroid（FSRSおよびSM-2アルゴリズム）と端末内でシームレスに同期します。',
+                botQuestions: [
+                    'Sakuは他の単語カードアプリと何が違いますか？',
+                    'AnkiDroidとの端末内同期はどのように機能しますか？',
+                    'Gemini Flashを使用したAIリーディングジェネレータはどのように動作しますか？',
+                ],
+                Information: {
+                    title: 'Saku • 咲く (Android 日本語学習ウィジェット)',
+                    description: 'Sakuは、1日に何百回も目にするスマートフォンのロック画面、常時表示ディスプレイ（AOD）、ホーム画面ウィジェットに日本語のイマージョン学習を直接もたらします。AndroidのContentProvider IPCを介してAnkiDroidと直接通信することで、外部サーバーやログインを一切介さず、端末内で正確なFSRSおよびSM-2復習スケジュールを維持します。さらに、Google Gemini FlashによるAIリーディングジェネレーターや高精度な音声合成機能も搭載しています。',
+                    coreFeatures: {
+                        title: 'コア機能',
+                        features1: { title: '100%端末内完結・ゼロログイン', description: '1タップの権限許可だけで、Android ContentProvider IPCを使用して端末内のAnkiDroidローカルデータベースに直接アクセス。クラウドログインやアカウント登録は一切不要です。' },
+                        features2: { title: 'FSRS & SM-2アルゴリズムの完全維持', description: 'ウィジェット上の復習回答（Again, Hard, Good, Easy）はAnkiDroidのスケジューリングエンジンに直接記録され、記憶の安定性や間隔係数、AnkiWeb同期が完全に保たれます。' },
+                        features3: { title: 'ロック画面＆常時表示ディスプレイ（AOD）', description: 'OxygenOS（OnePlus）、Samsung OneUI、Google Pixelなどの最新Android端末向けに最適化された、時計直下の高コントラストカード表示。' },
+                        features4: { title: 'インタラクティブなGlanceウィジェット', description: 'Jetpack Glance（Compose for AppWidgets）で構築。アプリを開くことなく、ホーム画面から直接カードのめくり、送り、評価送信が可能です。' },
+                        features5: { title: 'AI Graded Readerと音声合成', description: '復習予定の語彙からGoogle Gemini Flashが難易度に応じた日本語の物語を動的生成。Fish Audioによる自然な音声再生、ふりがな切り替え、タップ辞書引きに対応。' },
+                        features6: { title: 'オフライン辞書＆超軽量設計', description: 'JLPTレベルや筆順を含むオフラインJisho辞書を内蔵。約20MBの軽量APK、メモリ使用量25MB未満、バッテリー消費1日0.1%未満の省電力設計。' }
+                    },
+                    whyThisProject: '従来の単語学習は重いアプリを開く必要があり、日々の継続に摩擦が生じていました。スマートフォンで毎日何度も目にするロック画面やホーム画面に直接分散学習を持ち込むことで、AnkiDroidの高度なFSRSアルゴリズムを壊さず、無理のない受動的な日本語学習を実現したいと考えました。',
+                    howItWorks: {
+                        title: '仕組み',
+                        step1: { title: '1タップIPCクエリ', description: 'Sakuはクラウドサーバーを経由せず、content://com.ichi2.anki.flashcards/cards経由でAnkiDroidのローカルSQLiteから直接復習対象カードを取得します。' },
+                        step2: { title: 'GlanceとRemoteViewsによる描画', description: 'Jetpack Glanceがリアクティブなホーム画面ウィジェットを描画し、カスタムフォアグラウンドサービスが高コントラストなロック画面およびAOD通知を更新します。' },
+                        step3: { title: '即時アルゴリズム評価送信', description: 'ウィジェットで評価を選択すると、難易度評価（1〜4）が即座にAnkiDroidのContentProviderに送られ、復習間隔がその場で再計算されます。' },
+                        step4: { title: 'AIリーディング文章生成', description: '復習対象の単語群をGoogle Gemini Flashに入力し、文脈に沿った多読用ストーリーを動的生成。タップ可能な単語定義と音声読み上げを提供します。' },
+                        description: 'Sakuは、Androidのプロセス間通信（IPC）、最新のJetpack Composeアーキテクチャ、そしてGemini Flash AIを融合させ、言語学習を自然な毎日の習慣へと変えます。',
+                    },
+                    howIBuiltIt: {
+                        title: 'このプロジェクトの構築方法',
+                        frameworks: {
+                            framework1: { name: 'Kotlin 2.0', description: 'ネイティブAndroidアーキテクチャとコルーチンを支えるモダンで安全なプログラミング言語。' },
+                            framework2: { name: 'Jetpack Compose & Glance', description: 'アプリ内画面とリアクティブなホーム画面ウィジェットの両方を構築する宣言的UIツールキット。' },
+                            framework3: { name: 'React 19 & TypeScript', description: 'インタラクティブなWeb紹介ポータルとウィジェットシミュレーターを駆動。' }
+                        },
+                        styles: {
+                            style1: { name: 'Material 3 & RemoteViews', description: '高コントラストOLEDロック画面通知とカスタムテーマを備えたグラスモーフィックデザインシステム。' },
+                            style2: { name: 'Tailwind CSS', description: 'レスポンシブなWebショーケースとシミュレーターを構築するユーティリティファーストCSS。' }
+                        },
+                        api: {
+                            api1: { name: 'AnkiDroid ContentProvider IPC', description: '端末内でカードデータを読み取り、復習評価を記録するためのプロセス間通信API。' },
+                            api2: { name: 'Google Gemini Flash API', description: 'ユーザーの学習語彙から最適な日本語ストーリーを生成する高速AIモデル。' },
+                            api3: { name: 'Fish Audio & Android TTS', description: '自然な日本語ストーリー朗読を実現するニューラル音声合成と端末内TTSフォールバック。' },
+                            api4: { name: 'Offline Jisho Dictionary', description: 'アプリ内に直接バンドルされたローカル日本語・英語辞書および漢字JLPTデータベース。' }
                         },
                     }
                 }

@@ -4,6 +4,55 @@ import NavButton from './NavButton';
 
 const NAV_REGEX = /\[NAV:([^\]|]+)\]([^[]*)\[\/NAV]|\[NAV:([^\]|]+)\|([^\]]+)]/g;
 
+const ALLOWED_STATIC_ROUTES = new Set([
+    '/',
+    '/welcome',
+    '/portfolio',
+    '/contact',
+    '/sakupilot',
+    '/about-website',
+    '/dev-quiz',
+]);
+
+function normalizeAndValidateRoute(rawPath) {
+    if (!rawPath || typeof rawPath !== 'string') return null;
+    let path = rawPath.trim();
+    if (!path.startsWith('/')) {
+        path = `/${path}`;
+    }
+
+    // Strip trailing slash unless it's root
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
+
+    // Reject placeholder tokens like '...', '/...', '.', etc.
+    if (path.includes('...') || /^\/\.+$/.test(path)) {
+        return null;
+    }
+
+    if (ALLOWED_STATIC_ROUTES.has(path)) {
+        return path;
+    }
+
+    // Validate project detail routes: /portfolio/1 through /portfolio/7
+    if (/^\/portfolio\/[1-7]$/.test(path)) {
+        return path;
+    }
+
+    return null;
+}
+
+function isValidNavLabel(label) {
+    if (!label || typeof label !== 'string') return false;
+    const trimmed = label.trim();
+    // Reject empty labels, ellipsis, or placeholder characters
+    if (!trimmed || trimmed === '...' || trimmed === '…' || /^\.+$/.test(trimmed)) {
+        return false;
+    }
+    return true;
+}
+
 function parseNavTokens(content) {
     if (typeof content !== 'string') return [{ type: 'text', value: String(content) }];
 
@@ -17,9 +66,14 @@ function parseNavTokens(content) {
             const chunk = content.slice(lastIndex, match.index);
             if (chunk) parts.push({ type: 'text', value: chunk });
         }
-        const path  = match[1] || match[3];
-        const label = (match[2] || match[4] || '').trim();
-        if (path && label) parts.push({ type: 'nav', path, label });
+        const rawPath  = match[1] || match[3];
+        const rawLabel = (match[2] || match[4] || '').trim();
+
+        const validatedPath = normalizeAndValidateRoute(rawPath);
+        if (validatedPath && isValidNavLabel(rawLabel)) {
+            parts.push({ type: 'nav', path: validatedPath, label: rawLabel });
+        }
+
         lastIndex = match.index + match[0].length;
     }
 

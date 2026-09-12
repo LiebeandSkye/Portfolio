@@ -31,15 +31,21 @@ async function sendTelegramNotification({ name, email, tel, message }) {
     const contact = normalizeContactSubmission({ name, email, tel, message });
     const phoneLine = buildPhoneLine(contact.tel);
 
+    const esc = (s) => s.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
+    const safeName = esc(contact.name);
+    const safeEmail = esc(contact.email);
+    const safePhone = phoneLine ? esc(phoneLine) : null;
+    const safeMessage = esc(contact.message);
+
     const text = [
         `📬 *New Contact Form Message*`,
         ``,
-        `👤 *Name:*    ${contact.name}`,
-        `📧 *Email:*   ${contact.email}`,
-        phoneLine ? `📞 *Phone:*   ${phoneLine}` : null,
+        `👤 *Name:*    ${safeName}`,
+        `📧 *Email:*   ${safeEmail}`,
+        safePhone ? `📞 *Phone:*   ${safePhone}` : null,
         ``,
         `💬 *Message:*`,
-        `${contact.message}`,
+        `${safeMessage}`,
     ].filter(Boolean).join('\n');
 
     const url = `https://api.telegram.org/bot${token}/sendMessage`;

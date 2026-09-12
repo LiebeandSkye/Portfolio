@@ -43,6 +43,8 @@ const AboutProject = () => {
     const languageStyles = {
         javascript: { label: 'JavaScript', color: '#f1e05a' },
         typescript: { label: 'TypeScript', color: '#3178c6' },
+        kotlin: { label: 'Kotlin', color: '#A97BFF' },
+        xml: { label: 'XML', color: '#0060ac' },
         css: { label: 'CSS', color: '#563d7c' },
         html: { label: 'HTML', color: '#e34c26' },
         python: { label: 'Python', color: '#3572A5' },

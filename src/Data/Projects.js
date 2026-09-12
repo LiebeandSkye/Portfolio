@@ -16,13 +16,19 @@ import sakiKaraokeThumb from '../assets/SakiKaraoke/WebsiteThumbnail.png';
 import charmStoreThumb from '../assets/charmstorekh/WebsiteThumbnail.png';
 import OpenWeather from '../assets/Tools/OpenWeather.png';
 import googleMap from '../assets/Tools/googleMap.png';
+import sakuWebsiteScreenshot from '../assets/Saku/Website_Screenshot.png';
+import sakuCardsTab from '../assets/Saku/cards_tab.png';
+import sakuReadingTab from '../assets/Saku/reading_tab.png';
+import sakuJishoTab from '../assets/Saku/jisho_tab.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
-import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube, SiTypescript, SiSupabase, SiCloudinary } from "react-icons/si";
-import { MdLyrics } from "react-icons/md";
+import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube, SiTypescript, SiSupabase, SiCloudinary, SiKotlin, SiAndroid, SiJetpackcompose, SiGooglegemini } from "react-icons/si";
+import { MdLyrics, MdTranslate } from "react-icons/md";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import { BsLayersHalf } from "react-icons/bs";
+import { BiBookBookmark } from "react-icons/bi";
+import { IoVolumeHighOutline } from "react-icons/io5";
 
 const Projects = [
     {
@@ -33,7 +39,7 @@ const Projects = [
         red: true,
         description: 'A car e-commerce website with virtual assistant and clean images of cars at affordable prices.',
         bread: '/portfolio',
-        pinned: true,
+        pinned: false,
         code: 'https://github.com/LiebeandSkye/Continental',
         demo: 'https://continental-neon.vercel.app/',
         designed: true,
@@ -687,6 +693,157 @@ const Projects = [
             languages: { lang1: 'JavaScript', lang2: 'CSS', lang3: 'HTML' },
             screenshots: {
                 screenshot1: sakiKaraokeThumb,
+            },
+        },
+    },
+    {
+        id: 7,
+        title: 'Saku • 咲く',
+        langKey: "saku",
+        public: true,
+        red: false,
+        description: 'A minimal spaced repetition Japanese flashcard widget for Android Home Screen, Lock Screen, and Always-On Display and seamlessly synced on-device with AnkiDroid (FSRS & SM-2 algorithms) with zero login required.',
+        bread: '/portfolio',
+        code: 'https://github.com/LiebeandSkye/saku',
+        demo: 'https://sakuofficialapp.vercel.app',
+        designed: true,
+        developed: true,
+        pinned: true,
+        thumbnail: sakuWebsiteScreenshot,
+        tags: ['Android', 'Kotlin', 'Jetpack Compose', 'Jetpack Glance', 'AnkiDroid API', 'Gemini Flash', 'FSRS Algorithm', 'React 19', 'TypeScript'],
+        summary: {
+            title: 'Development Summary',
+            framework: 'Kotlin 2.0 + Jetpack Compose & Glance',
+            style: 'Material 3 & Glassmorphic / Tailwind CSS',
+            API: 'AnkiDroid IPC + Gemini Flash + Fish Audio',
+        },
+        percent: { kotlin: 88.3, xml: 6.4, typescript: 3.8, css: 1.5 },
+        languages: { kotlin: 'Kotlin', xml: 'XML', typescript: 'TypeScript', css: 'CSS' },
+        Information: {
+            title: 'Saku • 咲く',
+            description: 'Saku is a minimal spaced-repetition Japanese flashcard widget and AI graded reading platform for Android. Designed for passive immersion, Saku displays due vocabulary cards directly on your Home Screen widget, Lock Screen notification, and Always-On Display (AOD). It connects securely to AnkiDroid via Android ContentProvider inter-process communication (IPC) with zero account login, preserving your exact FSRS and SM-2 retention algorithm schedules.',
+            coreFeatures: {
+                title: 'Core Features',
+                features1: {
+                    title: '100% On-Device & Zero Login',
+                    description: '– Connects directly to local AnkiDroid databases using Android ContentProvider IPC with a 1-tap permission prompt. No cloud accounts, external tracking, or passwords required.'
+                },
+                features2: {
+                    title: 'Preserves FSRS & SM-2 Algorithm Schedules',
+                    description: '– Widget card reviews (Again, Hard, Good, Easy) write directly into AnkiDroid’s scheduling engine. Memory stability, retention factors, and AnkiWeb sync stay 100% intact.'
+                },
+                features3: {
+                    title: 'Lock Screen & Always-On Display (AOD)',
+                    description: '– Pinned high-contrast card right under the lock screen clock optimized for OxygenOS (OnePlus), Samsung OneUI, Google Pixel, and modern Android devices.'
+                },
+                features4: {
+                    title: 'Interactive Home Screen Widget (Jetpack Glance)',
+                    description: '– Built with Jetpack Glance (Compose for AppWidgets). Flip cards, advance cards, or submit ratings directly from your home screen without opening the app.'
+                },
+                features5: {
+                    title: 'AI Graded Reader & Audio Synthesis',
+                    description: '– Generates customized Japanese graded reading passages tailored directly from your due vocabulary using Google Gemini Flash, with Fish Audio neural voice synthesis, furigana toggles, and tap-to-define dictionary lookup.'
+                },
+                features6: {
+                    title: 'Offline Jisho Dictionary & Lightweight Footprint',
+                    description: '– Full offline Kanji & vocabulary definitions, JLPT levels, and stroke info. Bundled in an ultra-lean ~20 MB APK with <25 MB RAM and <0.1% battery drain per day.'
+                }
+            },
+            WhyThisProject: {
+                title: 'Why This Project?',
+                description: "Traditional flashcard study requires opening heavy apps, which adds friction to busy days. I wanted to achieve effortless passive Japanese immersion by bringing spaced repetition directly to the phone surfaces people look at hundreds of times daily—the lock screen and home screen—without breaking the sophisticated FSRS algorithm schedules in AnkiDroid.",
+            },
+            HowItWorks: {
+                title: 'How It Works?',
+                steps: {
+                    step1: {
+                        title: '1-Tap IPC Query',
+                        description: '– Saku queries due cards from AnkiDroid’s local SQLite database via content://com.ichi2.anki.flashcards/cards without intermediate cloud servers.'
+                    },
+                    step2: {
+                        title: 'Glance & RemoteViews Surface Rendering',
+                        description: '– Jetpack Glance renders reactive home screen widgets, while a custom foreground service updates high-contrast lock screen and AOD notifications.'
+                    },
+                    step3: {
+                        title: 'Instant Algorithm Grade Submission',
+                        description: '– Rating a card sends ease grades (1-4) straight to AnkiDroid’s ContentProvider to recalculate spaced repetition intervals on the spot.'
+                    },
+                    step4: {
+                        title: 'AI Reading Passage Generation',
+                        description: '– Due or studied cards feed into Google Gemini Flash to generate contextual graded stories with clickable vocabulary lookup and neural TTS.'
+                    }
+                },
+                description: 'Saku blends Android inter-process communication, modern Jetpack Compose architecture, and Gemini Flash AI to make language learning an effortless, continuous habit.',
+            },
+            HowIBuiltIt: {
+                title: 'How I Built this Project',
+                frameworks: {
+                    framework1: {
+                        icon: SiKotlin,
+                        name: 'Kotlin 2.0',
+                        description: 'Modern, safe programming language powering the native Android architecture and coroutines.',
+                        color: '#A97BFF',
+                    },
+                    framework2: {
+                        icon: SiJetpackcompose,
+                        name: 'Jetpack Compose & Glance',
+                        description: 'Declarative UI toolkit for both in-app screens and reactive home screen widgets.',
+                        color: '#4285F4',
+                    },
+                    framework3: {
+                        icon: FaReact,
+                        name: 'React 19 & TypeScript',
+                        description: 'Powering the interactive showcase website and live widget simulator portal.',
+                        color: '#61dafb',
+                    },
+                },
+                Styles: {
+                    style1: {
+                        icon: SiAndroid,
+                        name: 'Material 3 & RemoteViews',
+                        description: 'Glassmorphic design system with high-contrast OLED lock screen notifications and custom themes.',
+                        color: '#3DDC84',
+                    },
+                    style2: {
+                        icon: RiTailwindCssFill,
+                        name: 'Tailwind CSS',
+                        description: 'Utility-first CSS powering the responsive web showcase and simulator.',
+                        color: '#38bdf8',
+                    },
+                },
+                Api: {
+                    api1: {
+                        icon: SiAndroid,
+                        name: 'AnkiDroid ContentProvider IPC',
+                        description: 'Inter-process communication API for reading flashcards and recording review grades on-device.',
+                        color: '#0080FF',
+                    },
+                    api2: {
+                        icon: SiGooglegemini,
+                        name: 'Google Gemini Flash API',
+                        description: 'High-speed AI model generating tailored Japanese reading stories from user flashcard vocabulary.',
+                        color: '#8E75FF',
+                    },
+                    api3: {
+                        icon: IoVolumeHighOutline,
+                        name: 'Fish Audio & Android TTS',
+                        description: 'Neural voice synthesis for natural Japanese story narration with on-device TTS fallback.',
+                        color: '#52C47C',
+                    },
+                    api4: {
+                        icon: BiBookBookmark,
+                        name: 'Offline Jisho Dictionary',
+                        description: 'Local Japanese-English dictionary and Kanji JLPT database bundled directly into the app.',
+                        color: '#FFA116',
+                    },
+                },
+            },
+            languages: { lang1: 'Kotlin', lang2: 'XML', lang3: 'TypeScript', lang4: 'CSS' },
+            screenshots: {
+                screenshot1: sakuWebsiteScreenshot,
+                screenshot2: sakuCardsTab,
+                screenshot3: sakuReadingTab,
+                screenshot4: sakuJishoTab,
             },
         },
     },

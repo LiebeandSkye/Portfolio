@@ -30,3 +30,23 @@ test('remarkGithubSafe renders GFM without constructing Safari-incompatible look
         globalThis.RegExp = OriginalRegExp;
     }
 });
+
+test('remarkGithubSafe disables indented code blocks while preserving fenced code blocks', () => {
+    const processor = unified()
+        .use(remarkParse)
+        .use(remarkGithubSafe);
+
+    // Indented with 4 spaces should be parsed as paragraph text, NOT code
+    const indentedMarkdown = 'Here is text:\n\n    <- Best - Android spaced-repetition\n\nDone.';
+    const indentedTree = processor.parse(indentedMarkdown);
+    const hasIndentedCodeNode = indentedTree.children.some(child => child.type === 'code');
+    assert.equal(hasIndentedCodeNode, false, 'Indented text should not be parsed as a code block');
+
+    // Fenced code block with triple backticks should still be parsed as code
+    const fencedMarkdown = 'Here is code:\n\n```javascript\nconsole.log("hello");\n```\n';
+    const fencedTree = processor.parse(fencedMarkdown);
+    const fencedCodeNode = fencedTree.children.find(child => child.type === 'code');
+    assert.ok(fencedCodeNode, 'Fenced code should still be parsed as a code block');
+    assert.equal(fencedCodeNode.lang, 'javascript');
+});
+

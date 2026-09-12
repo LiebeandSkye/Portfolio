@@ -73,9 +73,7 @@
     @apply relative flex flex-col items-center justify-center px-4 py-4 transition-colors duration-200 font-semibold;
   }
 
-  .chat-chip {
-    @apply flex items-center gap-2 border border-(--border-light) rounded-lg px-3 py-2 text-left text-xs text-white hover:bg-[#1d2128] transition-colors w-fit;
-  }
+
 
   /* The Trick: Reserve space for bold text to prevent jumping */
   .nav-link::before {
@@ -189,13 +187,7 @@
   animation: rotate-gradient 4s linear infinite;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded-full;
-}
 
 @keyframes sp-panel {
   from {

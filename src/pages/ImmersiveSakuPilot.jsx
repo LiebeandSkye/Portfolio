@@ -79,10 +79,10 @@ const ImmersiveSakuPilot = () => {
 
     useEffect(() => {
         if (retryCountdown > 0) {
-            const timer = setInterval(() => {
+            const timer = setTimeout(() => {
                 setRetryCountdown((prev) => prev - 1);
             }, 1000);
-            return () => clearInterval(timer);
+            return () => clearTimeout(timer);
         }
     }, [retryCountdown]);
     const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
@@ -306,6 +306,14 @@ const ImmersiveSakuPilot = () => {
             console.error(err);
             setError(err);
             setInputValue(lastInput); // Restore input on error
+
+            // Roll back the user message that was already appended
+            const rolledBack = {
+                ...activeConversationRef.current,
+                messages: activeConversationRef.current.messages.slice(0, -1),
+            };
+            persistActiveConversation(rolledBack);
+
             if (err.code === 'RATE_LIMIT') {
                 setRetryCountdown(err.retryAfter || 60);
             }
@@ -1094,7 +1102,6 @@ const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {
                     disabled={isRateLimit && retryCountdown > 0}
                     className="px-4 py-2 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >{t('sakupilot.immersive.tryAgain')}
-                    Try Again
                 </button>
                 {isRateLimit && (
                     <span className="text-[11px] text-(--text-gray)">

@@ -85,6 +85,8 @@ Notable projects:
 - Discover Cambodia: tourism project with destination content and weather data.
 - AI MemoryPorter: privacy-first utility for converting exported AI memory/context data into token-optimized Markdown.
 - Project Nebula: real-time social deduction game with React, Express, and Socket.IO.
+- SakiKaraoke: real-time collaborative karaoke web application with React, Express, and Socket.IO.
+- Saku: minimal spaced repetition Japanese flashcard Android widget and AI graded reader with 100% on-device AnkiDroid FSRS sync.
 - SakuPilot: AI assistant embedded in the portfolio for answering questions about Kry Rithisak, projects, skills, and background.
 `
 );

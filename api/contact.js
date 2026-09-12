@@ -14,6 +14,10 @@ function buildPhoneLine(tel) {
     return phone ? phone : null;
 }
 
+function escapeTelegramMarkdown(text) {
+    return text.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
+}
+
 async function sendTelegramNotification(contact) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -23,16 +27,20 @@ async function sendTelegramNotification(contact) {
     }
 
     const phoneLine = buildPhoneLine(contact.tel);
+    const safeName = escapeTelegramMarkdown(contact.name);
+    const safeEmail = escapeTelegramMarkdown(contact.email);
+    const safePhone = phoneLine ? escapeTelegramMarkdown(phoneLine) : null;
+    const safeMessage = escapeTelegramMarkdown(contact.message);
 
     const text = [
         `📬 *New Contact Form Message*`,
         '',
-        `👤 *Name:*    ${contact.name}`,
-        `📧 *Email:*   ${contact.email}`,
-        phoneLine ? `📞 *Phone:*   ${phoneLine}` : null,
+        `👤 *Name:*    ${safeName}`,
+        `📧 *Email:*   ${safeEmail}`,
+        safePhone ? `📞 *Phone:*   ${safePhone}` : null,
         '',
         `💬 *Message:*`,
-        `${contact.message}`,
+        `${safeMessage}`,
     ].filter(Boolean).join('\n');
 
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
