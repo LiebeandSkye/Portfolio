@@ -45,6 +45,12 @@ export const PROJECT_ROUTES = [
     description: 'Saku is a minimal spaced repetition Japanese flashcard Android widget and AI graded reader by Kry Rithisak, featuring 100% on-device AnkiDroid FSRS sync with zero login.',
     keywords: ['Saku', 'Android widget', 'Japanese flashcards', 'AnkiDroid', 'FSRS', 'Jetpack Compose', 'Gemini Flash', 'Kotlin'],
   },
+  {
+    path: '/portfolio/8',
+    name: 'Orgi',
+    description: 'Orgi is a full-stack media curation and recommendation platform by Kry Rithisak featuring AI editorial verdicts, psychological discovery wizards, and cross-media tracking.',
+    keywords: ['Orgi', 'media curation', 'recommendation system', 'React 19', 'Express 5', 'Tailwind CSS v4', 'Supabase', 'Redis', 'Gemini AI', 'TMDB'],
+  },
 ];
 
 const ROUTES = [

@@ -20,10 +20,14 @@ import sakuWebsiteScreenshot from '../assets/Saku/Website_Screenshot.png';
 import sakuCardsTab from '../assets/Saku/cards_tab.png';
 import sakuReadingTab from '../assets/Saku/reading_tab.png';
 import sakuJishoTab from '../assets/Saku/jisho_tab.png';
+import orgiThumb from '../assets/Orgi/OrgiThumbnail.png';
+import orgiHomepage from '../assets/Orgi/Orgi_homepage.png';
+import orgiFeedpage from '../assets/Orgi/Orgi_feedpage.png';
+import orgiBookpage from '../assets/Orgi/Orgi_bookpage.png';
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
-import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube, SiTypescript, SiSupabase, SiCloudinary, SiKotlin, SiAndroid, SiJetpackcompose, SiGooglegemini } from "react-icons/si";
+import { SiGooglemaps, SiSocketdotio, SiExpress, SiVite, SiNodedotjs, SiYoutube, SiTypescript, SiSupabase, SiCloudinary, SiKotlin, SiAndroid, SiJetpackcompose, SiGooglegemini, SiRedis } from "react-icons/si";
 import { MdLyrics, MdTranslate } from "react-icons/md";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import { BsLayersHalf } from "react-icons/bs";
@@ -155,7 +159,7 @@ const Projects = [
         red: true,
         description: 'An informative tourism website about Cambodia featuring weather tools, tourist destinations, and educational content.',
         bread: '/portfolio',
-        pinned: true,
+        pinned: false,
         code: 'https://github.com/LiebeandSkye/Travel_Project',
         demo: 'https://edcambodia-164ed.web.app/',
         thumbnail: cambodiaThumb,
@@ -844,6 +848,138 @@ const Projects = [
                 screenshot2: sakuCardsTab,
                 screenshot3: sakuReadingTab,
                 screenshot4: sakuJishoTab,
+            },
+        },
+    },
+    // ===========================
+    // ORGI (ID:8)
+    // ===========================
+    {
+        id: 8,
+        title: 'Orgi',
+        langKey: "orgi",
+        public: true,
+        red: false,
+        description: 'A full-stack media curation and recommendation platform featuring an AI-powered psychological discovery wizard (Orgi Picks), cross-media tracking, and editorial verdicts.',
+        bread: '/portfolio',
+        code: 'https://github.com/LiebeandSkye/Orgi',
+        demo: 'https://orgi-one.vercel.app',
+        designed: true,
+        developed: true,
+        pinned: true,
+        thumbnail: orgiThumb,
+        tags: ['React 19', 'Tailwind CSS v4', 'Express 5', 'Node.js', 'Supabase', 'Upstash Redis', 'Gemini AI', 'TMDB API', 'MangaDex API'],
+        summary: {
+            title: 'Development Summary',
+            framework: 'React 19 + Express 5',
+            style: 'Tailwind CSS v4',
+            API: 'Supabase + Upstash Redis + Gemini AI',
+        },
+        percent: { javascript: 78.5, css: 12.0, sql: 9.5 },
+        languages: { javascript: 'JavaScript', css: 'CSS', sql: 'SQL' },
+        Information: {
+            title: 'Orgi',
+            description: 'Orgi (rate.) is a cinematic and literary discovery platform designed to combat decision fatigue after a long workday. It unifies movie, TV series, anime, and manga tracking into a cohesive experience powered by a 3-step psychological recommendation wizard, Gemini-driven editorial verdicts, and high-performance server-side caching.',
+            coreFeatures: {
+                title: 'Core Features',
+                features1: {
+                    title: 'Orgi Picks Recommendation Wizard',
+                    description: '– A 3-step psychological questionnaire leveraging the Endowed Progress Effect (starts at 20%) to match mood, social context, pacing, and story depth against TMDB and MangaDex pools.'
+                },
+                features2: {
+                    title: 'AI Editorial Verdicts (Gemini)',
+                    description: '– Leverages Google Gemini Flash Lite to generate instant "worth it" editorial assessments, highlighting specific taste matches, caveats, and viewing/reading atmosphere.'
+                },
+                features3: {
+                    title: 'Unified Media Engines',
+                    description: '– Seamless integration with TMDB API for movies, series, and anime, paired with MangaDex and OpenLibrary for manga, manhwa, and books.'
+                },
+                features4: {
+                    title: 'Redis Caching & Supabase Auth',
+                    description: '– Upstash Redis provides ultra-low latency caching for frequent API queries, while Supabase manages authentication, user profiles, collections, and episode discussions.'
+                },
+                features5: {
+                    title: 'In-Place Modal Overlays & Discussions',
+                    description: '– Quick-access previews, score rings, trailer popups, and episode discussion threads designed for effortless browsing without losing context.'
+                }
+            },
+            WhyThisProject: {
+                title: 'Why This Project?',
+                description: "Endless scrolling across fragmented platforms creates decision fatigue. Orgi was built to create an opinionated, comforting, and high-agency curation hub that helps users find exactly what fits their mood in minutes.",
+            },
+            HowItWorks: {
+                title: 'How It Works?',
+                steps: {
+                    step1: {
+                        title: 'Select Medium & Preferences',
+                        description: '– Users choose between movies, TV, anime, or books, and configure mood, pacing, and social vibe in the Orgi Picks wizard.'
+                    },
+                    step2: {
+                        title: 'Algorithmic Filtering & AI Analysis',
+                        description: '– The server executes filtered TMDB/MangaDex queries with Redis cache validation, calling Gemini for tailored media verdicts.'
+                    },
+                    step3: {
+                        title: 'Curate, Discuss & Bookmark',
+                        description: '– Users add titles to custom Supabase collections, join episode discussions, and log personal ratings.'
+                    },
+                },
+                description: 'Orgi replaces endless choice paralysis with guided discovery and instant cultural criticism.',
+            },
+            HowIBuiltIt: {
+                title: 'How I Built this Project',
+                frameworks: {
+                    framework1: {
+                        icon: FaReact,
+                        name: 'React 19',
+                        description: 'Modern component architecture with fast HMR and client-side routing.',
+                        color: '#61dafb',
+                    },
+                    framework2: {
+                        icon: SiExpress,
+                        name: 'Express 5',
+                        description: 'Feature-driven modular backend API with native Node.js test suites.',
+                        color: '#ffffff',
+                    },
+                    framework3: {
+                        icon: SiVite,
+                        name: 'Vite',
+                        description: 'Blazing fast frontend tooling and development server.',
+                        color: '#646cff',
+                    },
+                },
+                Styles: {
+                    style1: {
+                        icon: RiTailwindCssFill,
+                        name: 'Tailwind CSS v4',
+                        description: 'Utility-first dark aesthetic with refined neon accents and smooth transitions.',
+                        color: '#38bdf8',
+                    },
+                },
+                Api: {
+                    api1: {
+                        icon: SiSupabase,
+                        name: 'Supabase',
+                        description: 'PostgreSQL database, Row-Level Security, and social authentication.',
+                        color: '#3ecf8e',
+                    },
+                    api2: {
+                        icon: SiRedis,
+                        name: 'Upstash Redis',
+                        description: 'Serverless in-memory cache minimizing external rate limits and latency.',
+                        color: '#ff4438',
+                    },
+                    api3: {
+                        icon: SiGooglegemini,
+                        name: 'Google Gemini AI',
+                        description: 'AI model generating editorial verdicts and mood-matched summaries.',
+                        color: '#8e75ff',
+                    },
+                },
+            },
+            screenshots: {
+                screenshot1: orgiHomepage,
+                screenshot2: orgiFeedpage,
+                screenshot3: orgiBookpage,
             },
         },
     },
