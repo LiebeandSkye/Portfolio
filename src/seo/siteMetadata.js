@@ -4,12 +4,6 @@ export const PROFILE_IMAGE = `${BASE_URL}/og-image.png`;
 
 export const PROJECT_ROUTES = [
   {
-    path: '/portfolio/1',
-    name: 'Continental',
-    description: 'Continental is a car e-commerce project by Kry Rithisak with a polished catalog, simulated checkout flow, Contentful CMS, and an AI assistant.',
-    keywords: ['Continental', 'car e-commerce', 'Contentful', 'React', 'Groq AI'],
-  },
-  {
     path: '/portfolio/2',
     name: 'Discover Cambodia',
     description: 'Discover Cambodia is a tourism web project by Kry Rithisak using browser UI, weather data, and destination-focused travel content.',
@@ -44,6 +38,12 @@ export const PROJECT_ROUTES = [
     name: 'Saku • 咲く',
     description: 'Saku is a minimal spaced repetition Japanese flashcard Android widget and AI graded reader by Kry Rithisak, featuring 100% on-device AnkiDroid FSRS sync with zero login.',
     keywords: ['Saku', 'Android widget', 'Japanese flashcards', 'AnkiDroid', 'FSRS', 'Jetpack Compose', 'Gemini Flash', 'Kotlin'],
+  },
+  {
+    path: '/portfolio/8',
+    name: 'Orgi',
+    description: 'Orgi is a full-stack media curation and recommendation platform by Kry Rithisak featuring AI editorial verdicts, psychological discovery wizards, and cross-media tracking.',
+    keywords: ['Orgi', 'media curation', 'recommendation system', 'React 19', 'Express 5', 'Tailwind CSS v4', 'Supabase', 'Redis', 'Gemini AI', 'TMDB'],
   },
 ];
 

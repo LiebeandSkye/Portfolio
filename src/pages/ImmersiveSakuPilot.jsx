@@ -677,13 +677,13 @@ const ImmersiveSakuPilot = () => {
                     </div>
 
                     {/* Model Switcher — Centered */}
-                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[10]">
+                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[10000000000000]">
                         <button
                             onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
                         >
                             <span className="text-sm font-semibold text-(--text-light) flex items-center gap-2">
-                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'gemini' ? 'Gemini 3.7 Flash' : 'GPT-OSS 120B'}
+                                SakuPilot <span className="text-(--text-gray) font-normal">-</span> {selectedModel === 'gemini' ? 'Gemini 3.5 Flash-lite' : 'GPT-OSS 120B'}
                             </span>
                             <FiChevronDown className={`text-(--text-gray) transition-transform duration-200 ${isModelMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -699,7 +699,7 @@ const ImmersiveSakuPilot = () => {
                                 >
                                     {[
                                         { id: 'groq', name: 'GPT-OSS 120B', desc: 'Chatgpt', icon: GroqIcon },
-                                        { id: 'gemini', name: 'Gemini 3.7 Flash', desc: 'Google AI', icon: GeminiIcon }
+                                        { id: 'gemini', name: 'Gemini 3.5 Flash-lite', desc: 'Google AI', icon: GeminiIcon }
                                     ].map((m) => (
                                         <button
                                             key={m.id}

@@ -81,7 +81,6 @@ LinkedIn: https://www.linkedin.com/in/kry-rithisak-b2b66824a
 Core topics: React, JavaScript, Node.js, full-stack development, AI applications, Tailwind CSS, Socket.IO, Vite, web development.
 
 Notable projects:
-- Continental: car e-commerce project with Contentful CMS, simulated checkout, and AI assistant features.
 - Discover Cambodia: tourism project with destination content and weather data.
 - AI MemoryPorter: privacy-first utility for converting exported AI memory/context data into token-optimized Markdown.
 - Project Nebula: real-time social deduction game with React, Express, and Socket.IO.

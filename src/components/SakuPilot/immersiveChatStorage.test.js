@@ -17,9 +17,9 @@ test('createConversation stores a recent conversation with a generated title', (
 });
 
 test('summarizeConversationTitle trims long prompts into readable sidebar titles', () => {
-    const title = summarizeConversationTitle('   Please compare Continental and Discover Cambodia from a recruiter perspective with details   ');
+    const title = summarizeConversationTitle('   Please compare Charm Store and Discover Cambodia from a recruiter perspective with details   ');
 
-    assert.equal(title, 'Please compare Continental and Discover Cambodia...');
+    assert.equal(title, 'Please compare Charm Store and Discover Cambodia...');
 });
 
 test('renameConversation updates the title and timestamp without mutating the original', () => {

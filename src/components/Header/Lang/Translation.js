@@ -133,44 +133,6 @@ const translations = {
                 how: "How It Works",
                 built: "How I Built This Project"
             },
-            continental: {
-                title: 'Continental',
-                description: 'A car e-commerce website with virtual assistant and clean images of cars at affordable prices.',
-                // 3 quick-tap suggested questions shown when this project is attached
-                botQuestions: [
-                    'What is the Continental project about?',
-                    'What tech stack was used for Continental?',
-                    'How does the AI virtual assistant work?',
-                ],
-                Information: {
-                    title: 'Continental Website',
-                    description: 'Continental is a car e-commerce website located in Phnom Penh, Cambodia. This project was developed as a final project (ETEC II) to provide a modern, user-friendly experience including virtual assistance and simulated payment features. Built with React and Tailwind CSS.',
-                    coreFeatures: {
-                        title: 'Core Features',
-                        features1: { title: 'Virtual Assistance', description: 'Integrated AI assistant to help users with services and recommendations.' },
-                        features2: { title: 'Email & Notifications', description: 'EmailJS handles contact forms and automated responses.' },
-                        features3: { title: 'Responsive, Animated UI', description: 'Styled with Tailwind CSS and animated with Framer Motion.' },
-                        features4: { title: 'CMS-Driven Content', description: 'Contentful used for dynamic content management.' },
-                    },
-                    whyThisProject: 'Developed as a final project at ETEC II. Randomly assigned as car e-commerce, pushing me to research UI patterns and real-world implementations.',
-                    howItWorks: {
-                        title: 'How It Works',
-                        step1: { title: 'Visitor Browses Cars', description: 'Users can filter and explore car listings.' },
-                        step2: { title: 'Chatbot Answers Questions', description: 'AI assistant provides instant responses.' },
-                        step3: { title: 'Checkout', description: 'Simulated payment system for demonstration.' },
-                        description: 'This project demonstrates how modern frontend tools can create a professional e-commerce experience.',
-                    },
-                    howIBuiltIt: {
-                        title: 'How I Built this Project',
-                        frameworks: { framework1: { name: 'React.js', description: 'Used for routing and state management.' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'Utility-first CSS framework.' } },
-                        api: {
-                            api1: { name: 'Google Maps', description: 'Location services integration.' },
-                            api2: { name: 'Groq', description: 'AI virtual assistant integration.' },
-                        },
-                    }
-                },
-            },
             cambodia: {
                 title: 'Discover Cambodia',
                 description: 'An informative tourism website about Cambodia featuring weather tools, tourist destinations, and educational content.',
@@ -412,6 +374,50 @@ const translations = {
                         },
                     }
                 }
+            },
+            orgi: {
+                title: 'Orgi',
+                description: 'A full-stack media curation and recommendation platform featuring an AI-powered psychological discovery wizard (Orgi Picks), cross-media tracking, and editorial verdicts.',
+                botQuestions: [
+                    'What is Orgi and how does Orgi Picks work?',
+                    'How does Orgi use Google Gemini AI and Upstash Redis?',
+                    'What tech stack powers both the client and server?',
+                ],
+                Information: {
+                    title: 'Orgi',
+                    description: 'Orgi (rate.) is a cinematic and literary discovery platform designed to combat decision fatigue after a long workday. It unifies movie, TV series, anime, and manga tracking into a cohesive experience powered by a 3-step psychological recommendation wizard, Gemini-driven editorial verdicts, and high-performance server-side caching.',
+                    coreFeatures: {
+                        title: 'Core Features',
+                        features1: { title: 'Orgi Picks Recommendation Wizard', description: 'A 3-step psychological questionnaire leveraging the Endowed Progress Effect (starts at 20%) to match mood, social context, pacing, and story depth against TMDB and MangaDex pools.' },
+                        features2: { title: 'AI Editorial Verdicts (Gemini)', description: 'Leverages Google Gemini Flash Lite to generate instant "worth it" editorial assessments, highlighting specific taste matches, caveats, and viewing/reading atmosphere.' },
+                        features3: { title: 'Unified Media Engines', description: 'Seamless integration with TMDB API for movies, series, and anime, paired with MangaDex and OpenLibrary for manga, manhwa, and books.' },
+                        features4: { title: 'Redis Caching & Supabase Auth', description: 'Upstash Redis provides ultra-low latency caching for frequent API queries, while Supabase manages authentication, user profiles, collections, and episode discussions.' },
+                        features5: { title: 'In-Place Modal Overlays & Discussions', description: 'Quick-access previews, score rings, trailer popups, and episode discussion threads designed for effortless browsing without losing context.' },
+                    },
+                    whyThisProject: 'Endless scrolling across fragmented platforms creates decision fatigue. Orgi was built to create an opinionated, comforting, and high-agency curation hub that helps users find exactly what fits their mood in minutes.',
+                    howItWorks: {
+                        title: 'How It Works',
+                        step1: { title: 'Select Medium & Preferences', description: 'Users choose between movies, TV, anime, or books, and configure mood, pacing, and social vibe in the Orgi Picks wizard.' },
+                        step2: { title: 'Algorithmic Filtering & AI Analysis', description: 'The server executes filtered TMDB/MangaDex queries with Redis cache validation, calling Gemini for tailored media verdicts.' },
+                        step3: { title: 'Curate, Discuss & Bookmark', description: 'Users add titles to custom Supabase collections, join episode discussions, and log personal ratings.' },
+                    },
+                    howIBuiltIt: {
+                        title: 'How I Built this Project',
+                        frameworks: {
+                            framework1: { name: 'React 19', description: 'Modern component architecture with fast HMR and client-side routing.' },
+                            framework2: { name: 'Express 5', description: 'Feature-driven modular backend API with native Node.js test suites.' },
+                            framework3: { name: 'Vite', description: 'Blazing fast frontend tooling and development server.' },
+                        },
+                        styles: {
+                            style1: { name: 'Tailwind CSS v4', description: 'Utility-first dark aesthetic with refined neon accents and smooth transitions.' },
+                        },
+                        api: {
+                            api1: { name: 'Supabase', description: 'PostgreSQL database, Row-Level Security, and social authentication.' },
+                            api2: { name: 'Upstash Redis', description: 'Serverless in-memory cache minimizing external rate limits and latency.' },
+                            api3: { name: 'Google Gemini AI', description: 'AI model generating editorial verdicts and mood-matched summaries.' },
+                        },
+                    },
+                },
             },
         },
         aboutWebsiteCard: {
@@ -1016,43 +1022,6 @@ const translations = {
                 how: "仕組み",
                 built: "このプロジェクトの構築方法"
             },
-            continental: {
-                title: 'コンティネンタル',
-                description: 'AIアシスタント付きの車のECサイト。手頃な価格の車のクリーンな画像を提供します。',
-                botQuestions: [
-                    'コンティネンタルはどんなプロジェクトですか？',
-                    'どの技術スタックを使いましたか？',
-                    'バーチャルアシスタントはどのように動きますか？',
-                ],
-                Information: {
-                    title: 'コンティネンタル ウェブサイト',
-                    description: 'Continentalは、カンボジアのプノンペンに拠点を置く自動車のEコマースウェブサイトです。このプロジェクトはETEC IIの最終プロジェクトとして開発され、仮想アシスタントや模擬決済機能を含む、現代的で使いやすい体験を提供することを目的としています。ReactとTailwind CSSを使用して構築されています。',
-                    coreFeatures: {
-                        title: 'コア機能',
-                        features1: { title: 'バーチャルアシスタント', description: 'サービスや推奨事項をユーザーに提供するAIアシスタントを統合。' },
-                        features2: { title: 'メールと通知', description: 'EmailJSが連絡フォームと自動応答を処理。' },
-                        features3: { title: 'レスポンシブ、アニメーションUI', description: 'Tailwind CSSでスタイリング、Framer Motionでアニメーション。' },
-                        features4: { title: 'CMS管理コンテンツ', description: 'Contentfulを使用して動的コンテンツを管理。' },
-                    },
-                    whyThisProject: 'ETEC IIの最終プロジェクトとして開発。車のECサイトとしてランダムに割り当てられ、UIパターンと実際の実装を研究することになった。',
-                    howItWorks: {
-                        title: '仕組み',
-                        step1: { title: '訪問者が車を閲覧', description: 'ユーザーは車のリストをフィルターして探索できます。' },
-                        step2: { title: 'チャットボットが質問に回答', description: 'AIアシスタントが即座に回答。' },
-                        step3: { title: 'チェックアウト', description: 'デモ用のシミュレートされた支払いシステム。' },
-                        description: 'このプロジェクトは、最新のフロントエンドツールを活用することで、プロフェッショナルなEコマース体験をどのように実現できるかを示しています。',
-                    },
-                    howIBuiltIt: {
-                        title: 'このプロジェクトの構築方法',
-                        frameworks: { framework1: { name: 'React.js', description: 'ルーティングと状態管理に使用。' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'ユーティリティファーストのCSSフレームワーク。' } },
-                        api: {
-                            api1: { name: 'Google Maps', description: '位置情報サービスの統合。' },
-                            api2: { name: 'Groq', description: 'AIバーチャルアシスタントの統合。' },
-                        },
-                    }
-                },
-            },
             cambodia: {
                 title: 'カンボジアを発見',
                 description: 'カンボジアの観光情報サイト。天気ツール、観光地、教育コンテンツを掲載。',
@@ -1299,8 +1268,53 @@ const translations = {
                     }
                 }
             },
+            orgi: {
+                title: 'Orgi',
+                description: 'AIを活用した心理的レコメンドウィザード、クロスメディア追跡、批評家レビューを備えたフルスタックのメディアキュレーションプラットフォーム。',
+                botQuestions: [
+                    'Orgiはどんなプロジェクトですか？Orgi Picksの仕組みは？',
+                    'Google Gemini AIとUpstash Redisはどのように使われていますか？',
+                    'クライアントとサーバーにはどのような技術が使われていますか？',
+                ],
+                Information: {
+                    title: 'Orgi',
+                    description: 'Orgi（rate.）は、仕事終わりの「何を見ようか迷う時間（決定疲労）」を解消するために設計された、映画・アニメ・書籍のキュレーションプラットフォームです。3ステップの心理的レコメンドウィザード「Orgi Picks」、Geminiによる批評要約、高速なサーバーサイドキャッシュを統合し、心地よい作品発見体験を提供します。',
+                    coreFeatures: {
+                        title: 'コア機能',
+                        features1: { title: 'Orgi Picks レコメンドウィザード', description: '「授与された進捗効果」（開始時点で20%表示）を活用した3ステップの心理アンケートにより、気分、視聴環境、テンポ、物語の深さに応じた最適な候補をTMDBおよびMangaDexから抽出。' },
+                        features2: { title: 'AI批評・総評生成 (Gemini)', description: 'Google Gemini Flash Liteを活用し、作品の魅力や見どころ、視聴時の雰囲気、注意点をまとめた editorial verdict（編集部クイック総評）を瞬時に生成。' },
+                        features3: { title: '統合メディアエンジン', description: '映画・ドラマ・アニメを網羅するTMDB APIと、マンガ・WebtoonをカバーするMangaDexおよびOpenLibrary APIをシームレスに統合。' },
+                        features4: { title: 'RedisキャッシュとSupabase認証', description: '頻出するAPIリクエストをUpstash Redisで高速キャッシュしつつ、Supabaseによって安全なユーザー認証、コレクション管理、エピソードごとのディスカッション機能を実現。' },
+                        features5: { title: 'インプレイスモーダルと議論フォーラム', description: '検索一覧を離れることなく詳細・予告編・スコアを確認できるモーダルオーバーレイと、話数ごとの感想を共有できる掲示板システム。' },
+                    },
+                    whyThisProject: '複数のストリーミングや情報サイトを延々とスクロールする決定疲労を減らし、その日の気分や持ち時間にぴったり寄り添う作品と素早く出会える場所を作りたいと考え開発しました。',
+                    howItWorks: {
+                        title: '仕組み',
+                        step1: { title: 'メディアと気分の選択', description: '映画・アニメ・書籍から希望のジャンルを選び、Orgi Picksで気分やテンポ、誰と観るかを直感的に設定。' },
+                        step2: { title: 'アルゴリズム抽出とAI分析', description: 'Redisキャッシュを介してTMDB/MangaDexから高評価候補を絞り込み、Gemini AIがパーソナライズされた総評を付与。' },
+                        step3: { title: 'コレクション保存と交流', description: 'お気に入り作品をSupabaseのマイコレクションに追加し、各エピソードの掲示板で他のユーザーと感想を共有。' },
+                    },
+                    howIBuiltIt: {
+                        title: 'このプロジェクトの構築方法',
+                        frameworks: {
+                            framework1: { name: 'React 19', description: '最新のReactコンポーネント構成と高速なHMRによる快適なフロントエンド開発。' },
+                            framework2: { name: 'Express 5', description: '機能別（Feature-Driven）アーキテクチャを採用したモジュール型バックエンドAPI。' },
+                            framework3: { name: 'Vite', description: '超高速なビルドと開発環境を提供する最新フロントエンドツール。' },
+                        },
+                        styles: {
+                            style1: { name: 'Tailwind CSS v4', description: 'ダークモードを基調としたネオンアクセントと洗練されたUIスタイリング。' },
+                        },
+                        api: {
+                            api1: { name: 'Supabase', description: 'PostgreSQLデータベース、行レベルセキュリティ（RLS）、OAuth認証の提供。' },
+                            api2: { name: 'Upstash Redis', description: 'APIレート制限の回避と超低遅延レスポンスを実現するサーバーレスインメモリキャッシュ。' },
+                            api3: { name: 'Google Gemini AI', description: '作品ごとの的確な批評総評や鑑賞アドバイスを動的に生成するAIエンジン。' },
+                        },
+                    },
+                },
+            },
         },
         aboutWebsiteCard: {
+
           title: "このウェブサイトについて",
           imageAlt: "このウェブサイトのプレビュー",
           p1: "このポートフォリオをプロダクトのように解説しています。GitHub風UI、プロジェクト閲覧、AIアシスタント、翻訳、デプロイまでまとめています。",

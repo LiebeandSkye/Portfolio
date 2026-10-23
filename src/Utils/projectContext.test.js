@@ -30,13 +30,13 @@ test('returns empty string when project is null or undefined', () => {
 
 test('returns non-empty tech summary for sample portfolio projects with tags', () => {
   const sampleProject = {
-    id: 1,
-    title: 'Continental',
-    tags: ['React.js', 'Tailwind CSS', 'JavaScript', 'API', 'E-commerce', 'Virtual Assistant'],
+    id: 2,
+    title: 'Discover Cambodia',
+    tags: ['JavaScript', 'Python', 'HTML', 'CSS', 'Tailwind CSS', 'Tourism', 'Firebase'],
   };
   assert.equal(
     getProjectTechSummary(sampleProject),
-    'React.js, Tailwind CSS, JavaScript, API, E-commerce, Virtual Assistant',
+    'JavaScript, Python, HTML, CSS, Tailwind CSS, Tourism, Firebase',
   );
 });
 
