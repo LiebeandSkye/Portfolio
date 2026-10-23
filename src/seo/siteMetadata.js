@@ -4,12 +4,6 @@ export const PROFILE_IMAGE = `${BASE_URL}/og-image.png`;
 
 export const PROJECT_ROUTES = [
   {
-    path: '/portfolio/1',
-    name: 'Continental',
-    description: 'Continental is a car e-commerce project by Kry Rithisak with a polished catalog, simulated checkout flow, Contentful CMS, and an AI assistant.',
-    keywords: ['Continental', 'car e-commerce', 'Contentful', 'React', 'Groq AI'],
-  },
-  {
     path: '/portfolio/2',
     name: 'Discover Cambodia',
     description: 'Discover Cambodia is a tourism web project by Kry Rithisak using browser UI, weather data, and destination-focused travel content.',

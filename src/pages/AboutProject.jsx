@@ -139,18 +139,16 @@ const AboutProject = () => {
                                     </section>
 
                                     <section>
-                                        <h3 className="text-2xl font-bold mb-6">{t('projects.continental.Information.coreFeatures.title')}</h3>
+                                        <h3 className="text-2xl font-bold mb-6">{t(`projects.${project.langKey}.Information.coreFeatures.title`)}</h3>
                                         <ul className="space-y-4">
                                             {Object.keys(info.coreFeatures || {}).filter(key => key !== 'title').map((featureKey, i) => (
                                                 <li key={i} className="flex gap-2.5 text-(--text-light) items-start">
                                                     <span className="text-(--text-light) select-none leading-relaxed">•</span>
                                                     <span className="leading-relaxed">
                                                         <strong className="text-(--text-light)">
-                                                            {/* Correct Path: projects.continental.Information.coreFeatures.features1.title */}
                                                             {t(`projects.${project.langKey}.Information.coreFeatures.${featureKey}.title`)}
                                                         </strong>
                                                         {" – "}
-                                                        {/* Correct Path: projects.continental.Information.coreFeatures.features1.description */}
                                                         {t(`projects.${project.langKey}.Information.coreFeatures.${featureKey}.description`)}
                                                     </span>
                                                 </li>

@@ -35,8 +35,8 @@ function normalizeAndValidateRoute(rawPath) {
         return path;
     }
 
-    // Validate project detail routes: /portfolio/1 through /portfolio/7
-    if (/^\/portfolio\/[1-7]$/.test(path)) {
+    // Validate project detail routes: /portfolio/2 through /portfolio/8
+    if (/^\/portfolio\/[2-8]$/.test(path)) {
         return path;
     }
 

@@ -133,44 +133,6 @@ const translations = {
                 how: "How It Works",
                 built: "How I Built This Project"
             },
-            continental: {
-                title: 'Continental',
-                description: 'A car e-commerce website with virtual assistant and clean images of cars at affordable prices.',
-                // 3 quick-tap suggested questions shown when this project is attached
-                botQuestions: [
-                    'What is the Continental project about?',
-                    'What tech stack was used for Continental?',
-                    'How does the AI virtual assistant work?',
-                ],
-                Information: {
-                    title: 'Continental Website',
-                    description: 'Continental is a car e-commerce website located in Phnom Penh, Cambodia. This project was developed as a final project (ETEC II) to provide a modern, user-friendly experience including virtual assistance and simulated payment features. Built with React and Tailwind CSS.',
-                    coreFeatures: {
-                        title: 'Core Features',
-                        features1: { title: 'Virtual Assistance', description: 'Integrated AI assistant to help users with services and recommendations.' },
-                        features2: { title: 'Email & Notifications', description: 'EmailJS handles contact forms and automated responses.' },
-                        features3: { title: 'Responsive, Animated UI', description: 'Styled with Tailwind CSS and animated with Framer Motion.' },
-                        features4: { title: 'CMS-Driven Content', description: 'Contentful used for dynamic content management.' },
-                    },
-                    whyThisProject: 'Developed as a final project at ETEC II. Randomly assigned as car e-commerce, pushing me to research UI patterns and real-world implementations.',
-                    howItWorks: {
-                        title: 'How It Works',
-                        step1: { title: 'Visitor Browses Cars', description: 'Users can filter and explore car listings.' },
-                        step2: { title: 'Chatbot Answers Questions', description: 'AI assistant provides instant responses.' },
-                        step3: { title: 'Checkout', description: 'Simulated payment system for demonstration.' },
-                        description: 'This project demonstrates how modern frontend tools can create a professional e-commerce experience.',
-                    },
-                    howIBuiltIt: {
-                        title: 'How I Built this Project',
-                        frameworks: { framework1: { name: 'React.js', description: 'Used for routing and state management.' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'Utility-first CSS framework.' } },
-                        api: {
-                            api1: { name: 'Google Maps', description: 'Location services integration.' },
-                            api2: { name: 'Groq', description: 'AI virtual assistant integration.' },
-                        },
-                    }
-                },
-            },
             cambodia: {
                 title: 'Discover Cambodia',
                 description: 'An informative tourism website about Cambodia featuring weather tools, tourist destinations, and educational content.',
@@ -1059,43 +1021,6 @@ const translations = {
                 why: "なぜこのプロジェクト？",
                 how: "仕組み",
                 built: "このプロジェクトの構築方法"
-            },
-            continental: {
-                title: 'コンティネンタル',
-                description: 'AIアシスタント付きの車のECサイト。手頃な価格の車のクリーンな画像を提供します。',
-                botQuestions: [
-                    'コンティネンタルはどんなプロジェクトですか？',
-                    'どの技術スタックを使いましたか？',
-                    'バーチャルアシスタントはどのように動きますか？',
-                ],
-                Information: {
-                    title: 'コンティネンタル ウェブサイト',
-                    description: 'Continentalは、カンボジアのプノンペンに拠点を置く自動車のEコマースウェブサイトです。このプロジェクトはETEC IIの最終プロジェクトとして開発され、仮想アシスタントや模擬決済機能を含む、現代的で使いやすい体験を提供することを目的としています。ReactとTailwind CSSを使用して構築されています。',
-                    coreFeatures: {
-                        title: 'コア機能',
-                        features1: { title: 'バーチャルアシスタント', description: 'サービスや推奨事項をユーザーに提供するAIアシスタントを統合。' },
-                        features2: { title: 'メールと通知', description: 'EmailJSが連絡フォームと自動応答を処理。' },
-                        features3: { title: 'レスポンシブ、アニメーションUI', description: 'Tailwind CSSでスタイリング、Framer Motionでアニメーション。' },
-                        features4: { title: 'CMS管理コンテンツ', description: 'Contentfulを使用して動的コンテンツを管理。' },
-                    },
-                    whyThisProject: 'ETEC IIの最終プロジェクトとして開発。車のECサイトとしてランダムに割り当てられ、UIパターンと実際の実装を研究することになった。',
-                    howItWorks: {
-                        title: '仕組み',
-                        step1: { title: '訪問者が車を閲覧', description: 'ユーザーは車のリストをフィルターして探索できます。' },
-                        step2: { title: 'チャットボットが質問に回答', description: 'AIアシスタントが即座に回答。' },
-                        step3: { title: 'チェックアウト', description: 'デモ用のシミュレートされた支払いシステム。' },
-                        description: 'このプロジェクトは、最新のフロントエンドツールを活用することで、プロフェッショナルなEコマース体験をどのように実現できるかを示しています。',
-                    },
-                    howIBuiltIt: {
-                        title: 'このプロジェクトの構築方法',
-                        frameworks: { framework1: { name: 'React.js', description: 'ルーティングと状態管理に使用。' } },
-                        styles: { style1: { name: 'Tailwind CSS', description: 'ユーティリティファーストのCSSフレームワーク。' } },
-                        api: {
-                            api1: { name: 'Google Maps', description: '位置情報サービスの統合。' },
-                            api2: { name: 'Groq', description: 'AIバーチャルアシスタントの統合。' },
-                        },
-                    }
-                },
             },
             cambodia: {
                 title: 'カンボジアを発見',
