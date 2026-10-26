@@ -9,14 +9,8 @@ import SakuPilotIcon from '../../assets/Tools/SakuPilotIcon.poster.png';
 /**
  * ChatView — renders committed messages only.
  *
- * No longer receives typingIndex / typedText.
  * The typing animation is handled by <TypingMessage> in SakuPilot.jsx,
  * which is rendered outside this component so it doesn't cause re-renders here.
- *
- * This component only re-renders when:
- *  - A new complete message is added to `messages`
- *  - isThinking changes
- *  - suggestedQuestions changes (language switch)
  */
 const ChatView = memo(function ChatView({
     messages,
@@ -24,9 +18,19 @@ const ChatView = memo(function ChatView({
     suggestedQuestions,
     selectedProject,
     handleSendMessage,
+    handlePopulateInput,
     handleNavigate,
     t,
 }) {
+    // Identify the index of the latest assistant message for follow-up chips
+    let lastAssistantIdx = -1;
+    for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i]?.role === 'assistant') {
+            lastAssistantIdx = i;
+            break;
+        }
+    }
+
     return (
         <div className="flex flex-col">
             {/* Sticky disclaimer */}
@@ -82,7 +86,10 @@ const ChatView = memo(function ChatView({
                             key={i}
                             msg={msg}
                             isUser={isUser}
+                            isLatestAssistant={!isUser && i === lastAssistantIdx && !isThinking}
                             handleNavigate={handleNavigate}
+                            handleSendMessage={handleSendMessage}
+                            handlePopulateInput={handlePopulateInput}
                         />
                     );
                 })}
@@ -104,7 +111,14 @@ const ChatView = memo(function ChatView({
 });
 
 // ─── Individual message bubble — memoized so it never re-renders after commit ─
-const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate }) {
+const MessageBubble = memo(function MessageBubble({
+    msg,
+    isUser,
+    isLatestAssistant,
+    handleNavigate,
+    handleSendMessage,
+    handlePopulateInput,
+}) {
     return (
         <div className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start items-start'} w-full min-w-0`}>
             {!isUser && (
@@ -113,8 +127,8 @@ const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate 
                 </div>
             )}
             <div className={`
-                min-w-0 max-w-[85%] rounded-xl text-sm min-h-[1.5em] overflow-visible
-                ${isUser ? 'bg-(--pixel) px-3 py-2.5' : 'px-1 py-0.5'}
+                min-w-0 max-w-[88%] rounded-xl text-sm min-h-[1.5em] overflow-visible
+                ${isUser ? 'bg-(--pixel) px-3 py-2.5' : 'px-1 py-0.5 flex-1'}
             `}>
                 {isUser && (msg.files?.length > 0 || msg.project) && (
                     <div className="flex flex-wrap gap-1.5 mb-2">
@@ -139,7 +153,13 @@ const MessageBubble = memo(function MessageBubble({ msg, isUser, handleNavigate 
                         <MessageContent content={msg.content} />
                     </div>
                 ) : (
-                    <BotMessage content={msg.content} onNavigate={handleNavigate} />
+                    <BotMessage
+                        content={msg.content}
+                        onNavigate={handleNavigate}
+                        onSendPrompt={handleSendMessage}
+                        onPopulateInput={handlePopulateInput}
+                        showSuggestions={isLatestAssistant}
+                    />
                 )}
             </div>
         </div>

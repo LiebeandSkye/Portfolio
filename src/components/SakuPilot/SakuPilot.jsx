@@ -189,51 +189,29 @@ const SakuPilot = ({ isOpen, onClose }) => {
         setAttachedFiles([]);
 
         try {
-            // Use a snapshot of messages BEFORE the user msg was added
-            // (the setMessages above is async in React 18, so we pass the pre-update array)
-            const response = await getGroqResponse(`${text}${fileContext}`, messages, projectContext);
+            // Real-time token streaming — outputs chunks immediately as the AI generates them
+            const response = await getGroqResponse(`${text}${fileContext}`, messages, projectContext, {
+                onChunk: (accumulatedText) => {
+                    setIsThinking(false);
+                    setTypingMessage({ displayText: accumulatedText });
+                    scheduleScroll();
+                },
+            });
 
-            // Start typing animation — does NOT touch `messages` yet
-            setTypingMessage({ fullText: response, displayText: '' });
+            setTypingMessage(null);
+            if (response) {
+                setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+                scheduleScroll();
+            }
         } catch (err) {
             console.error('SakuPilot API error:', err);
             addNotification(err.message || 'Failed to get a response. Please try again.', 'error');
             setInputValue(text); // Restore input so user can retry
         } finally {
             setIsThinking(false);
+            setTypingMessage(null);
         }
-    }, [inputValue, attachedFiles, messages, selectedProject, t, addNotification]);
-
-    // ── Typing animation — runs in isolation, only TypingMessage re-renders ───
-    // Interval: 30ms (was 15ms) — still ~60 chars/sec, imperceptible difference
-    // Scroll: RAF-throttled — max once per frame (~16ms) instead of every 15ms
-    useEffect(() => {
-        if (!typingMessage?.fullText) return;
-        const fullText = typingMessage.fullText;
-        let idx = 0;
-
-        const interval = setInterval(() => {
-            idx += 4; // characters per tick
-            const displayText = fullText.slice(0, idx);
-            setTypingMessage({ fullText, displayText });
-            scheduleScroll();
-
-            if (idx >= fullText.length) {
-                clearInterval(interval);
-                // Commit finished message to main array — ChatView re-renders once
-                setMessages(prev => [...prev, { role: 'assistant', content: fullText }]);
-                setTypingMessage(null);
-            }
-        }, 30);
-
-        return () => {
-            clearInterval(interval);
-            if (scrollRafRef.current) {
-                cancelAnimationFrame(scrollRafRef.current);
-                scrollRafRef.current = null;
-            }
-        };
-    }, [typingMessage?.fullText, scheduleScroll]);
+    }, [inputValue, attachedFiles, messages, selectedProject, t, addNotification, scheduleScroll]);
 
     // ── Chat lifecycle ────────────────────────────────────────────────────────
     const startChat = useCallback((project) => {
@@ -388,6 +366,10 @@ const SakuPilot = ({ isOpen, onClose }) => {
                                         suggestedQuestions={suggestedQuestions}
                                         selectedProject={selectedProject}
                                         handleSendMessage={handleSendMessage}
+                                        handlePopulateInput={(promptText) => {
+                                            setInputValue(promptText);
+                                            requestAnimationFrame(() => textareaRef.current?.focus());
+                                        }}
                                         handleNavigate={handleNavigate}
                                         t={t}
                                     />

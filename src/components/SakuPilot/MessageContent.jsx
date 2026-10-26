@@ -1,44 +1,9 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGithubSafe from '../../Utils/githubMarkdown';
-
-// Syntax highlighting with Prism
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-tsx';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-markdown';
-import 'prismjs/components/prism-sql';
-import 'prismjs/components/prism-yaml';
-
-const LANGUAGE_MAP = {
-    js: 'javascript',
-    jsx: 'jsx',
-    ts: 'typescript',
-    tsx: 'tsx',
-    py: 'python',
-    python: 'python',
-    sh: 'bash',
-    bash: 'bash',
-    shell: 'bash',
-    zsh: 'bash',
-    json: 'json',
-    css: 'css',
-    html: 'markup',
-    xml: 'markup',
-    markup: 'markup',
-    sql: 'sql',
-    md: 'markdown',
-    markdown: 'markdown',
-    yml: 'yaml',
-    yaml: 'yaml',
-};
+import CodePlayground from './CodePlayground';
+import { DynamicIcon } from './InteractiveWidget';
 
 const MDLi = ({ children }) => (
     <li className="leading-relaxed text-(--text-light) break-words mb-1.5 last:mb-0">
@@ -147,13 +112,15 @@ const MDTr = ({ children }) => (
     <tr className="hover:bg-(--pixel-hover)/30 transition-colors last:border-0">{children}</tr>
 );
 
-const MessageContent = memo(({ content }) => {
+const MessageContent = memo(({ content, onOpenCanvas, onSendPrompt }) => {
     const processedContent = useMemo(() => {
         if (typeof content !== 'string') return content;
         return content
             .replace(/â€¢/g, '\n•')
             // Remove standalone "undefined" or "null" lines accidentally emitted between blocks
             .replace(/(^|\n)\s*(?:undefined|null)\s*(?=\n|$)/gi, '$1')
+            // Convert inline [ICON:name] tokens to inline code markers that we render as icons
+            .replace(/\[ICON:\s*([a-z0-9_-]+)\s*\]/gi, '`$icon:$1`')
             // Convert markdown arrow prefixes like "^-> " or "\n-> " to styled arrow bullets
             .replace(/(^|\n)->\s+/g, '$1- → ')
             .replace(/(^|\n)▸\s+/g, '$1- ▸ ')
@@ -169,9 +136,18 @@ const MessageContent = memo(({ content }) => {
             const contentStr = String(children || '');
             const trimmed = contentStr.trim();
 
-            // Guard against accidental "undefined" or null output from AI models
             if (!trimmed || trimmed === 'undefined' || trimmed === 'null') {
                 return null;
+            }
+
+            // Inline semantic icon token (`$icon:name`)
+            if (trimmed.startsWith('$icon:')) {
+                const iconName = trimmed.slice(6);
+                return (
+                    <span className="inline-flex items-center justify-center align-middle mx-1 p-1 rounded-md bg-(--pixel2) border border-(--border-light) text-(--sucess)">
+                        <DynamicIcon name={iconName} className="w-3.5 h-3.5" />
+                    </span>
+                );
             }
 
             const isMultiline = contentStr.includes('\n');
@@ -187,7 +163,14 @@ const MessageContent = memo(({ content }) => {
                     </code>
                 );
             }
-            return <CodeBlock language={match ? match[1] : 'text'} code={contentStr.replace(/\n$/, '')} />;
+            return (
+                <CodePlayground
+                    language={match ? match[1] : 'text'}
+                    code={contentStr.replace(/\n$/, '')}
+                    onOpenCanvas={onOpenCanvas}
+                    onSendPrompt={onSendPrompt}
+                />
+            );
         },
         li: MDLi,
         ul: MDUl,
@@ -208,7 +191,7 @@ const MessageContent = memo(({ content }) => {
         th: MDTh,
         td: MDTd,
         tr: MDTr,
-    }), []);
+    }), [onOpenCanvas, onSendPrompt]);
 
     return (
         <div className="overflow-x-auto w-full min-w-0 max-w-full">
@@ -220,103 +203,4 @@ const MessageContent = memo(({ content }) => {
 });
 MessageContent.displayName = 'MessageContent';
 
-const CodeBlock = memo(function CodeBlock({ language, code }) {
-    const [copyState, setCopyState] = useState('idle');
-
-    const normalizedLang = (language || 'text').toLowerCase();
-    const prismLang = LANGUAGE_MAP[normalizedLang] || (Prism.languages[normalizedLang] ? normalizedLang : null);
-
-    const highlightedHtml = useMemo(() => {
-        if (prismLang && Prism.languages[prismLang]) {
-            try {
-                return Prism.highlight(code, Prism.languages[prismLang], prismLang);
-            } catch (e) {
-                console.warn('Prism highlight failed:', e);
-            }
-        }
-        return null;
-    }, [code, prismLang]);
-
-    const handleCopy = () => {
-        if (copyState !== 'idle') return;
-        copyToClipboard(code)
-            .then(() => {
-                setCopyState('copied');
-                setTimeout(() => setCopyState('idle'), 2000);
-            })
-            .catch(() => {
-                setCopyState('error');
-                setTimeout(() => setCopyState('idle'), 2000);
-            });
-    };
-
-    return (
-        <div className="relative my-4 rounded-xl overflow-hidden border border-(--border-light) bg-[#0d1117] text-[#e6edf3] shadow-sm max-w-full code-theme-dark">
-            <div className="flex items-center justify-between bg-[#161b22] px-4 py-2 text-xs text-[#8b949e] border-b border-[#30363d]">
-                <span className="font-mono font-semibold uppercase tracking-wider text-[11px] text-[#c9d1d9]">
-                    {normalizedLang}
-                </span>
-                <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-[#30363d] hover:text-[#f0f6fc] transition-colors cursor-pointer select-none text-xs font-medium"
-                    aria-label="Copy code to clipboard"
-                >
-                    {copyState === 'copied' && (
-                        <>
-                            <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span className="text-emerald-400">Copied!</span>
-                        </>
-                    )}
-                    {copyState === 'error' && (
-                        <>
-                            <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            <span className="text-red-400">Failed</span>
-                        </>
-                    )}
-                    {copyState === 'idle' && (
-                        <>
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                            <span>Copy code</span>
-                        </>
-                    )}
-                </button>
-            </div>
-            <div className="overflow-x-auto">
-                <pre className="m-0 p-4 text-[13.5px] leading-relaxed font-mono overflow-x-auto bg-transparent">
-                    {highlightedHtml ? (
-                        <code
-                            className={`language-${normalizedLang}`}
-                            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-                        />
-                    ) : (
-                        <code className={`language-${normalizedLang}`}>{code}</code>
-                    )}
-                </pre>
-            </div>
-        </div>
-    );
-});
-CodeBlock.displayName = 'CodeBlock';
-
-function copyToClipboard(text) {
-    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
-    return new Promise((resolve, reject) => {
-        const el = document.createElement('textarea');
-        el.value = text;
-        el.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
-        document.body.appendChild(el);
-        el.focus();
-        el.select();
-        document.execCommand('copy') ? resolve() : reject();
-        document.body.removeChild(el);
-    });
-}
-
 export default MessageContent;
-

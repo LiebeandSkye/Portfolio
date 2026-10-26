@@ -1,110 +1,97 @@
 import React, { memo, useMemo } from 'react';
 import MessageContent from './MessageContent';
 import NavButton from './NavButton';
+import VisualCard from './VisualCard';
+import SuggestionChips from './SuggestionChips';
+import { StatsWidget, QuizWidget, OptionSelectorWidget } from './InteractiveWidget';
+import { parseIntelligentMessage } from './intelligentUiParser';
 
-const NAV_REGEX = /\[NAV:([^\]|]+)\]([^[]*)\[\/NAV]|\[NAV:([^\]|]+)\|([^\]]+)]/g;
-
-const ALLOWED_STATIC_ROUTES = new Set([
-    '/',
-    '/welcome',
-    '/portfolio',
-    '/contact',
-    '/sakupilot',
-    '/about-website',
-    '/dev-quiz',
-]);
-
-function normalizeAndValidateRoute(rawPath) {
-    if (!rawPath || typeof rawPath !== 'string') return null;
-    let path = rawPath.trim();
-    if (!path.startsWith('/')) {
-        path = `/${path}`;
-    }
-
-    // Strip trailing slash unless it's root
-    if (path.length > 1 && path.endsWith('/')) {
-        path = path.slice(0, -1);
-    }
-
-    // Reject placeholder tokens like '...', '/...', '.', etc.
-    if (path.includes('...') || /^\/\.+$/.test(path)) {
-        return null;
-    }
-
-    if (ALLOWED_STATIC_ROUTES.has(path)) {
-        return path;
-    }
-
-    // Validate project detail routes: /portfolio/2 through /portfolio/8
-    if (/^\/portfolio\/[2-8]$/.test(path)) {
-        return path;
-    }
-
-    return null;
-}
-
-function isValidNavLabel(label) {
-    if (!label || typeof label !== 'string') return false;
-    const trimmed = label.trim();
-    // Reject empty labels, ellipsis, or placeholder characters
-    if (!trimmed || trimmed === '...' || trimmed === '…' || /^\.+$/.test(trimmed)) {
-        return false;
-    }
-    return true;
-}
-
-function parseNavTokens(content) {
-    if (typeof content !== 'string') return [{ type: 'text', value: String(content) }];
-
-    const parts = [];
-    let lastIndex = 0;
-    let match;
-    NAV_REGEX.lastIndex = 0; // reset since it's module-level with /g flag
-
-    while ((match = NAV_REGEX.exec(content)) !== null) {
-        if (match.index > lastIndex) {
-            const chunk = content.slice(lastIndex, match.index);
-            if (chunk) parts.push({ type: 'text', value: chunk });
-        }
-        const rawPath  = match[1] || match[3];
-        const rawLabel = (match[2] || match[4] || '').trim();
-
-        const validatedPath = normalizeAndValidateRoute(rawPath);
-        if (validatedPath && isValidNavLabel(rawLabel)) {
-            parts.push({ type: 'nav', path: validatedPath, label: rawLabel });
-        }
-
-        lastIndex = match.index + match[0].length;
-    }
-
-    if (lastIndex < content.length) {
-        const remaining = content.slice(lastIndex);
-        if (remaining) parts.push({ type: 'text', value: remaining });
-    }
-
-    if (parts.length === 0) parts.push({ type: 'text', value: content });
-    return parts;
-}
-
-// memo — for committed messages this never re-renders after initial paint.
-// For the typing message (in TypingMessage.jsx) it re-renders each tick,
-// but only the single small bubble, not the whole list.
-const BotMessage = memo(function BotMessage({ content, onNavigate }) {
-    // Parse once per content value change
-    const parts = useMemo(() => parseNavTokens(content), [content]);
+const BotMessage = memo(function BotMessage({
+    content,
+    onNavigate,
+    onSendPrompt,
+    onPopulateInput,
+    onOpenCanvas,
+    isTyping = false,
+    showSuggestions = true,
+}) {
+    const { parts, suggestions } = useMemo(
+        () =>
+            parseIntelligentMessage(content, {
+                isTyping,
+                allowAutoSuggestions: !isTyping && showSuggestions,
+            }),
+        [content, isTyping, showSuggestions]
+    );
 
     return (
-        <div className="flex flex-col gap-1 overflow-x-auto w-full min-w-0 max-w-full">
-            {parts.map((part, i) =>
-                part.type === 'nav' ? (
-                    <NavButton key={i} path={part.path} label={part.label} onClick={onNavigate} />
-                ) : (
-                    part.value && (
-                        <div key={i} className="overflow-x-auto break-words w-full min-w-0 max-w-full">
-                            <MessageContent content={part.value} />
-                        </div>
-                    )
-                )
+        <div className="flex flex-col gap-1.5 overflow-x-auto w-full min-w-0 max-w-full">
+            {parts.map((part, i) => {
+                if (part.type === 'nav') {
+                    return (
+                        <NavButton
+                            key={`nav-${i}`}
+                            path={part.path}
+                            label={part.label}
+                            onClick={onNavigate}
+                        />
+                    );
+                }
+
+                if (part.type === 'visual') {
+                    return (
+                        <VisualCard
+                            key={`vis-${i}-${part.query}`}
+                            query={part.query}
+                            title={part.title}
+                            caption={part.caption}
+                        />
+                    );
+                }
+
+                if (part.type === 'stats') {
+                    return <StatsWidget key={`stats-${i}`} items={part.items} />;
+                }
+
+                if (part.type === 'quiz') {
+                    return (
+                        <QuizWidget
+                            key={`quiz-${i}`}
+                            question={part.question}
+                            options={part.options}
+                            answer={part.answer}
+                            explanation={part.explanation}
+                        />
+                    );
+                }
+
+                if (part.type === 'options') {
+                    return (
+                        <OptionSelectorWidget
+                            key={`opts-${i}`}
+                            groups={part.groups}
+                            buttonLabel={part.buttonLabel}
+                            onSubmitSelection={onSendPrompt}
+                        />
+                    );
+                }
+
+                return (
+                    <MessageContent
+                        key={`txt-${i}`}
+                        content={part.value}
+                        onOpenCanvas={onOpenCanvas}
+                        onSendPrompt={onSendPrompt}
+                    />
+                );
+            })}
+
+            {!isTyping && showSuggestions && suggestions.length > 0 && onSendPrompt && (
+                <SuggestionChips
+                    suggestions={suggestions}
+                    onSelectSuggestion={onSendPrompt}
+                    onPopulateInput={onPopulateInput}
+                />
             )}
         </div>
     );

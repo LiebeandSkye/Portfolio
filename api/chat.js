@@ -248,6 +248,48 @@ CRITICAL PRESENTATION & SYNTAX RESTRICTIONS:
 - **Callouts & Notes**: Use blockquotes (\`> **Note:** ...\`) for tips, warnings, or best practices.
 - **Tables**: Use Markdown tables for comparative data, tech stacks, or pros/cons.
 - **Spacing**: Keep single blank lines between paragraphs and sections (avoid double/excess blank lines).
+
+---
+
+### AUTONOMOUS INTELLIGENT UI ENGINE (CRITICAL — USE SMART JUDGMENT):
+You are equipped with a client-side **Intelligent UI Engine** (similar to ChatGPT Canvas & Artifacts). You must autonomously decide when a user's prompt benefits from rich UI components, interactive sandboxes, visuals, or follow-up options:
+
+1. **LIVE INTERACTIVE SANDBOX & CODE PLAYGROUND (\`\`\`sandbox or \`\`\`html or \`\`\`javascript)**:
+   - **When to use**: Whenever the user asks you to build, prototype, demo, visualize, or experiment with a UI component, mini-app, calculator, game, animation, SVG graphic, or interactive concept.
+   - **How to use**: Wrap self-contained HTML/CSS/JS (Tailwind CSS is automatically preloaded in the sandbox!) inside a \`\`\`sandbox or \`\`\`html fenced block. The UI will automatically render a live interactive preview, a live code editor for the user to experiment with, and a split-screen Canvas workspace!
+   - For pure JavaScript algorithms/logic, use \`\`\`javascript — the UI automatically provides a "Run JS" console runner for the user.
+
+2. **WEB VISUALS & PORTFOLIO GALLERY CARDS (\`[VISUAL: ...]\`)**:
+   - **When to use**: When discussing visual topics, landmarks/places (e.g., Cambodia, Angkor Wat, Tokyo), scientific/architectural concepts, or when showcasing Kry's projects (Saku App, Orgi, Project Nebula, SakiKaraoke, Charm Store, AI MemoryPorter, Discover Cambodia).
+   - **Syntax**: Place on its own line:
+     \`[VISUAL: query="search keyword" | title="Card Title" | caption="Brief visual explanation"]\`
+   - **Rule**: Only include when a visual genuinely enriches the answer (0 or 1 per response). Do NOT use on trivial greetings.
+
+3. **KEY METRICS & BENTO STAT CARDS (\`[STATS: ...]\`)**:
+   - **When to use**: When highlighting performance benchmarks, project footprint stats (e.g., Saku App's 20MB APK / <25MB RAM), or key numerical comparisons.
+   - **Syntax**: Place on its own line:
+     \`[STATS: label="RAM Usage", value="<25 MB", sub="0 when idle", icon="cpu" | label="APK Size", value="20 MB", sub="100% Offline", icon="zap"]\`
+   - **Valid icons**: \`cpu\`, \`zap\`, \`code\`, \`globe\`, \`database\`, \`shield\`, \`terminal\`, \`layers\`, \`mobile\`, \`server\`, \`book\`, \`music\`, \`cart\`, \`map\`, \`sparkles\`, \`rocket\`, \`game\`, \`package\`, \`clock\`, \`activity\`, \`star\`.
+
+4. **INTERACTIVE MINI-QUIZ WIDGET (\`[QUIZ: ...]\`)**:
+   - **When to use**: When the user asks to be quizzed, wants to test their understanding of a coding concept, or asks "quiz me".
+   - **Syntax**: Place on its own line (use semicolons \`;\` between options, and 0-based index for \`answer\`):
+     \`[QUIZ: question="Your question?" | options="Option A;Option B;Option C;Option D" | answer="0" | explanation="Why Option A is correct."]\`
+
+5. **CHATGPT-STYLE INTERACTIVE OPTION BUILDER CARD (\`[OPTIONS: ...]\`)**:
+   - **When to use**: Whenever the user is building something, exploring what to build/learn next, choosing project features/architecture, or when you want to give the user a structured multi-choice configuration card (just like ChatGPT's interactive option selector!).
+   - **Syntax** (place on its own line; use \`|\` between groups, \`;\` between options within a group, and \` — \` to separate each option's title from its description):
+     \`[OPTIONS: button="Build this calculator" | group="Choose your calculator type": "Command-line calculator — improve the one above"; "GUI calculator — buttons and a display, like Windows Calculator"; "Web calculator — interactive browser interface"; "Scientific calculator — powers, roots, and trigonometry" | group="Your experience level": "Beginner — explain the code step by step"; "Intermediate — cleaner architecture"]\`
+   - **Rule**: Use 1 or 2 groups per \`[OPTIONS: ...]\` card, with 2 to 4 choices per group, and a clear action \`button="..."\` label.
+
+6. **INLINE SEMANTIC ICONS (\`[ICON:name]\`)**:
+   - You may optionally sprinkle \`[ICON:sparkles]\`, \`[ICON:rocket]\`, \`[ICON:code]\`, \`[ICON:shield]\`, or \`[ICON:zap]\` inline in headings or callouts for visual polish.
+
+7. **NEXT-MESSAGE FOLLOW-UP OPTIONS (\`[SUGGEST: ...]\`)**:
+   - **When to use**: At the VERY END of substantive answers (if you didn't already include an \`[OPTIONS: ...]\` card), provide 2 to 3 smart, clickable follow-up prompts the user is most likely to want next. Skip on simple "hi" / "thanks" replies.
+   - **Syntax** (MUST be the final line of your response):
+     \`[SUGGEST: "First follow-up option" | "Second follow-up option" | "Third follow-up option"]\`
+   - Make suggestions specific and actionable (e.g., \`"Build an interactive demo of this"\`, \`"How does Saku sync with AnkiDroid?"\`, \`"Compare this with Next.js"\`).
 ${isImmersive ? `
 ### IMMERSIVE CHAT MODE:
 - This is the full-page SakuPilot experience, so responses can be deeper, structured, and more polished.
@@ -274,8 +316,10 @@ Current context: ${projectContext
             content: typeof msg.content === 'string' ? msg.content : String(msg.content || '')
         }));
 
+        const wantsStream = body.stream === true && typeof res.write === 'function' && typeof res.setHeader === 'function';
+
         if (activeModel === 'gemini') {
-            const geminiModelCandidates = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash'];
+            const geminiModelCandidates = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash-lite'];
             let lastGeminiError = null;
             let responseText = null;
 
@@ -297,10 +341,31 @@ Current context: ${projectContext
                         },
                     });
 
-                    const result = await chat.sendMessage(userInput);
-                    const response = await result.response;
-                    responseText = response.text();
-                    if (responseText) break;
+                    if (wantsStream) {
+                        const streamResult = await chat.sendMessageStream(userInput);
+                        res.status(200);
+                        res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+                        res.setHeader('Cache-Control', 'no-cache, no-transform');
+                        res.setHeader('Connection', 'keep-alive');
+
+                        let streamedAny = false;
+                        for await (const chunk of streamResult.stream) {
+                            const chunkText = chunk.text();
+                            if (chunkText) {
+                                streamedAny = true;
+                                res.write(`data: ${JSON.stringify({ delta: chunkText })}\n\n`);
+                            }
+                        }
+                        if (streamedAny) {
+                            res.write('data: [DONE]\n\n');
+                            return res.end();
+                        }
+                    } else {
+                        const result = await chat.sendMessage(userInput);
+                        const response = await result.response;
+                        responseText = response.text();
+                        if (responseText) break;
+                    }
                 } catch (err) {
                     lastGeminiError = err;
                     console.warn(`Gemini model ${geminiModelId} failed, trying fallback:`, err.message);
@@ -312,26 +377,59 @@ Current context: ${projectContext
             }
             throw lastGeminiError || new Error("Failed to get response from Gemini.");
         } else {
-            // Default to Groq (GPT-OSS 120B with resilient fallbacks)
-            const groqModelCandidates = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'groq/compound-mini'];
+            // Fast Groq LPU models — llama-3.3-70b-versatile streams at 300+ tok/sec with instant first token
+            const groqModelCandidates = ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
             let lastGroqError = null;
             let responseContent = null;
 
             for (const groqModelId of groqModelCandidates) {
                 try {
-                    const chatCompletion = await groq.chat.completions.create({
-                        messages: [
-                            { role: "system", content: systemMessage },
-                            ...sanitizedHistory,
-                            { role: "user", content: userInput },
-                        ],
-                        model: groqModelId,
-                        temperature: isImmersive ? 0.72 : 0.75,
-                        max_tokens: isImmersive ? 4096 : 2048,
-                        top_p: 0.92,
-                    });
-                    responseContent = chatCompletion.choices?.[0]?.message?.content;
-                    if (responseContent) break;
+                    if (wantsStream) {
+                        const stream = await groq.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemMessage },
+                                ...sanitizedHistory,
+                                { role: "user", content: userInput },
+                            ],
+                            model: groqModelId,
+                            temperature: isImmersive ? 0.72 : 0.75,
+                            max_tokens: isImmersive ? 4096 : 2048,
+                            top_p: 0.92,
+                            stream: true,
+                        });
+
+                        res.status(200);
+                        res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+                        res.setHeader('Cache-Control', 'no-cache, no-transform');
+                        res.setHeader('Connection', 'keep-alive');
+
+                        let streamedAny = false;
+                        for await (const chunk of stream) {
+                            const delta = chunk.choices?.[0]?.delta?.content;
+                            if (delta) {
+                                streamedAny = true;
+                                res.write(`data: ${JSON.stringify({ delta })}\n\n`);
+                            }
+                        }
+                        if (streamedAny) {
+                            res.write('data: [DONE]\n\n');
+                            return res.end();
+                        }
+                    } else {
+                        const chatCompletion = await groq.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemMessage },
+                                ...sanitizedHistory,
+                                { role: "user", content: userInput },
+                            ],
+                            model: groqModelId,
+                            temperature: isImmersive ? 0.72 : 0.75,
+                            max_tokens: isImmersive ? 4096 : 2048,
+                            top_p: 0.92,
+                        });
+                        responseContent = chatCompletion.choices?.[0]?.message?.content;
+                        if (responseContent) break;
+                    }
                 } catch (error) {
                     lastGroqError = error;
                     console.warn(`Groq model ${groqModelId} failed, trying fallback:`, error.message);
