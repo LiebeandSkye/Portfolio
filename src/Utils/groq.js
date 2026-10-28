@@ -20,6 +20,7 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
                 projectContext,
                 mode: options.mode,
                 model: options.model,
+                images: options.images,
                 stream: wantsStream,
             }),
         });

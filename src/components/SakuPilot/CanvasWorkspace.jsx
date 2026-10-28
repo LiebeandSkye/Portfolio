@@ -60,7 +60,7 @@ const CanvasWorkspace = memo(function CanvasWorkspace({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 40 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed inset-0 z-[90] lg:static lg:z-auto flex flex-col w-full lg:w-[50%] xl:w-[54%] h-full border-l border-(--border-light) bg-[#0d1117] text-[#e6edf3] shadow-2xl"
+            className="fixed inset-0 z-40 lg:static lg:z-auto flex flex-col w-full lg:w-[50%] xl:w-[54%] h-full border-l border-(--border-light) bg-[#0d1117] text-[#e6edf3] shadow-2xl"
         >
             {/* Top Canvas Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-[#161b22] border-b border-[#30363d] shrink-0">

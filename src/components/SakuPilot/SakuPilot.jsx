@@ -310,7 +310,7 @@ const SakuPilot = ({ isOpen, onClose }) => {
                         exit={{ opacity: 0, scale: 0.95, y: 40 }}
                         className="fixed inset-0 md:inset-auto md:bottom-2 md:right-3 md:w-[580px] md:h-[640px]
                             bg-(--pixel2) border-t md:border border-(--border-light)
-                            md:rounded-xl flex flex-col z-[100] text-[#e6edf3] overflow-hidden"
+                            md:rounded-xl flex flex-col z-60 text-[#e6edf3] overflow-hidden"
                     >
                         {/* Header */}
                         <div className="flex-shrink-0 p-4 border-b border-(--border-light) flex justify-between items-center">

@@ -20,7 +20,7 @@ export function NotificationProvider({ children }) {
         <NotificationContext.Provider value={{ addNotification }}>
             {children}
 
-            <div className="fixed top-5 right-5 z-[99999] flex flex-col gap-3 pointer-events-none">
+            <div className="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none">
                 <AnimatePresence mode="popLayout" initial={false}>
                     {notifications.map((notif) => (
                         <motion.div

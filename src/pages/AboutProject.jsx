@@ -125,7 +125,7 @@ const AboutProject = () => {
                     <div className="border border-(--border-light) rounded-md overflow-visible">
 
                         {/* STICKY TAB HEADER (Only this part stays fixed) */}
-                        <div className="sticky top-0 z-[40] flex border-b border-(--border-light) rounded-t-md bg-(--pixel)">
+                        <div className="sticky top-0 z-10 flex border-b border-(--border-light) rounded-t-md bg-(--pixel)">
                             <TabBtn active={activeTab === 'readme'} onClick={() => setActiveTab('readme')} icon={<MdOutlineLibraryBooks />} label="Readme" />
                             <TabBtn active={activeTab === 'screenshots'} onClick={() => setActiveTab('screenshots')} icon={<MdOutlinePhotoLibrary />} label="Screenshots" />
                         </div>

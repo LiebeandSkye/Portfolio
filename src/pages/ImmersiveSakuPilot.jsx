@@ -34,7 +34,7 @@ import MessageContent from '../components/SakuPilot/MessageContent';
 import BotMessage from '../components/SakuPilot/BotMessage';
 import TypingMessage from '../components/SakuPilot/TypingMessage';
 import CanvasWorkspace from '../components/SakuPilot/CanvasWorkspace';
-import PromptBox from '../components/SakuPilot/PromptBox';
+import PromptBox, { FileCard } from '../components/SakuPilot/PromptBox';
 import {
     createConversation,
     loadConversations,
@@ -245,8 +245,32 @@ const ImmersiveSakuPilot = () => {
             ? filesOrEvent
             : Array.from(filesOrEvent?.target?.files || []);
         if (files.length === 0) return;
-        const prepared = await Promise.all(files.map(prepareAttachment));
-        setAttachments((prev) => [...prev, ...prepared.filter(Boolean)].slice(0, 6));
+
+        // Show each file right away as "uploading", then fill in once it has been read
+        const placeholders = files.map((file) => ({
+            id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 7)}`,
+            name: file.name,
+            type: file.type || 'unknown',
+            kind: file.type.startsWith('image/') ? 'image' : 'document',
+            size: file.size,
+            status: 'uploading',
+            progress: 0,
+        }));
+        setAttachments((prev) => [...prev, ...placeholders].slice(0, 6));
+
+        const patchAttachment = (id, patch) => setAttachments((prev) => (
+            prev.map((attachment) => (attachment.id === id ? { ...attachment, ...patch } : attachment))
+        ));
+
+        await Promise.all(files.map(async (file, index) => {
+            const { id } = placeholders[index];
+            try {
+                const patch = await prepareAttachment(file, (progress) => patchAttachment(id, { progress }));
+                patchAttachment(id, { ...patch, status: 'ready', progress: 100 });
+            } catch {
+                patchAttachment(id, { status: 'error', note: 'Could not read this file.' });
+            }
+        }));
         if (filesOrEvent?.target) filesOrEvent.target.value = '';
     }, []);
 
@@ -288,6 +312,7 @@ const ImmersiveSakuPilot = () => {
     const handleSendMessage = useCallback(async (textOverride) => {
         const text = typeof textOverride === 'string' ? textOverride : inputValue;
         if (!text.trim() && attachments.length === 0) return;
+        if (attachments.some((attachment) => attachment.status === 'uploading')) return;
 
         const attachmentText = attachments.map((attachment) => (
             `--- ATTACHMENT: ${attachment.name} (${attachment.type}) ---\n${attachment.content || attachment.note}\n--- END ATTACHMENT ---`
@@ -300,7 +325,7 @@ const ImmersiveSakuPilot = () => {
         const userMessage = {
             role: 'user',
             content: text.trim() || `Uploaded ${attachments.length} attachment(s)`,
-            files: attachments.map(({ name, type, kind, previewUrl }) => ({ name, type, kind, previewUrl })),
+            files: attachments.map(({ name, type, kind, previewUrl, size }) => ({ name, type, kind, previewUrl, size })),
             project: projectContext ? { title: projectContext.title } : undefined,
         };
 
@@ -334,6 +359,9 @@ const ImmersiveSakuPilot = () => {
                 {
                     mode: 'immersive',
                     model: selectedModel,
+                    images: attachments
+                        .filter((attachment) => attachment.modelImage)
+                        .map(({ name, modelImage }) => ({ name, ...modelImage })),
                     onChunk: (accumulatedText) => {
                         setTypingMessage({ displayText: accumulatedText });
                         scheduleScroll();
@@ -382,7 +410,7 @@ const ImmersiveSakuPilot = () => {
                         animate={{ width: 290, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 left-0 z-[80] border-r border-(--border-light) bg-(--pixel2) md:static shadow-xl md:shadow-none overflow-hidden"
+                        className="fixed inset-y-0 left-0 z-[45] border-r border-(--border-light) bg-(--pixel2) md:static shadow-xl md:shadow-none overflow-hidden"
                     >
                         <div className="w-[290px] h-full flex flex-col p-3">
                     <div className="mb-3 flex items-center justify-between px-2 py-1">
@@ -508,7 +536,7 @@ const ImmersiveSakuPilot = () => {
                                                                 </button>
 
                                                                 {dropdownOpenId === conversation.id && (
-                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                    <div className="absolute right-0 top-full z-50 mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
                                                                         <button
                                                                             onClick={() => handlePinConversation(conversation.id)}
                                                                             className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
@@ -611,7 +639,7 @@ const ImmersiveSakuPilot = () => {
                                                                 </button>
 
                                                                 {dropdownOpenId === conversation.id && (
-                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                    <div className="absolute right-0 top-full z-50 mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
                                                                         <button
                                                                             onClick={() => handlePinConversation(conversation.id)}
                                                                             className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
@@ -649,10 +677,10 @@ const ImmersiveSakuPilot = () => {
                 )}
             </AnimatePresence>
 
-            {isSidebarOpen && <button className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
+            {isSidebarOpen && <button className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
 
             <div className="flex min-w-0 flex-1 flex-col bg-(--light) min-h-0">
-                <div className="relative flex h-14 shrink-0 items-center px-3 md:px-5">
+                <div className="relative z-30 flex h-14 shrink-0 items-center px-3 md:px-5">
                     <div className="flex items-center gap-1">
                         {/* Sidebar toggle */}
                         <button
@@ -665,7 +693,7 @@ const ImmersiveSakuPilot = () => {
                     </div>
 
                     {/* Model Switcher — Centered */}
-                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[10000000000000]">
+                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-50">
                         <button
                             onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
@@ -860,7 +888,7 @@ const ImmersiveSakuPilot = () => {
 
             {isSearchOpen && typeof document !== 'undefined' && createPortal(
                 <div 
-                    className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/50 px-4 pt-20 backdrop-blur-[1px] cursor-pointer"
+                    className="fixed inset-0 z-70 flex items-start justify-center bg-black/50 px-4 pt-20 backdrop-blur-[1px] cursor-pointer"
                     onClick={() => setIsSearchOpen(false)}
                     role="dialog"
                     aria-modal="true"
@@ -995,10 +1023,7 @@ const ChatMessage = ({
                                     className="h-16 w-16 rounded-xl object-cover border border-(--border-light) shadow-xs"
                                 />
                             ) : (
-                                <span key={file.name || idx} className="flex items-center gap-1 rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs text-(--text-gray)">
-                                    <FiPaperclip size={11} />
-                                    {file.name}
-                                </span>
+                                <FileCard key={file.name || idx} file={{ ...file, status: 'ready' }} className="bg-(--pixel2)" />
                             )
                         ))}
                     </div>
@@ -1020,49 +1045,66 @@ const ChatMessage = ({
     );
 };
 
-const prepareAttachment = async (file) => {
-    const base = {
-        id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 7)}`,
-        name: file.name,
-        type: file.type || 'unknown',
-        kind: file.type.startsWith('image/') ? 'image' : 'document',
-        size: file.size,
+const readFile = (file, mode, onProgress) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = (event) => {
+        if (event.lengthComputable) onProgress?.((event.loaded / event.total) * 100);
     };
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    if (mode === 'dataUrl') reader.readAsDataURL(file);
+    else reader.readAsText(file);
+});
 
+const TEXT_EXTENSIONS = ['txt', 'md', 'json', 'csv', 'js', 'jsx', 'ts', 'tsx', 'css', 'html', 'py', 'java', 'c', 'cpp', 'go', 'rs', 'xml', 'yml', 'yaml', 'sql', 'sh', 'log'];
+
+// Downscale to keep the request small (Vercel body limit ~4.5MB); returns { mimeType, data } base64
+const toModelImage = (dataUrl, maxSide = 1536) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve({ mimeType: 'image/jpeg', data: canvas.toDataURL('image/jpeg', 0.85).split(',')[1] });
+    };
+    img.onerror = () => resolve(null);
+    img.src = dataUrl;
+});
+
+// Reads the file and returns the attachment fields (previewUrl / content / note)
+const prepareAttachment = async (file, onProgress) => {
     if (file.type.startsWith('image/')) {
-        const previewUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = () => resolve(null);
-            reader.readAsDataURL(file);
-        });
+        const previewUrl = await readFile(file, 'dataUrl', onProgress);
         return {
-            ...base,
             previewUrl,
-            note: 'Image attached. Current SakuPilot text flow can use the filename and user description; visual analysis depends on the model configured.',
+            modelImage: await toModelImage(previewUrl),
+            note: 'Image attached and sent to the model as an image.',
+        };
+    }
+
+    const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+    const isTextLike = file.type.startsWith('text/') || file.type === 'application/json' || TEXT_EXTENSIONS.includes(ext);
+
+    if (!isTextLike) {
+        onProgress?.(100);
+        return {
+            note: `${ext ? ext.toUpperCase() : 'This'} file was attached, but SakuPilot can't read its contents yet. Ask the user to paste the relevant text.`,
         };
     }
 
     if (file.size > 1_500_000) {
         return {
-            ...base,
             note: 'This file is larger than the current in-browser context limit. Ask the user to paste a relevant excerpt.',
         };
     }
 
-    try {
-        const content = await file.text();
-        return {
-            ...base,
-            content: content.slice(0, 45_000),
-            note: content.length > 45_000 ? 'File was trimmed to fit the chat context.' : '',
-        };
-    } catch {
-        return {
-            ...base,
-            note: 'Could not read file text content.',
-        };
-    }
+    const content = await readFile(file, 'text', onProgress);
+    return {
+        content: content.slice(0, 45_000),
+        note: content.length > 45_000 ? 'File was trimmed to fit the chat context.' : '',
+    };
 };
 
 const ErrorDisplay = ({ error, retryCountdown, onRetry }) => {

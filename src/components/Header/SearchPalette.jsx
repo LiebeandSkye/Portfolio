@@ -72,7 +72,7 @@ const SearchPalette = ({
 
             {/* ── Backdrop ─────────────────────────────────────────────────── */}
             <div
-                className="fixed inset-0 z-[9998] flex justify-center items-start"
+                className="fixed inset-0 z-70 flex justify-center items-start"
                 style={{ background:'rgba(0,0,0,0.55)', backdropFilter:'blur(2px)',
                          animation:'sp-backdrop 0.18s ease' }}
                 onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
@@ -83,7 +83,7 @@ const SearchPalette = ({
                         bg-(--pixel2) border border-(--border-light)
                         rounded-xl overflow-hidden flex flex-col h-auto
                         shadow-[0_24px_80px_rgba(0,0,0,0.4)]"
-                    style={{ animation:'sp-panel 0.2s cubic-bezier(.16,1,.3,1)', zIndex:9999 }}
+                    style={{ animation:'sp-panel 0.2s cubic-bezier(.16,1,.3,1)' }}
                     onMouseDown={(e) => e.stopPropagation()}
                 >
                     {/* Input row */}

@@ -43,7 +43,7 @@ const Links = () => {
         isActive ? 'active nav-link ' : 'inactive nav-link';
 
     return (
-        <div className="bg-(--light) border-b border-(--border-light)">
+        <div className="relative z-20 bg-(--light) border-b border-(--border-light)">
             <div className="flex items-end px-4
             sm:px-6 md:px-10">
 
@@ -89,7 +89,7 @@ const Links = () => {
                                     className="absolute top-[calc(100%+8px)] right-0
                         bg-(--pixel2) border border-(--border-light) rounded-xl
                         shadow-[0_8px_30px_rgba(0,0,0,0.2)]
-                        min-w-[180px] z-[200] overflow-hidden"
+                        min-w-[180px] z-50 overflow-hidden"
                                     style={{ animation: 'sp-panel 0.18s cubic-bezier(.16,1,.3,1)' }}
                                 >
                                     {overflowLinks.map((link) => (

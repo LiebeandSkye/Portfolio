@@ -128,7 +128,7 @@ ${trimmed}
     if (!errEl) {
       errEl = document.createElement('div');
       errEl.id = '__saku_err';
-      errEl.style.cssText = 'position:fixed;bottom:8px;left:8px;right:8px;background:rgba(220,38,38,0.15);border:1px solid rgba(239,68,68,0.5);color:#fca5a5;padding:8px 12px;border-radius:8px;font-family:monospace;font-size:12px;z-index:9999;';
+      errEl.style.cssText = 'position:fixed;bottom:8px;left:8px;right:8px;background:rgba(220,38,38,0.15);border:1px solid rgba(239,68,68,0.5);color:#fca5a5;padding:8px 12px;border-radius:8px;font-family:monospace;font-size:12px;z-index:50;';
       document.body.appendChild(errEl);
     }
     errEl.textContent = 'Runtime Error: ' + e.message;
@@ -534,7 +534,7 @@ const CodePlayground = memo(function CodePlayground({
             {/* Standalone Fullscreen Canvas Modal (used when in Floating Chat or when no split-pane callback is passed) */}
             {isModalCanvasOpen && typeof document !== 'undefined' && createPortal(
                 <div
-                    className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-2 sm:p-6 backdrop-blur-xs"
+                    className="fixed inset-0 z-70 flex items-center justify-center bg-black/80 p-2 sm:p-6 backdrop-blur-xs"
                     onClick={() => setIsModalCanvasOpen(false)}
                 >
                     <div

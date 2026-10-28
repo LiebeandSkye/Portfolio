@@ -17,7 +17,19 @@ export default async function handler(req, res) {
         const genAI = new GoogleGenerativeAI(geminiApiKey || 'missing-key');
 
         const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-        const { userInput, chatHistory, projectContext, mode, model } = body;
+        const { userInput: rawUserInput, chatHistory, projectContext, mode, model } = body;
+        // Images attached to the current message: [{ name, mimeType, data (base64) }]
+        const images = (Array.isArray(body.images) ? body.images : [])
+            .filter((img) => img && typeof img.data === 'string' && /^image\//.test(img.mimeType || ''))
+            .slice(0, 4);
+        const supportsVision = model === 'gemini';
+        // Models without vision are told about the images so they say so honestly instead of guessing
+        const userInput = images.length > 0 && !supportsVision
+            ? `${rawUserInput}\n\n[SYSTEM NOTE: The user attached ${images.length} image(s) (${images.map((img) => img.name || 'image').join(', ')}), but you are a text-only model and CANNOT see them. Clearly tell the user you can't view images with the currently selected model, suggest switching to a vision-capable model (Gemini) or describing the image in text, and do not guess what the image contains.]`
+            : rawUserInput;
+        const imageParts = supportsVision
+            ? images.map((img) => ({ inlineData: { mimeType: img.mimeType, data: img.data } }))
+            : [];
         const isImmersive = mode === 'immersive';
         const activeModel = (model === 'gemini') ? 'gemini' : 'groq';
 
@@ -66,7 +78,7 @@ ${projectContextSection}
 - Location: Phnom Penh, Cambodia
 - Passionate about: web dev, software architecture, turning ideas into working products
 - Tech Stack: React.js, Tailwind CSS, Framer Motion, Contentful, EmailJS, Vite, JavaScript/TypeScript, Vercel, Git, Github, Python, Node js and so on (more on welcome page)
-- SideNote: Kry Rithisak aka Saku is still a second year student currently studying at AUPP or better known as American University Phnom Penh.
+- SideNote: Kry Rithisak aka Saku is still a second year student currently studying at AUPP or better known as American University Phnom Penh. He started his journey in software development in 2025 and finished his bacll(Khmer national exam, Baccalauréat) in 2024.
 
 ---
 ### Contacts Data: 
@@ -313,7 +325,7 @@ ${isImmersive ? `
 - This is the full-page SakuPilot experience, so responses can be deeper, structured, and more polished.
 - Provide comprehensive context, clean headings, comparative tables, and full code examples where appropriate.
 - Be precise, developer-centric, and premium.
-- When users attach files, analyze the provided extracted text. If an image or PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can see it.
+- When users attach files, analyze the provided extracted text. If an image is attached and you can actually see it, analyze it directly. If a PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can read it.
 ` : ''}
 
 ---
@@ -360,7 +372,7 @@ Current context: ${projectContext
                     });
 
                     if (wantsStream) {
-                        const streamResult = await chat.sendMessageStream(userInput);
+                        const streamResult = await chat.sendMessageStream(imageParts.length ? [userInput, ...imageParts] : userInput);
                         res.status(200);
                         res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
                         res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -379,7 +391,7 @@ Current context: ${projectContext
                             return res.end();
                         }
                     } else {
-                        const result = await chat.sendMessage(userInput);
+                        const result = await chat.sendMessage(imageParts.length ? [userInput, ...imageParts] : userInput);
                         const response = await result.response;
                         responseText = response.text();
                         if (responseText) break;

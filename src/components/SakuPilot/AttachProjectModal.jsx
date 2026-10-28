@@ -15,7 +15,7 @@ const AttachProjectModal = ({
 }) => (
     <AnimatePresence>
         {isOpen && (
-            <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+            <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}

@@ -371,7 +371,7 @@ const VisualCard = memo(function VisualCard({ query, title, caption }) {
                     role="dialog"
                     aria-modal="true"
                     aria-label={heading || 'Image preview'}
-                    className="fixed inset-0 z-[99999] flex cursor-zoom-out items-center justify-center bg-black/85 p-4 backdrop-blur-xs"
+                    className="fixed inset-0 z-70 flex cursor-zoom-out items-center justify-center bg-black/85 p-4 backdrop-blur-xs"
                 >
                     <button
                         type="button"
