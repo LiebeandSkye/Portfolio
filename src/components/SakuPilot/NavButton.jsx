@@ -1,22 +1,15 @@
 import React, { memo } from 'react';
-import { GoArrowRight } from "react-icons/go";
-import { RiArrowRightUpLine } from "react-icons/ri";
+import { FiArrowUpRight } from 'react-icons/fi';
 
 const NavButton = memo(function NavButton({ path, label, onClick }) {
     return (
         <button
-            onClick={() => onClick(path)}
-            className="group inline-flex items-center gap-2.5 my-1 px-4 py-2.5 rounded-md
-                border-2 border-(--border-light)
-                text-(--text-light)
-                transition-all duration-200 cursor-pointer
-                text-sm font-medium w-fit bg-(--pixel2)"
+            type="button"
+            onClick={() => onClick?.(path)}
+            className="group my-1 inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-(--border-light) bg-(--pixel2) py-2 pl-4 pr-3.5 text-sm font-medium text-(--text-light) transition-colors hover:bg-(--pixel) cursor-pointer"
         >
-            <span className="w-5 h-5 rounded-md border border-(--border-light) flex items-center justify-center flex-shrink-0">
-                <RiArrowRightUpLine size={12} />
-            </span>
-            {label}
-            <GoArrowRight size={12} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200" />
+            <span className="truncate">{label}</span>
+            <FiArrowUpRight className="h-4 w-4 shrink-0 text-(--text-gray) transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </button>
     );
 });

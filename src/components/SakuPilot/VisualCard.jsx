@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiImage, FiExternalLink, FiMaximize2, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiExternalLink, FiMaximize2, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 // Curated local project visuals for instant zero-latency rendering when discussing Kry's portfolio
 import cambodiaThumb from '../../assets/DiscoverCambodia/WebsiteThumbnail.webp';
@@ -204,6 +204,14 @@ async function fetchWebVisuals(query) {
     return finalItems;
 }
 
+const overlayButton =
+    'flex h-8 w-8 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-xs transition-opacity hover:bg-black/75 cursor-pointer sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100';
+
+/**
+ * Image card: the picture first, one short title line under it.
+ * Several images become a swipeable set with small dots (no thumbnail strip,
+ * no source badges).
+ */
 const VisualCard = memo(function VisualCard({ query, title, caption }) {
     const portfolioMatch = useMemo(() => matchPortfolioGallery(query, title), [query, title]);
     const [images, setImages] = useState(() => (portfolioMatch ? portfolioMatch.images : []));
@@ -238,14 +246,24 @@ const VisualCard = memo(function VisualCard({ query, title, caption }) {
         };
     }, [query, portfolioMatch]);
 
+    const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+
+    useEffect(() => {
+        if (!lightboxOpen) return undefined;
+        const onKey = e => {
+            if (e.key === 'Escape') closeLightbox();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [lightboxOpen, closeLightbox]);
+
     if (loading) {
         return (
-            <div className="my-3.5 rounded-xl border border-(--border-light) bg-(--pixel2) p-3.5 animate-pulse">
-                <div className="flex items-center gap-2 mb-2.5">
-                    <div className="w-4 h-4 rounded bg-(--border-light)" />
-                    <div className="h-3 w-36 rounded bg-(--border-light)" />
+            <div className="my-3 w-full animate-pulse overflow-hidden rounded-2xl border border-(--border-light) bg-(--pixel2)">
+                <div className="aspect-[16/10] max-h-[320px] w-full bg-(--pixel)" />
+                <div className="px-3.5 py-3">
+                    <div className="h-3 w-40 rounded bg-(--pixel)" />
                 </div>
-                <div className="h-44 sm:h-52 w-full rounded-lg bg-(--pixel)" />
             </div>
         );
     }
@@ -255,151 +273,123 @@ const VisualCard = memo(function VisualCard({ query, title, caption }) {
     }
 
     const currentImg = images[activeIdx] || images[0];
-    const sourceBadge = portfolioMatch ? portfolioMatch.source : (currentImg.sourceName || 'Web Search Visual');
+    const heading = title || currentImg.title || query;
+    const subtext = caption || currentImg.caption;
+    const showArrows = images.length > 1;
+
+    const step = delta => setActiveIdx(prev => (prev + delta + images.length) % images.length);
 
     return (
         <>
-            <motion.div
+            <motion.figure
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="my-4 overflow-hidden rounded-xl border border-(--border-light) bg-(--pixel2) shadow-sm max-w-full"
+                transition={{ duration: 0.2 }}
+                className="my-3 w-full max-w-full overflow-hidden rounded-2xl border border-(--border-light) bg-(--pixel2)"
             >
-                {/* Header bar */}
-                <div className="flex items-center justify-between gap-2 border-b border-(--border-light) bg-(--pixel) px-3.5 py-2 text-xs">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <FiImage className="text-(--sucess) shrink-0" />
-                        <span className="font-semibold text-(--text-light) truncate">
-                            {title || currentImg.title || query}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                        <span className="rounded-md bg-(--pixel2) border border-(--border-light) px-2 py-0.5 text-[10px] font-medium text-(--text-gray)">
-                            {sourceBadge}
-                        </span>
-                        {currentImg.sourceUrl && (
-                            <a
-                                href={currentImg.sourceUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-(--text-gray) hover:text-(--text-light) transition-colors"
-                                title="Open image source"
-                            >
-                                <FiExternalLink size={13} />
-                            </a>
-                        )}
-                    </div>
-                </div>
-
-                {/* Main Image Viewport */}
-                <div className="relative group bg-black/20 flex items-center justify-center overflow-hidden aspect-[16/10] max-h-[300px] w-full">
+                <div className="group relative aspect-[16/10] max-h-[320px] w-full overflow-hidden bg-(--pixel)">
                     <img
                         src={currentImg.url}
                         alt={currentImg.title || title || query}
                         loading="lazy"
                         onClick={() => setLightboxOpen(true)}
-                        className="h-full w-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-[1.02]"
+                        className="h-full w-full cursor-zoom-in object-cover"
                     />
 
-                    {/* Expand button */}
-                    <button
-                        onClick={() => setLightboxOpen(true)}
-                        className="absolute top-2.5 right-2.5 flex items-center gap-1.5 rounded-lg bg-black/65 backdrop-blur-xs border border-white/15 px-2.5 py-1.5 text-[11px] font-medium text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                        aria-label="Inspect full visual"
-                    >
-                        <FiMaximize2 size={12} />
-                        <span>Inspect</span>
-                    </button>
+                    <div className="absolute right-2.5 top-2.5 flex gap-1.5">
+                        {currentImg.sourceUrl && (
+                            <a
+                                href={currentImg.sourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Open image source"
+                                title="Open source"
+                                className={overlayButton}
+                            >
+                                <FiExternalLink size={14} />
+                            </a>
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => setLightboxOpen(true)}
+                            aria-label="Expand image"
+                            title="Expand"
+                            className={overlayButton}
+                        >
+                            <FiMaximize2 size={14} />
+                        </button>
+                    </div>
 
-                    {/* Carousel Arrows if multiple images */}
-                    {images.length > 1 && (
+                    {showArrows && (
                         <>
                             <button
-                                onClick={() => setActiveIdx((prev) => (prev - 1 + images.length) % images.length)}
-                                className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hover:bg-black/80"
+                                type="button"
+                                onClick={() => step(-1)}
                                 aria-label="Previous image"
+                                className={`${overlayButton} absolute left-2.5 top-1/2 -translate-y-1/2`}
                             >
                                 <FiChevronLeft size={16} />
                             </button>
                             <button
-                                onClick={() => setActiveIdx((prev) => (prev + 1) % images.length)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hover:bg-black/80"
+                                type="button"
+                                onClick={() => step(1)}
                                 aria-label="Next image"
+                                className={`${overlayButton} absolute right-2.5 top-1/2 -translate-y-1/2`}
                             >
                                 <FiChevronRight size={16} />
                             </button>
+                            <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5">
+                                {images.map((img, i) => (
+                                    <button
+                                        key={img.url}
+                                        type="button"
+                                        onClick={() => setActiveIdx(i)}
+                                        aria-label={`Show image ${i + 1}`}
+                                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                                            i === activeIdx ? 'w-4 bg-white' : 'w-1.5 bg-white/55 hover:bg-white/80'
+                                        }`}
+                                    />
+                                ))}
+                            </div>
                         </>
                     )}
                 </div>
 
-                {/* Thumbnail Strip for multiple visuals */}
-                {images.length > 1 && (
-                    <div className="flex items-center gap-2 px-3.5 pt-2.5 overflow-x-auto no-scrollbar">
-                        {images.map((img, i) => (
-                            <button
-                                key={img.url}
-                                onClick={() => setActiveIdx(i)}
-                                className={`relative h-11 w-16 shrink-0 rounded-md overflow-hidden border transition-all cursor-pointer ${
-                                    i === activeIdx
-                                        ? 'border-(--sucess) ring-1 ring-(--sucess) opacity-100'
-                                        : 'border-(--border-light) opacity-55 hover:opacity-90'
-                                }`}
-                            >
-                                <img src={img.url} alt={img.title} className="h-full w-full object-cover" />
-                            </button>
-                        ))}
-                    </div>
+                {(heading || subtext) && (
+                    <figcaption className="px-3.5 py-2.5">
+                        {heading && <p className="truncate text-sm font-medium text-(--text-light)">{heading}</p>}
+                        {subtext && <p className="mt-0.5 line-clamp-1 text-xs text-(--text-gray)">{subtext}</p>}
+                    </figcaption>
                 )}
+            </motion.figure>
 
-                {/* Caption footer */}
-                {(caption || currentImg.caption) && (
-                    <div className="px-3.5 py-2.5 text-xs text-(--text-gray) leading-relaxed">
-                        {caption || currentImg.caption}
-                    </div>
-                )}
-            </motion.div>
-
-            {/* Fullscreen Lightbox Portal */}
             {lightboxOpen && typeof document !== 'undefined' && createPortal(
-                <AnimatePresence>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setLightboxOpen(false)}
-                        className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 p-4 backdrop-blur-xs cursor-zoom-out"
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={closeLightbox}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={heading || 'Image preview'}
+                    className="fixed inset-0 z-[99999] flex cursor-zoom-out items-center justify-center bg-black/85 p-4 backdrop-blur-xs"
+                >
+                    <button
+                        type="button"
+                        onClick={closeLightbox}
+                        aria-label="Close preview"
+                        className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 cursor-pointer"
                     >
-                        <div
-                            onClick={(e) => e.stopPropagation()}
-                            className="relative flex flex-col max-w-4xl w-full max-h-[90vh] rounded-2xl overflow-hidden border border-white/15 bg-[#0d1117] shadow-2xl cursor-default"
-                        >
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#161b22] text-white">
-                                <div className="min-w-0">
-                                    <h4 className="text-sm font-semibold truncate">{currentImg.title || title || query}</h4>
-                                    <p className="text-[11px] text-gray-400 truncate">{sourceBadge}</p>
-                                </div>
-                                <button
-                                    onClick={() => setLightboxOpen(false)}
-                                    className="rounded-lg p-1.5 text-gray-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
-                                    aria-label="Close visual preview"
-                                >
-                                    <FiX size={18} />
-                                </button>
-                            </div>
-                            <div className="flex-1 overflow-auto flex items-center justify-center bg-black p-2 min-h-[280px] max-h-[75vh]">
-                                <img
-                                    src={currentImg.url}
-                                    alt={currentImg.title || title}
-                                    className="max-h-[70vh] w-auto object-contain rounded"
-                                />
-                            </div>
-                            {(caption || currentImg.caption) && (
-                                <div className="px-4 py-3 text-xs text-gray-300 border-t border-white/10 bg-[#161b22]">
-                                    {caption || currentImg.caption}
-                                </div>
-                            )}
-                        </div>
-                    </motion.div>
-                </AnimatePresence>,
+                        <FiX size={18} />
+                    </button>
+                    <div onClick={e => e.stopPropagation()} className="flex max-h-full max-w-4xl cursor-default flex-col items-center gap-3">
+                        <img
+                            src={currentImg.url}
+                            alt={currentImg.title || title || query}
+                            className="max-h-[78vh] w-auto max-w-full rounded-xl object-contain"
+                        />
+                        {heading && <p className="max-w-full truncate text-sm text-white/80">{heading}</p>}
+                    </div>
+                </motion.div>,
                 document.body
             )}
         </>

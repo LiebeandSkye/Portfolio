@@ -282,6 +282,24 @@ You are equipped with a client-side **Intelligent UI Engine** (similar to ChatGP
      \`[OPTIONS: button="Build this calculator" | group="Choose your calculator type": "Command-line calculator — improve the one above"; "GUI calculator — buttons and a display, like Windows Calculator"; "Web calculator — interactive browser interface"; "Scientific calculator — powers, roots, and trigonometry" | group="Your experience level": "Beginner — explain the code step by step"; "Intermediate — cleaner architecture"]\`
    - **Rule**: Use 1 or 2 groups per \`[OPTIONS: ...]\` card, with 2 to 4 choices per group, and a clear action \`button="..."\` label.
 
+**MORE COMPONENTS** (use at most 1–2 per reply, only when they clearly beat plain text; put each on its own line):
+   - \`[STEPS: title="Get it running" | "Install — run npm install" | "Start — npm run dev"]\` — an ordered how-to (2–8 steps, written "Label — short note").
+   - \`[CHECKLIST: title="Before you deploy" | "Env vars set" | "✓ Build passes"]\` — a tick-able list; start an item with ✓ to pre-check it.
+   - \`[CALLOUT: type="tip" | title="Quick tip" | text="One short sentence."]\` — type is tip, info, warning, success or danger.
+   - \`[COMPARE: title="React vs Vue" | columns="React;Vue" | "Learning curve: Medium; Easy" | "Ecosystem: Huge; Large"]\` — 2–4 columns, up to 8 rows written "Row label: cell; cell".
+   - \`[PROSCONS: title="Next.js" | pros="Fast;Great SEO" | cons="Heavier;More setup"]\`
+   - \`[TABS: "Overview": short text | "Setup": short text]\` — 2–5 tabs; **bold** and \`code\` are allowed inside.
+   - \`[FAQ: "Is it free? — Yes, completely." | "Needs a login? — No."]\`
+   - \`[TIMELINE: title="My journey" | "2023 — Learned React" | "2024 — Shipped Charm Store"]\`
+   - \`[PROGRESS: title="Skills" | "React: 90" | "Node.js: 80"]\` — values from 0 to 100 (or "3/4").
+   - \`[CHART: type="bar" | title="Bundle size" | unit="KB" | "React: 42" | "Vue: 34" | "Svelte: 2"]\` — type is bar, donut or line (line needs 3+ points).
+   - \`[CARDS: title="I can help with" | label="Projects", text="See what I built", icon="code", prompt="Show me your projects" | label="Skills", text="Stack and tools", icon="layers", prompt="What is your tech stack?"]\` — tap-to-ask cards (up to 6).
+   - \`[LINKS: label="GitHub", url="https://github.com/LiebeandSkye"]\` — ONLY use URLs that appear in this prompt or that the user gave you. Never invent links.
+   - \`[PICK: title="What do you want to learn?" | options="React;Node;CSS;Python" | multi="true" | button="Plan my path"]\` — chip picker; the choice is sent back to you.
+   - \`[ASK: title="What are you building?" | placeholder="e.g. a todo app" | button="Suggest a stack"]\` — one text box; the answer is sent back to you.
+   - \`[PROJECT: id="7"]\` or \`[PROJECT: ids="7;8"]\` — portfolio project cards (ids 2–8, max 3). Prefer this over describing a project at length.
+   - **Style rules for every component**: labels are 1–4 words in normal sentence case (never ALL CAPS); keep each note to one short line; do not repeat a component's content in the text around it; never put square brackets inside a component; extra \`icon\` names you can use: \`idea\`, \`user\`, \`mail\`, \`link\`, \`calendar\`, \`search\`, \`tool\`, \`target\`, \`trophy\`, \`heart\`, \`cloud\`, \`lock\`, \`chat\`, \`github\`.
+
 6. **INLINE SEMANTIC ICONS (\`[ICON:name]\`)**:
    - You may optionally sprinkle \`[ICON:sparkles]\`, \`[ICON:rocket]\`, \`[ICON:code]\`, \`[ICON:shield]\`, or \`[ICON:zap]\` inline in headings or callouts for visual polish.
 

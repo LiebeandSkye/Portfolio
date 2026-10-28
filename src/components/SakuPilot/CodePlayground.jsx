@@ -261,7 +261,7 @@ const CodePlayground = memo(function CodePlayground({
             onOpenCanvas({
                 code: editableCode,
                 language: normalizedLang,
-                title: `Interactive ${normalizedLang.toUpperCase()} Sandbox`,
+                title: 'Live preview',
             });
         } else {
             setIsModalCanvasOpen(true);
@@ -276,8 +276,8 @@ const CodePlayground = memo(function CodePlayground({
                 {/* Top Intelligent Toolbar */}
                 <div className="flex flex-wrap items-center justify-between gap-2 bg-[#161b22] px-3 py-2 text-xs text-[#8b949e] border-b border-[#30363d]">
                     <div className="flex items-center gap-2">
-                        <span className="font-mono font-semibold uppercase tracking-wider text-[11px] text-[#c9d1d9] px-1.5 py-0.5 rounded bg-[#21262d] border border-[#30363d]">
-                            {normalizedLang === 'sandbox' ? 'Interactive UI' : normalizedLang}
+                        <span className="font-mono font-medium text-[11px] text-[#c9d1d9] px-1.5 py-0.5 rounded bg-[#21262d] border border-[#30363d]">
+                            {normalizedLang === 'sandbox' ? 'ui' : normalizedLang}
                         </span>
 
                         {/* Mode Switcher Tabs for Visual Previewable Code */}
@@ -305,7 +305,7 @@ const CodePlayground = memo(function CodePlayground({
                                     }`}
                                 >
                                     <FiPlay size={11} />
-                                    <span>Live Preview</span>
+                                    <span>Preview</span>
                                 </button>
                                 <button
                                     type="button"
@@ -317,7 +317,7 @@ const CodePlayground = memo(function CodePlayground({
                                     }`}
                                 >
                                     <FiEdit3 size={11} />
-                                    <span>Experiment</span>
+                                    <span>Edit</span>
                                 </button>
                             </div>
                         )}
@@ -332,7 +332,7 @@ const CodePlayground = memo(function CodePlayground({
                                     className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-[11px] font-medium transition-colors cursor-pointer"
                                 >
                                     <FiPlay size={11} />
-                                    <span>Run JS</span>
+                                    <span>Run</span>
                                 </button>
                                 <button
                                     type="button"
@@ -344,7 +344,7 @@ const CodePlayground = memo(function CodePlayground({
                                     }`}
                                 >
                                     <FiEdit3 size={11} />
-                                    <span>{activeTab === 'experiment' ? 'View Highlighted' : 'Edit & Test'}</span>
+                                    <span>{activeTab === 'experiment' ? 'Code' : 'Edit'}</span>
                                 </button>
                             </div>
                         )}
@@ -418,7 +418,7 @@ const CodePlayground = memo(function CodePlayground({
                         <div className="flex items-center justify-between px-3 py-1.5 bg-[#161b22]/60 border-b border-[#30363d] text-[11px] text-[#8b949e]">
                             <span className="flex items-center gap-1.5">
                                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                                Live Interactive Sandbox — Feel free to click & interact
+                                Live preview
                             </span>
                             <button
                                 type="button"
@@ -444,14 +444,14 @@ const CodePlayground = memo(function CodePlayground({
                     <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-[#30363d]">
                         <div className="flex flex-col">
                             <div className="flex items-center justify-between px-3 py-1.5 bg-[#161b22]/70 border-b border-[#30363d] text-[11px] text-[#8b949e]">
-                                <span>Live Code Editor (Edit below to experiment)</span>
+                                <span>Edit code</span>
                                 {canRunJs && (
                                     <button
                                         type="button"
                                         onClick={handleRunJsConsole}
                                         className="text-emerald-400 hover:underline font-medium cursor-pointer"
                                     >
-                                        ▶ Run Changes
+                                        Run
                                     </button>
                                 )}
                             </div>
@@ -465,7 +465,7 @@ const CodePlayground = memo(function CodePlayground({
                         {canVisualPreview && (
                             <div className="flex flex-col bg-[#0d1117]">
                                 <div className="flex items-center justify-between px-3 py-1.5 bg-[#161b22]/70 border-b border-[#30363d] text-[11px] text-[#8b949e]">
-                                    <span className="text-emerald-400 font-medium">Real-Time Output</span>
+                                    <span className="text-emerald-400 font-medium">Output</span>
                                     <button
                                         type="button"
                                         onClick={() => setIframeKey(k => k + 1)}
@@ -498,7 +498,7 @@ const CodePlayground = memo(function CodePlayground({
                             <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#161b22] text-[11px] text-[#8b949e]">
                                 <div className="flex items-center gap-1.5 font-mono">
                                     <FiTerminal className="text-emerald-400" size={12} />
-                                    <span>Console Output</span>
+                                    <span>Console</span>
                                 </div>
                                 <button
                                     type="button"
@@ -548,8 +548,7 @@ const CodePlayground = memo(function CodePlayground({
                                     <HiOutlineSparkles size={16} />
                                 </span>
                                 <div>
-                                    <h3 className="text-sm font-bold text-white leading-tight">SakuPilot Interactive Canvas</h3>
-                                    <p className="text-[11px] text-[#8b949e]">Edit code and test responsive viewports live</p>
+                                    <h3 className="text-sm font-medium text-white leading-tight">Canvas</h3>
                                 </div>
                             </div>
 
@@ -587,7 +586,7 @@ const CodePlayground = memo(function CodePlayground({
                                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-medium cursor-pointer"
                                     >
                                         <HiOutlineSparkles size={13} />
-                                        <span>Ask AI to Enhance</span>
+                                        <span>Improve</span>
                                     </button>
                                 )}
 
@@ -606,14 +605,14 @@ const CodePlayground = memo(function CodePlayground({
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-12 min-h-0 divide-y md:divide-y-0 md:divide-x divide-[#30363d]">
                             <div className="md:col-span-5 flex flex-col min-h-0">
                                 <div className="flex items-center justify-between px-3.5 py-2 bg-[#161b22]/60 border-b border-[#30363d] text-xs text-[#8b949e]">
-                                    <span>Source Code</span>
+                                    <span>Code</span>
                                     {hasModified && (
                                         <button
                                             type="button"
                                             onClick={handleResetCode}
                                             className="text-amber-400 hover:underline text-[11px] cursor-pointer"
                                         >
-                                            Reset Code
+                                            Reset
                                         </button>
                                     )}
                                 </div>

@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGithubSafe from '../../Utils/githubMarkdown';
 import CodePlayground from './CodePlayground';
-import { DynamicIcon } from './InteractiveWidget';
+import { DynamicIcon } from './widgets/DynamicIcon';
 
 const MDLi = ({ children }) => (
     <li className="leading-relaxed text-(--text-light) break-words mb-1.5 last:mb-0">
@@ -91,7 +91,7 @@ const MDTable = ({ children }) => (
 );
 
 const MDThead = ({ children }) => (
-    <thead className="bg-(--pixel) text-(--text-gray) text-xs uppercase tracking-wider font-semibold border-b border-(--border-light)">
+    <thead className="bg-(--pixel) text-(--text-gray) text-sm font-medium border-b border-(--border-light)">
         {children}
     </thead>
 );

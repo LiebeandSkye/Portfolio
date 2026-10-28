@@ -10,9 +10,64 @@
 //  - [SUGGEST: "Option 1" | "Option 2" | "Option 3"]
 //  - Inline [ICON:name]
 //
+// Extra components (see widgetPayloads.js for each payload format):
+//  - [STEPS] [CHECKLIST] [CALLOUT] [COMPARE] [PROSCONS] [TABS] [FAQ]
+//  - [TIMELINE] [PROGRESS] [CHART] [CARDS] [LINKS] [PICK] [ASK] [PROJECT]
+//
 // Also strips incomplete trailing tags during live streaming so raw
 // bracket syntax never flashes on screen.
 // ─────────────────────────────────────────────────────────────────────────────
+
+import {
+    parseKeyValuePairs,
+    splitLabelDesc,
+    parseStepsPayload,
+    parseChecklistPayload,
+    parseCalloutPayload,
+    parseComparePayload,
+    parseProsConsPayload,
+    parseTabsPayload,
+    parseFaqPayload,
+    parseTimelinePayload,
+    parseProgressPayload,
+    parseChartPayload,
+    parseCardsPayload,
+    parseLinksPayload,
+    parsePickPayload,
+    parseAskPayload,
+    parseProjectPayload,
+} from './widgetPayloads.js';
+
+/**
+ * Registry of the newer widget tags.
+ * `aliases` are extra tag names the model may use; `parse` returns the part data.
+ * Adding a component = one entry here + a renderer in widgets/index.jsx.
+ */
+const WIDGET_TAGS = {
+    steps: { aliases: ['STEPS'], parse: parseStepsPayload },
+    checklist: { aliases: ['CHECKLIST'], parse: parseChecklistPayload },
+    callout: { aliases: ['CALLOUT'], parse: parseCalloutPayload },
+    compare: { aliases: ['COMPARE', 'COMPARISON'], parse: parseComparePayload },
+    proscons: { aliases: ['PROSCONS', 'PROS_CONS'], parse: parseProsConsPayload },
+    tabs: { aliases: ['TABS'], parse: parseTabsPayload },
+    faq: { aliases: ['FAQ', 'ACCORDION'], parse: parseFaqPayload },
+    timeline: { aliases: ['TIMELINE'], parse: parseTimelinePayload },
+    progress: { aliases: ['PROGRESS'], parse: parseProgressPayload },
+    chart: { aliases: ['CHART'], parse: parseChartPayload },
+    cards: { aliases: ['CARDS'], parse: parseCardsPayload },
+    links: { aliases: ['LINKS'], parse: parseLinksPayload },
+    pick: { aliases: ['PICK'], parse: parsePickPayload },
+    ask: { aliases: ['ASK'], parse: parseAskPayload },
+    project: { aliases: ['PROJECT', 'PROJECTS'], parse: parseProjectPayload },
+};
+
+// Widgets that wait for the user to answer, so follow-up chips would be noise
+const INTERACTIVE_WIDGETS = new Set(['pick', 'ask', 'cards']);
+
+const WIDGET_ALIAS_TO_KEY = Object.fromEntries(
+    Object.entries(WIDGET_TAGS).flatMap(([key, def]) => def.aliases.map(alias => [alias, key]))
+);
+const WIDGET_TAG_PATTERN = Object.keys(WIDGET_ALIAS_TO_KEY).join('|');
 
 const ALLOWED_STATIC_ROUTES = new Set([
     '/',
@@ -70,57 +125,15 @@ export function stripTrailingIncompleteTags(rawText) {
 
     const cleaned = text
         .replace(
-            /\[(?:NAV|SUGGEST|SUGGESTIONS|VISUAL|IMAGE|STATS|QUIZ|OPTIONS|CHOICES|WIDGET|ICON):[^\]]*$/i,
+            new RegExp(
+                `\\[(?:NAV|SUGGEST|SUGGESTIONS|VISUAL|IMAGE|STATS|QUIZ|OPTIONS|CHOICES|WIDGET|ICON|${WIDGET_TAG_PATTERN}):[^\\]]*$`,
+                'i'
+            ),
             ''
         )
         .replace(/\[NAV:[^\]]*\][^[]*(?:\[\/(?:N(?:A(?:V)?)?)?)?$/i, '');
 
     return hasCursor ? `${cleaned}▌` : cleaned;
-}
-
-/**
- * Helper to parse key="value" or key=value pairs inside a tag payload
- */
-function parseKeyValuePairs(payloadStr) {
-    const result = {};
-    if (!payloadStr || typeof payloadStr !== 'string') return result;
-
-    const kvRegex = /(\w+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^|,\]]+))/g;
-    let match;
-    while ((match = kvRegex.exec(payloadStr)) !== null) {
-        const key = match[1].trim().toLowerCase();
-        const val = (match[2] ?? match[3] ?? match[4] ?? '').trim();
-        result[key] = val;
-    }
-    return result;
-}
-
-/**
- * Splits an option string like "Web calculator — Rust backend with a browser interface"
- * into { label, description, raw }
- */
-function splitOptionLabelAndDesc(rawOpt) {
-    const cleaned = String(rawOpt || '')
-        .trim()
-        .replace(/^["'“”‘’]+|["'“”‘’]+$/g, '')
-        .trim();
-    if (!cleaned) return null;
-
-    // Match em-dash, en-dash, or spaced hyphen
-    const dashMatch = /^(.+?)\s+(?:—|–|-)\s+(.+)$/.exec(cleaned);
-    if (dashMatch) {
-        return {
-            label: dashMatch[1].trim(),
-            description: dashMatch[2].trim(),
-            raw: cleaned,
-        };
-    }
-
-    return {
-        label: cleaned,
-        description: '',
-        raw: cleaned,
-    };
 }
 
 /**
@@ -152,7 +165,7 @@ export function parseOptionsPayload(rawPayload) {
             const optsRaw = groupMatch[4];
             const options = optsRaw
                 .split(';')
-                .map(splitOptionLabelAndDesc)
+                .map(splitLabelDesc)
                 .filter(Boolean);
 
             if (options.length > 0) {
@@ -166,7 +179,7 @@ export function parseOptionsPayload(rawPayload) {
             const colonIdx = seg.indexOf(':');
             const rawTitle = seg.slice(0, colonIdx).trim().replace(/^["']|["']$/g, '');
             const rawOpts = seg.slice(colonIdx + 1).trim();
-            const options = rawOpts.split(';').map(splitOptionLabelAndDesc).filter(Boolean);
+            const options = rawOpts.split(';').map(splitLabelDesc).filter(Boolean);
             if (rawTitle && options.length >= 2) {
                 groups.push({ title: rawTitle, options });
                 continue;
@@ -182,7 +195,7 @@ export function parseOptionsPayload(rawPayload) {
         }
         const rawOptions = kv.options || kv.choices;
         if (rawOptions) {
-            const options = rawOptions.split(';').map(splitOptionLabelAndDesc).filter(Boolean);
+            const options = rawOptions.split(';').map(splitLabelDesc).filter(Boolean);
             if (options.length >= 2) {
                 groups.push({
                     title: kv.title || kv.group || 'Choose your preferred option',
@@ -349,8 +362,19 @@ export function inferSmartSuggestions(content) {
     return suggestions.slice(0, 3);
 }
 
-const COMBINED_TOKEN_REGEX =
-    /\[NAV:([^\]|]+)\]([^[]*)\[\/NAV\]|\[NAV:([^\]|]+)\|([^\]]+)\]|\[(?:VISUAL|IMAGE):([^\]]+)\]|\[STATS:([^\]]+)\]|\[QUIZ:([^\]]+)\]|\[(?:OPTIONS|CHOICES):([^\]]+)\]|\[(?:SUGGEST|SUGGESTIONS):([^\]]+)\]/gi;
+const COMBINED_TOKEN_REGEX = new RegExp(
+    [
+        '\\[NAV:([^\\]|]+)\\]([^[]*)\\[\\/NAV\\]',
+        '\\[NAV:([^\\]|]+)\\|([^\\]]+)\\]',
+        '\\[(?:VISUAL|IMAGE):([^\\]]+)\\]',
+        '\\[STATS:([^\\]]+)\\]',
+        '\\[QUIZ:([^\\]]+)\\]',
+        '\\[(?:OPTIONS|CHOICES):([^\\]]+)\\]',
+        '\\[(?:SUGGEST|SUGGESTIONS):([^\\]]+)\\]',
+        `\\[(${WIDGET_TAG_PATTERN})\\s*:([^\\]]+)\\]`,
+    ].join('|'),
+    'gi'
+);
 
 /**
  * Parses full or partial bot message content into ordered renderable parts
@@ -419,6 +443,15 @@ export function parseIntelligentMessage(rawContent, options = {}) {
             if (optionsData) {
                 hasOptionsCard = true;
                 parts.push({ type: 'options', ...optionsData });
+            }
+        }
+        // 7. Newer widget tags (steps, checklist, compare, chart, ...)
+        else if (match[10]) {
+            const widgetKey = WIDGET_ALIAS_TO_KEY[match[10].toUpperCase()];
+            const widgetData = widgetKey ? WIDGET_TAGS[widgetKey].parse(match[11]) : null;
+            if (widgetData) {
+                if (INTERACTIVE_WIDGETS.has(widgetKey)) hasOptionsCard = true;
+                parts.push({ type: widgetKey, ...widgetData });
             }
         }
         // 6. SUGGEST token

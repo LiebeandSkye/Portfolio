@@ -16,9 +16,9 @@ import { HiOutlineSparkles } from 'react-icons/hi2';
 import { buildSandboxSrcDoc } from './CodePlayground';
 
 const CANVAS_AI_ACTIONS = [
-    { label: 'Polish UI & Animations', prompt: 'Upgrade this interactive UI with smoother animations, better glassmorphism/styling, and micro-interactions.' },
-    { label: 'Add Interactive Features', prompt: 'Add more interactive controls, state feedback, and useful features to this sandbox demo.' },
-    { label: 'Make Fully Responsive', prompt: 'Optimize this layout so it adapts seamlessly across both mobile and desktop screens.' },
+    { label: 'Polish the look', prompt: 'Upgrade this interactive UI with smoother animations, better glassmorphism/styling, and micro-interactions.' },
+    { label: 'Add features', prompt: 'Add more interactive controls, state feedback, and useful features to this sandbox demo.' },
+    { label: 'Make responsive', prompt: 'Optimize this layout so it adapts seamlessly across both mobile and desktop screens.' },
 ];
 
 const CanvasWorkspace = memo(function CanvasWorkspace({
@@ -69,12 +69,9 @@ const CanvasWorkspace = memo(function CanvasWorkspace({
                         <HiOutlineSparkles size={15} />
                     </span>
                     <div className="min-w-0">
-                        <h3 className="text-xs sm:text-sm font-bold text-white truncate">
-                            {canvasData.title || 'SakuPilot Interactive Canvas'}
+                        <h3 className="text-sm font-medium text-white truncate">
+                            {canvasData.title || 'Canvas'}
                         </h3>
-                        <p className="text-[10px] text-[#8b949e] truncate">
-                            Live Sandbox • Edit code or ask SakuPilot to iterate
-                        </p>
                     </div>
                 </div>
 
@@ -194,8 +191,8 @@ const CanvasWorkspace = memo(function CanvasWorkspace({
                         }`}
                     >
                         <div className="px-3.5 py-1.5 bg-[#161b22]/60 border-b border-[#30363d] text-[11px] text-[#8b949e] flex justify-between">
-                            <span>Live Source Editor</span>
-                            <span className="font-mono uppercase">{canvasData.language || 'html'}</span>
+                            <span>Code</span>
+                            <span className="font-mono">{canvasData.language || 'html'}</span>
                         </div>
                         <textarea
                             value={code}
@@ -234,7 +231,7 @@ const CanvasWorkspace = memo(function CanvasWorkspace({
                 <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-[#161b22] border-t border-[#30363d] shrink-0">
                     <span className="text-[11px] font-medium text-[#8b949e] flex items-center gap-1.5">
                         <HiOutlineSparkles className="text-emerald-400" />
-                        Iterate with AI:
+                        Ask AI
                     </span>
                     <div className="flex flex-wrap items-center gap-1.5">
                         {CANVAS_AI_ACTIONS.map((action) => (
