@@ -4,11 +4,13 @@ import { GoDotFill } from "react-icons/go";
 import { IoCodeOutline, IoEyeOutline } from "react-icons/io5";
 import { useLanguage } from '../context/LanguageContext';
 import PrivateRepoModal from './PrivateRepoModal';
+import { getDominantLanguage } from '../../Utils/projectLanguages';
 
 // ─── Single row — memoized so only changed rows re-render on filter/search ────
 const ListRow = memo(function ListRow({ project, t, onPrivateCode }) {
     const projectTitle = t(`projects.${project.langKey}.title`);
     const projectDesc  = t(`projects.${project.langKey}.description`);
+    const dominantLang = getDominantLanguage(project);
 
     const handleCodeClick = useCallback(() => {
         if (project.code === false) {
@@ -43,8 +45,8 @@ const ListRow = memo(function ListRow({ project, t, onPrivateCode }) {
 
             <div className="flex items-center gap-4 text-xs text-(--text-gray)">
                 <div className="flex items-center gap-1">
-                    <GoDotFill className={project.red ? 'text-yellow-400' : 'text-blue-400'} />
-                    <span className="text-(--text-light)">JavaScript</span>
+                    <GoDotFill style={{ color: dominantLang.color }} />
+                    <span className="text-(--text-light)">{dominantLang.label}</span>
                 </div>
                 {project.demo && (
                     <a href={project.demo} target="_blank" rel="noreferrer"

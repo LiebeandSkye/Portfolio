@@ -95,7 +95,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
         <>
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/65 backdrop-blur-[1px] z-[99990]"
+                    className="fixed inset-0 bg-black/65 backdrop-blur-[1px] z-70"
                     onClick={toggleSidebar}
                     aria-hidden="true"
                 />
@@ -108,7 +108,7 @@ const Drawer = memo(function Drawer({ isOpen, toggleSidebar }) {
                 className={`
                 fixed top-0 right-0 h-full w-74 md:w-100
                 bg-(--light) text-(--text-light) dark:bg-(--dark-bg) dark:text-(--dark-text)
-                shadow-2xl z-[99999] border-l border-(--border-light)
+                shadow-2xl z-70 border-l border-(--border-light)
                 overflow-y-auto github-scrollbar
                 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
                 will-change-transform transform-gpu

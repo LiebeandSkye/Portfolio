@@ -14,6 +14,7 @@ import { FiCode } from "react-icons/fi";
 import { GoDotFill, GoCheck } from "react-icons/go";
 import { BsLayersHalf } from "react-icons/bs";
 import { RiTwitterXFill, RiWhatsappFill } from "react-icons/ri";
+import { LANGUAGE_STYLES } from '../Utils/projectLanguages';
 
 const AboutProject = () => {
     const { addNotification } = useNotification();
@@ -40,25 +41,15 @@ const AboutProject = () => {
     if (!project) return <div className="p-20 text-center text-white">Project Not Found</div>;
 
     const info = project.Information;
-    const languageStyles = {
-        javascript: { label: 'JavaScript', color: '#f1e05a' },
-        typescript: { label: 'TypeScript', color: '#3178c6' },
-        kotlin: { label: 'Kotlin', color: '#A97BFF' },
-        xml: { label: 'XML', color: '#0060ac' },
-        css: { label: 'CSS', color: '#563d7c' },
-        html: { label: 'HTML', color: '#e34c26' },
-        python: { label: 'Python', color: '#3572A5' },
-        plpgsql: { label: 'PLpgSQL', color: '#336790' },
-    };
-    const languageBreakdown = Object.entries(project.percent)
+    const languageBreakdown = Object.entries(project.percent || {})
         .filter(([, percent]) => Number(percent) > 0)
         .map(([key, percent]) => {
             const normalizedKey = key.toLowerCase();
             return {
                 key,
                 percent,
-                label: languageStyles[normalizedKey]?.label || key,
-                color: languageStyles[normalizedKey]?.color || '#8b949e',
+                label: LANGUAGE_STYLES[normalizedKey]?.label || project.languages?.[key] || project.languages?.[normalizedKey] || key,
+                color: LANGUAGE_STYLES[normalizedKey]?.color || '#8b949e',
             };
         });
 
@@ -125,7 +116,7 @@ const AboutProject = () => {
                     <div className="border border-(--border-light) rounded-md overflow-visible">
 
                         {/* STICKY TAB HEADER (Only this part stays fixed) */}
-                        <div className="sticky top-0 z-[40] flex border-b border-(--border-light) rounded-t-md bg-(--pixel)">
+                        <div className="sticky top-0 z-10 flex border-b border-(--border-light) rounded-t-md bg-(--pixel)">
                             <TabBtn active={activeTab === 'readme'} onClick={() => setActiveTab('readme')} icon={<MdOutlineLibraryBooks />} label="Readme" />
                             <TabBtn active={activeTab === 'screenshots'} onClick={() => setActiveTab('screenshots')} icon={<MdOutlinePhotoLibrary />} label="Screenshots" />
                         </div>

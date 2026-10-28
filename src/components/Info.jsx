@@ -124,7 +124,7 @@ const Info = memo(function Info() {
                     {isModalOpen && (
                         <div 
                             onClick={() => setIsModalOpen(false)}
-                            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.98)_100%)] backdrop-blur-md cursor-pointer"
+                            className="fixed inset-0 z-70 flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.98)_100%)] backdrop-blur-md cursor-pointer"
                             role="dialog"
                             aria-modal="true"
                         >

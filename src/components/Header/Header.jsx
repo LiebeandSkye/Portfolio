@@ -34,7 +34,7 @@ const Header = () => {
 
     return (
         <>
-            <div className="bg-(--light) dark:bg-(--dark-bg) px-6 md:px-8 py-3 flex justify-between items-center dark:border-(--dark-border) z-50">
+            <div className="relative bg-(--light) dark:bg-(--dark-bg) px-6 md:px-8 py-3 flex justify-between items-center dark:border-(--dark-border) z-30">
 
                 {/* Left: logo + name */}
                 <div className="flex items-center gap-4">
@@ -83,7 +83,7 @@ const Header = () => {
                     {!isImmersiveChat && (
                         <button
                             onClick={openChat}
-                            className="fixed bottom-0 right-1 md:w-34 md:h-40 w-24 h-28 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-[60] cursor-pointer"
+                            className="fixed bottom-0 right-1 md:w-34 md:h-40 w-24 h-28 text-white bg-transparent flex items-center justify-center hover:scale-105 transition-transform z-40 cursor-pointer"
                         >
                             <img
                                 src={SakuPilotIcon}

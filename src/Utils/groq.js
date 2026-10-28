@@ -6,6 +6,8 @@ export const getChatEndpoint = (
 };
 
 export const getGroqResponse = async (userInput, chatHistory, projectContext = null, options = {}) => {
+    const wantsStream = typeof options.onChunk === 'function';
+
     try {
         const response = await fetch(getChatEndpoint(), {
             method: 'POST',
@@ -18,6 +20,8 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
                 projectContext,
                 mode: options.mode,
                 model: options.model,
+                images: options.images,
+                stream: wantsStream,
             }),
         });
 
@@ -32,14 +36,53 @@ export const getGroqResponse = async (userInput, chatHistory, projectContext = n
             };
         }
 
+        const contentType = response.headers.get('content-type') || '';
+        if (wantsStream && contentType.includes('text/event-stream') && response.body) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let accumulated = '';
+            let buffer = '';
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (!trimmed || !trimmed.startsWith('data:')) continue;
+                    const dataStr = trimmed.slice(5).trim();
+                    if (dataStr === '[DONE]') continue;
+
+                    try {
+                        const parsed = JSON.parse(dataStr);
+                        if (parsed.delta) {
+                            accumulated += parsed.delta;
+                            options.onChunk(accumulated, parsed.delta);
+                        }
+                    } catch {
+                        // Ignore malformed partial line
+                    }
+                }
+            }
+
+            if (accumulated) {
+                return accumulated;
+            }
+        }
+
         const data = await response.json();
+        if (wantsStream && data.content) {
+            options.onChunk(data.content, data.content);
+        }
         return data.content;
 
     } catch (error) {
         console.error("Frontend Error:", error);
-        // If it's already a structured error from above, re-throw it
         if (error.status) throw error;
-        // Otherwise wrap it
         throw {
             status: 500,
             message: "Failed to connect to SakuPilot.",

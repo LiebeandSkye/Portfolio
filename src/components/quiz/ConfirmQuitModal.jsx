@@ -29,7 +29,7 @@ const ConfirmQuitModal = ({ isOpen, onCancel, onConfirm, currentQuestion, totalQ
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs"
+          className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs"
           onClick={onCancel}
         >
           <motion.div

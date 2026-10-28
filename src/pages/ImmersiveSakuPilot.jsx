@@ -7,12 +7,10 @@ import {
     FiArrowLeft,
     FiEdit3,
     FiFolder,
-    FiImage,
     FiMenu,
     FiMessageSquare,
     FiPaperclip,
     FiSearch,
-    FiSend,
     FiTrash2,
     FiX,
     FiMoreHorizontal,
@@ -35,7 +33,8 @@ import { getProjectTechSummary } from '../Utils/projectContext';
 import MessageContent from '../components/SakuPilot/MessageContent';
 import BotMessage from '../components/SakuPilot/BotMessage';
 import TypingMessage from '../components/SakuPilot/TypingMessage';
-import AutoResizeTextarea from '../components/ui/AutoResizeTextarea';
+import CanvasWorkspace from '../components/SakuPilot/CanvasWorkspace';
+import PromptBox, { FileCard } from '../components/SakuPilot/PromptBox';
 import {
     createConversation,
     loadConversations,
@@ -47,7 +46,6 @@ import {
 const ImmersiveSakuPilot = () => {
     const navigate = useNavigate();
     const { t } = useLanguage();
-    const fileInputRef = useRef(null);
     const scrollRef = useRef(null);
 
     const [conversations, setConversations] = useState(() => loadConversations());
@@ -72,6 +70,7 @@ const ImmersiveSakuPilot = () => {
     });
     const [error, setError] = useState(null);
     const [retryCountdown, setRetryCountdown] = useState(0);
+    const [activeCanvas, setActiveCanvas] = useState(null);
 
     useEffect(() => {
         localStorage.setItem('sakupilot_model', selectedModel);
@@ -241,85 +240,43 @@ const ImmersiveSakuPilot = () => {
         if (window.innerWidth < 768) setIsSidebarOpen(false);
     }, []);
 
-    const handleAttachmentChange = useCallback(async (event) => {
-        const files = Array.from(event.target.files || []);
-        const prepared = await Promise.all(files.map(prepareAttachment));
-        setAttachments((prev) => [...prev, ...prepared.filter(Boolean)].slice(0, 6));
-        event.target.value = '';
+    const handleAttachmentChange = useCallback(async (filesOrEvent) => {
+        const files = Array.isArray(filesOrEvent)
+            ? filesOrEvent
+            : Array.from(filesOrEvent?.target?.files || []);
+        if (files.length === 0) return;
+
+        // Show each file right away as "uploading", then fill in once it has been read
+        const placeholders = files.map((file) => ({
+            id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 7)}`,
+            name: file.name,
+            type: file.type || 'unknown',
+            kind: file.type.startsWith('image/') ? 'image' : 'document',
+            size: file.size,
+            status: 'uploading',
+            progress: 0,
+        }));
+        setAttachments((prev) => [...prev, ...placeholders].slice(0, 6));
+
+        const patchAttachment = (id, patch) => setAttachments((prev) => (
+            prev.map((attachment) => (attachment.id === id ? { ...attachment, ...patch } : attachment))
+        ));
+
+        await Promise.all(files.map(async (file, index) => {
+            const { id } = placeholders[index];
+            try {
+                const patch = await prepareAttachment(file, (progress) => patchAttachment(id, { progress }));
+                patchAttachment(id, { ...patch, status: 'ready', progress: 100 });
+            } catch {
+                patchAttachment(id, { status: 'error', note: 'Could not read this file.' });
+            }
+        }));
+        if (filesOrEvent?.target) filesOrEvent.target.value = '';
     }, []);
 
     const removeAttachment = useCallback((id) => {
         setAttachments((prev) => prev.filter((attachment) => attachment.id !== id));
     }, []);
-
-    const handleSendMessage = useCallback(async (textOverride) => {
-        const text = typeof textOverride === 'string' ? textOverride : inputValue;
-        if (!text.trim() && attachments.length === 0) return;
-
-        const attachmentText = attachments.map((attachment) => (
-            `--- ATTACHMENT: ${attachment.name} (${attachment.type}) ---\n${attachment.content || attachment.note}\n--- END ATTACHMENT ---`
-        )).join('\n\n');
-        const prompt = [
-            text.trim(),
-            attachmentText ? `Attached context:\n${attachmentText}` : '',
-        ].filter(Boolean).join('\n\n');
-
-        const userMessage = {
-            role: 'user',
-            content: text.trim() || `Uploaded ${attachments.length} attachment(s)`,
-            files: attachments.map(({ name, type }) => ({ name, type })),
-            project: projectContext ? { title: projectContext.title } : undefined,
-        };
-
-        const baseConversation = activeConversation.messages.length === 0
-            ? { ...activeConversation, title: summarizeConversationTitle(userMessage.content) }
-            : activeConversation;
-
-        const nextConversation = {
-            ...baseConversation,
-            messages: [...baseConversation.messages, userMessage],
-            updatedAt: new Date().toISOString(),
-        };
-
-        userScrolledUp.current = false;
-        persistActiveConversation(nextConversation);
-        const lastInput = text.trim();
-        setInputValue('');
-        setAttachments([]);
-        setIsThinking(true);
-
-        try {
-            setError(null);
-            const apiHistory = nextConversation.messages
-                .slice(0, -1)
-                .map(({ role, content }) => ({ role, content }));
-
-            const response = await getGroqResponse(
-                prompt,
-                apiHistory,
-                projectContext,
-                { mode: 'immersive', model: selectedModel }
-            );
-
-            setTypingMessage({ fullText: response, displayText: '' });
-        } catch (err) {
-            console.error(err);
-            setError(err);
-            setInputValue(lastInput); // Restore input on error
-
-            // Roll back the user message that was already appended
-            const rolledBack = {
-                ...activeConversationRef.current,
-                messages: activeConversationRef.current.messages.slice(0, -1),
-            };
-            persistActiveConversation(rolledBack);
-
-            if (err.code === 'RATE_LIMIT') {
-                setRetryCountdown(err.retryAfter || 60);
-            }
-            setIsThinking(false);
-        }
-    }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext, selectedModel]);
 
     const userScrolledUp = useRef(false);
     const lastScrollTop = useRef(0);
@@ -352,38 +309,97 @@ const ImmersiveSakuPilot = () => {
         });
     }, [isNearBottom]);
 
-    useEffect(() => {
-        if (!typingMessage?.fullText) return;
-        const fullText = typingMessage.fullText;
-        let idx = 0;
+    const handleSendMessage = useCallback(async (textOverride) => {
+        const text = typeof textOverride === 'string' ? textOverride : inputValue;
+        if (!text.trim() && attachments.length === 0) return;
+        if (attachments.some((attachment) => attachment.status === 'uploading')) return;
 
-        const interval = setInterval(() => {
-            idx += 12; // Fast typing like Gemini Flash
-            const displayText = fullText.slice(0, idx);
-            setTypingMessage({ fullText, displayText });
-            scheduleScroll();
+        const attachmentText = attachments.map((attachment) => (
+            `--- ATTACHMENT: ${attachment.name} (${attachment.type}) ---\n${attachment.content || attachment.note}\n--- END ATTACHMENT ---`
+        )).join('\n\n');
+        const prompt = [
+            text.trim(),
+            attachmentText ? `Attached context:\n${attachmentText}` : '',
+        ].filter(Boolean).join('\n\n');
 
-            if (idx >= fullText.length) {
-                clearInterval(interval);
+        const userMessage = {
+            role: 'user',
+            content: text.trim() || `Uploaded ${attachments.length} attachment(s)`,
+            files: attachments.map(({ name, type, kind, previewUrl, size }) => ({ name, type, kind, previewUrl, size })),
+            project: projectContext ? { title: projectContext.title } : undefined,
+        };
+
+        const baseConversation = activeConversation.messages.length === 0
+            ? { ...activeConversation, title: summarizeConversationTitle(userMessage.content) }
+            : activeConversation;
+
+        const nextConversation = {
+            ...baseConversation,
+            messages: [...baseConversation.messages, userMessage],
+            updatedAt: new Date().toISOString(),
+        };
+
+        userScrolledUp.current = false;
+        persistActiveConversation(nextConversation);
+        const lastInput = text.trim();
+        setInputValue('');
+        setAttachments([]);
+        setIsThinking(true);
+
+        try {
+            setError(null);
+            const apiHistory = nextConversation.messages
+                .slice(0, -1)
+                .map(({ role, content }) => ({ role, content }));
+
+            const response = await getGroqResponse(
+                prompt,
+                apiHistory,
+                projectContext,
+                {
+                    mode: 'immersive',
+                    model: selectedModel,
+                    images: attachments
+                        .filter((attachment) => attachment.modelImage)
+                        .map(({ name, modelImage }) => ({ name, ...modelImage })),
+                    onChunk: (accumulatedText) => {
+                        setTypingMessage({ displayText: accumulatedText });
+                        scheduleScroll();
+                    },
+                }
+            );
+
+            setTypingMessage(null);
+            setIsThinking(false);
+
+            if (response) {
                 const currentConv = activeConversationRef.current;
                 persistActiveConversationRef.current({
                     ...currentConv,
-                    messages: [...currentConv.messages, { role: 'assistant', content: fullText, isNew: true }],
+                    messages: [...currentConv.messages, { role: 'assistant', content: response, isNew: true }],
                     updatedAt: new Date().toISOString(),
                 });
-                setTypingMessage(null);
-                setIsThinking(false);
+                scheduleScroll();
             }
-        }, 15);
+        } catch (err) {
+            console.error(err);
+            setError(err);
+            setInputValue(lastInput); // Restore input on error
+            setTypingMessage(null);
 
-        return () => {
-            clearInterval(interval);
-            if (scrollRafRef.current) {
-                cancelAnimationFrame(scrollRafRef.current);
-                scrollRafRef.current = null;
+            // Roll back the user message that was already appended
+            const rolledBack = {
+                ...activeConversationRef.current,
+                messages: activeConversationRef.current.messages.slice(0, -1),
+            };
+            persistActiveConversation(rolledBack);
+
+            if (err.code === 'RATE_LIMIT') {
+                setRetryCountdown(err.retryAfter || 60);
             }
-        };
-    }, [typingMessage?.fullText, scheduleScroll]);
+            setIsThinking(false);
+        }
+    }, [activeConversation, attachments, inputValue, persistActiveConversation, projectContext, selectedModel, scheduleScroll]);
 
     return (
         <section className="flex h-full w-full overflow-hidden bg-(--light) text-(--text-light) relative border-t border-(--border-light) dark:border-(--dark-border)">
@@ -394,7 +410,7 @@ const ImmersiveSakuPilot = () => {
                         animate={{ width: 290, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 left-0 z-[80] border-r border-(--border-light) bg-(--pixel2) md:static shadow-xl md:shadow-none overflow-hidden"
+                        className="fixed inset-y-0 left-0 z-[45] border-r border-(--border-light) bg-(--pixel2) md:static shadow-xl md:shadow-none overflow-hidden"
                     >
                         <div className="w-[290px] h-full flex flex-col p-3">
                     <div className="mb-3 flex items-center justify-between px-2 py-1">
@@ -520,7 +536,7 @@ const ImmersiveSakuPilot = () => {
                                                                 </button>
 
                                                                 {dropdownOpenId === conversation.id && (
-                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                    <div className="absolute right-0 top-full z-50 mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
                                                                         <button
                                                                             onClick={() => handlePinConversation(conversation.id)}
                                                                             className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
@@ -623,7 +639,7 @@ const ImmersiveSakuPilot = () => {
                                                                 </button>
 
                                                                 {dropdownOpenId === conversation.id && (
-                                                                    <div className="absolute right-0 top-full z-[100] mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
+                                                                    <div className="absolute right-0 top-full z-50 mt-1 w-40 overflow-hidden rounded-md border border-(--border-light) bg-(--pixel2) py-1 shadow-lg">
                                                                         <button
                                                                             onClick={() => handlePinConversation(conversation.id)}
                                                                             className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-(--text-light) hover:bg-(--pixel-hover) cursor-pointer"
@@ -661,10 +677,10 @@ const ImmersiveSakuPilot = () => {
                 )}
             </AnimatePresence>
 
-            {isSidebarOpen && <button className="fixed inset-0 z-[70] bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
+            {isSidebarOpen && <button className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close sidebar backdrop" />}
 
             <div className="flex min-w-0 flex-1 flex-col bg-(--light) min-h-0">
-                <div className="relative flex h-14 shrink-0 items-center px-3 md:px-5">
+                <div className="relative z-30 flex h-14 shrink-0 items-center px-3 md:px-5">
                     <div className="flex items-center gap-1">
                         {/* Sidebar toggle */}
                         <button
@@ -677,7 +693,7 @@ const ImmersiveSakuPilot = () => {
                     </div>
 
                     {/* Model Switcher — Centered */}
-                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-[10000000000000]">
+                    <div className="model-switcher-container absolute left-1/2 -translate-x-1/2 z-50">
                         <button
                             onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-(--pixel-hover) transition-colors group cursor-pointer"
@@ -791,9 +807,24 @@ const ImmersiveSakuPilot = () => {
                         </div>
                     ) : (
                         <div className="mx-auto flex max-w-[720px] flex-col gap-7">
-                            {activeConversation.messages.map((message, index) => (
-                                <ChatMessage key={`${message.role}-${index}`} message={message} handleNavigate={handleNavigate} />
-                            ))}
+                            {activeConversation.messages.map((message, index) => {
+                                const isLatestAssistant =
+                                    message.role === 'assistant' &&
+                                    index === activeConversation.messages.length - 1 &&
+                                    !isThinking &&
+                                    !typingMessage;
+                                return (
+                                    <ChatMessage
+                                        key={`${message.role}-${index}`}
+                                        message={message}
+                                        isLatestAssistant={isLatestAssistant}
+                                        handleNavigate={handleNavigate}
+                                        handleSendMessage={handleSendMessage}
+                                        handlePopulateInput={setInputValue}
+                                        onOpenCanvas={setActiveCanvas}
+                                    />
+                                );
+                            })}
                             {typingMessage && (
                                 <TypingMessage
                                     content={typingMessage.displayText + '▌'}
@@ -827,74 +858,37 @@ const ImmersiveSakuPilot = () => {
                 </div>
 
                 <div className="shrink-0 bg-(--light) px-3 pb-6 pt-2 sm:px-5">
-                    <div className="mx-auto max-w-[720px]">
-                        {projectContext && (
-                            <div className="mb-2 flex w-fit items-center gap-2 rounded-md border border-(--border-light) bg-(--pixel2) px-3 py-1.5 text-xs">
-                                <FiFolder className="text-(--text-gray)" />
-                                {projectContext.title}
-                                <button onClick={() => setProjectContext(null)} aria-label="Remove project context">
-                                    <FiX />
-                                </button>
-                            </div>
-                        )}
-
-                        {attachments.length > 0 && (
-                            <div className="mb-2 flex flex-wrap gap-2">
-                                {attachments.map((attachment) => (
-                                    <div key={attachment.id} className="flex items-center gap-2 rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs">
-                                        {attachment.kind === 'image' ? <FiImage /> : <FiPaperclip />}
-                                        <span className="max-w-[180px] truncate">{attachment.name}</span>
-                                        <button onClick={() => removeAttachment(attachment.id)} aria-label={`Remove ${attachment.name}`}>
-                                            <FiX />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        <div className="flex items-end gap-2 rounded-3xl border border-(--border-light) bg-(--pixel) px-4 py-2 focus-within:border-(--sucess) focus-within:ring-1 focus-within:ring-(--sucess)">
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                multiple
-                                className="hidden"
-                                accept=".txt,.md,.json,.csv,.js,.jsx,.ts,.tsx,.css,.html,.py,.pdf,image/*"
-                                onChange={handleAttachmentChange}
-                            />
-                            <button onClick={() => fileInputRef.current?.click()} className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--text-gray) hover:bg-(--pixel-hover) hover:text-(--text-light)" aria-label="Attach file">
-                                <FiPaperclip size={18} />
-                            </button>
-                            <AutoResizeTextarea
-                                value={inputValue}
-                                onChange={(event) => setInputValue(event.target.value)}
-                                minRows={1}
-                                maxRows={8}
-                                placeholder={t('sakupilot.immersive.messagePlaceholder')}
-                                className="no-scrollbar min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-6 outline-none placeholder:text-(--text-gray)"
-                                onKeyDown={(event) => {
-                                    if (event.key === 'Enter' && !event.shiftKey) {
-                                        event.preventDefault();
-                                        handleSendMessage();
-                                    }
-                                }}
-                            />
-                            <button
-                                onClick={() => handleSendMessage()}
-                                disabled={isThinking || (!inputValue.trim() && attachments.length === 0)}
-                                className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--text-light) text-(--light) transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
-                                aria-label="Send message"
-                            >
-                                <FiSend size={16} className="-ml-0.5" />
-                            </button>
-                        </div>
+                    <div className="mx-auto max-w-[760px]">
+                        <PromptBox
+                            value={inputValue}
+                            onChange={(event) => setInputValue(event.target.value)}
+                            onSend={() => handleSendMessage()}
+                            attachments={attachments}
+                            onAttachFiles={handleAttachmentChange}
+                            onRemoveAttachment={removeAttachment}
+                            projectContext={projectContext}
+                            onRemoveProject={() => setProjectContext(null)}
+                            isThinking={isThinking}
+                            placeholder={t('sakupilot.immersive.messagePlaceholder')}
+                        />
                         <p className="mt-2 text-center text-[11px] text-(--text-gray)">{t('sakupilot.immersive.disclaimer')}</p>
                     </div>
                 </div>
             </div>
 
+            <AnimatePresence>
+                {activeCanvas && (
+                    <CanvasWorkspace
+                        canvasData={activeCanvas}
+                        onClose={() => setActiveCanvas(null)}
+                        onSendPrompt={handleSendMessage}
+                    />
+                )}
+            </AnimatePresence>
+
             {isSearchOpen && typeof document !== 'undefined' && createPortal(
                 <div 
-                    className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/50 px-4 pt-20 backdrop-blur-[1px] cursor-pointer"
+                    className="fixed inset-0 z-70 flex items-start justify-center bg-black/50 px-4 pt-20 backdrop-blur-[1px] cursor-pointer"
                     onClick={() => setIsSearchOpen(false)}
                     role="dialog"
                     aria-modal="true"
@@ -983,7 +977,14 @@ const ImmersiveSakuPilot = () => {
     );
 };
 
-const ChatMessage = ({ message, handleNavigate }) => {
+const ChatMessage = ({
+    message,
+    isLatestAssistant,
+    handleNavigate,
+    handleSendMessage,
+    handlePopulateInput,
+    onOpenCanvas,
+}) => {
     const isUser = message.role === 'user';
     const isNew = message.isNew === true;
     return (
@@ -1004,7 +1005,7 @@ const ChatMessage = ({ message, handleNavigate }) => {
                     />
                 </div>
             )}
-            <div className={`min-w-0 max-w-[88%] overflow-visible ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1'}`}>
+            <div className={`min-w-0 max-w-[88%] overflow-visible ${isUser ? 'rounded-2xl bg-(--pixel) px-4 py-3' : 'py-1 flex-1'}`}>
                 {isUser && (message.files?.length > 0 || message.project) && (
                     <div className="mb-2 flex flex-wrap gap-2">
                         {message.project && (
@@ -1013,49 +1014,94 @@ const ChatMessage = ({ message, handleNavigate }) => {
                                 {message.project.title || message.project}
                             </span>
                         )}
-                        {message.files?.map((file) => (
-                            <span key={file.name} className="flex items-center gap-1 rounded-md border border-(--border-light) bg-(--pixel2) px-2 py-1 text-xs text-(--text-gray)">
-                                <FiPaperclip size={11} />
-                                {file.name}
-                            </span>
+                        {message.files?.map((file, idx) => (
+                            file.previewUrl ? (
+                                <img
+                                    key={file.name || idx}
+                                    src={file.previewUrl}
+                                    alt={file.name || 'attachment'}
+                                    className="h-16 w-16 rounded-xl object-cover border border-(--border-light) shadow-xs"
+                                />
+                            ) : (
+                                <FileCard key={file.name || idx} file={{ ...file, status: 'ready' }} className="bg-(--pixel2)" />
+                            )
                         ))}
                     </div>
                 )}
                 {isUser ? (
                     <MessageContent content={message.content} />
                 ) : (
-                    <BotMessage content={message.content} onNavigate={handleNavigate} />
+                    <BotMessage
+                        content={message.content}
+                        onNavigate={handleNavigate}
+                        onSendPrompt={handleSendMessage}
+                        onPopulateInput={handlePopulateInput}
+                        onOpenCanvas={onOpenCanvas}
+                        showSuggestions={isLatestAssistant}
+                    />
                 )}
             </div>
         </motion.article>
     );
 };
 
-const prepareAttachment = async (file) => {
-    const base = {
-        id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 7)}`,
-        name: file.name,
-        type: file.type || 'unknown',
-        kind: file.type.startsWith('image/') ? 'image' : 'document',
+const readFile = (file, mode, onProgress) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = (event) => {
+        if (event.lengthComputable) onProgress?.((event.loaded / event.total) * 100);
     };
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    if (mode === 'dataUrl') reader.readAsDataURL(file);
+    else reader.readAsText(file);
+});
+
+const TEXT_EXTENSIONS = ['txt', 'md', 'json', 'csv', 'js', 'jsx', 'ts', 'tsx', 'css', 'html', 'py', 'java', 'c', 'cpp', 'go', 'rs', 'xml', 'yml', 'yaml', 'sql', 'sh', 'log'];
+
+// Downscale to keep the request small (Vercel body limit ~4.5MB); returns { mimeType, data } base64
+const toModelImage = (dataUrl, maxSide = 1536) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve({ mimeType: 'image/jpeg', data: canvas.toDataURL('image/jpeg', 0.85).split(',')[1] });
+    };
+    img.onerror = () => resolve(null);
+    img.src = dataUrl;
+});
+
+// Reads the file and returns the attachment fields (previewUrl / content / note)
+const prepareAttachment = async (file, onProgress) => {
+    if (file.type.startsWith('image/')) {
+        const previewUrl = await readFile(file, 'dataUrl', onProgress);
+        return {
+            previewUrl,
+            modelImage: await toModelImage(previewUrl),
+            note: 'Image attached and sent to the model as an image.',
+        };
+    }
+
+    const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+    const isTextLike = file.type.startsWith('text/') || file.type === 'application/json' || TEXT_EXTENSIONS.includes(ext);
+
+    if (!isTextLike) {
+        onProgress?.(100);
+        return {
+            note: `${ext ? ext.toUpperCase() : 'This'} file was attached, but SakuPilot can't read its contents yet. Ask the user to paste the relevant text.`,
+        };
+    }
 
     if (file.size > 1_500_000) {
         return {
-            ...base,
             note: 'This file is larger than the current in-browser context limit. Ask the user to paste a relevant excerpt.',
         };
     }
 
-    if (file.type.startsWith('image/')) {
-        return {
-            ...base,
-            note: 'Image attached. Current SakuPilot text flow can use the filename and user description; visual analysis depends on the Groq model configured on the backend.',
-        };
-    }
-
-    const content = await file.text();
+    const content = await readFile(file, 'text', onProgress);
     return {
-        ...base,
         content: content.slice(0, 45_000),
         note: content.length > 45_000 ? 'File was trimmed to fit the chat context.' : '',
     };

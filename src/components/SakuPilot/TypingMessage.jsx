@@ -22,7 +22,7 @@ const TypingMessage = memo(function TypingMessage({ content, onNavigate }) {
                 />
             </div>
             <div className="min-w-0 max-w-[88%] rounded-xl text-sm overflow-visible py-1">
-                <BotMessage content={content} onNavigate={onNavigate} />
+                <BotMessage content={content} onNavigate={onNavigate} isTyping={true} />
             </div>
         </div>
     );

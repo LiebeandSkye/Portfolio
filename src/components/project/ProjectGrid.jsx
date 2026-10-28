@@ -4,6 +4,7 @@ import { GoDotFill } from "react-icons/go";
 import { IoCodeOutline, IoEyeOutline } from "react-icons/io5";
 import { useLanguage } from '../context/LanguageContext';
 import PrivateRepoModal from './PrivateRepoModal';
+import { getDominantLanguage } from '../../Utils/projectLanguages';
 
 // ─── Single grid card — memoized by project.id + language ────────────────────
 // The Portfolio page may re-render when the user types in a search box.
@@ -12,6 +13,7 @@ import PrivateRepoModal from './PrivateRepoModal';
 const GridCard = memo(function GridCard({ project, t, onPrivateCode }) {
     const projectTitle = t(`projects.${project.langKey}.title`);
     const projectDesc = t(`projects.${project.langKey}.description`);
+    const dominantLang = getDominantLanguage(project);
 
     const handleCodeClick = useCallback(() => {
         if (project.code === false) {
@@ -58,8 +60,8 @@ const GridCard = memo(function GridCard({ project, t, onPrivateCode }) {
 
                 <div className="flex items-center gap-4 text-xs text-(--text-gray) mt-auto">
                     <div className="flex items-center gap-1">
-                        <GoDotFill className={project.red ? 'text-yellow-400' : 'text-blue-400'} />
-                        <span className="text-(--text-light)">JavaScript</span>
+                        <GoDotFill style={{ color: dominantLang.color }} />
+                        <span className="text-(--text-light)">{dominantLang.label}</span>
                     </div>
                     {project.demo && (
                         <a href={project.demo} target="_blank" rel="noreferrer"

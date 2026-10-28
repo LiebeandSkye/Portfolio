@@ -17,7 +17,19 @@ export default async function handler(req, res) {
         const genAI = new GoogleGenerativeAI(geminiApiKey || 'missing-key');
 
         const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-        const { userInput, chatHistory, projectContext, mode, model } = body;
+        const { userInput: rawUserInput, chatHistory, projectContext, mode, model } = body;
+        // Images attached to the current message: [{ name, mimeType, data (base64) }]
+        const images = (Array.isArray(body.images) ? body.images : [])
+            .filter((img) => img && typeof img.data === 'string' && /^image\//.test(img.mimeType || ''))
+            .slice(0, 4);
+        const supportsVision = model === 'gemini';
+        // Models without vision are told about the images so they say so honestly instead of guessing
+        const userInput = images.length > 0 && !supportsVision
+            ? `${rawUserInput}\n\n[SYSTEM NOTE: The user attached ${images.length} image(s) (${images.map((img) => img.name || 'image').join(', ')}), but you are a text-only model and CANNOT see them. Clearly tell the user you can't view images with the currently selected model, suggest switching to a vision-capable model (Gemini) or describing the image in text, and do not guess what the image contains.]`
+            : rawUserInput;
+        const imageParts = supportsVision
+            ? images.map((img) => ({ inlineData: { mimeType: img.mimeType, data: img.data } }))
+            : [];
         const isImmersive = mode === 'immersive';
         const activeModel = (model === 'gemini') ? 'gemini' : 'groq';
 
@@ -66,7 +78,7 @@ ${projectContextSection}
 - Location: Phnom Penh, Cambodia
 - Passionate about: web dev, software architecture, turning ideas into working products
 - Tech Stack: React.js, Tailwind CSS, Framer Motion, Contentful, EmailJS, Vite, JavaScript/TypeScript, Vercel, Git, Github, Python, Node js and so on (more on welcome page)
-- SideNote: Kry Rithisak aka Saku is still a second year student currently studying at AUPP or better known as American University Phnom Penh.
+- SideNote: Kry Rithisak aka Saku is still a second year student currently studying at AUPP or better known as American University Phnom Penh. He started his journey in software development in 2025 and finished his bacll(Khmer national exam, Baccalauréat) in 2024.
 
 ---
 ### Contacts Data: 
@@ -248,12 +260,72 @@ CRITICAL PRESENTATION & SYNTAX RESTRICTIONS:
 - **Callouts & Notes**: Use blockquotes (\`> **Note:** ...\`) for tips, warnings, or best practices.
 - **Tables**: Use Markdown tables for comparative data, tech stacks, or pros/cons.
 - **Spacing**: Keep single blank lines between paragraphs and sections (avoid double/excess blank lines).
+
+---
+
+### AUTONOMOUS INTELLIGENT UI ENGINE (CRITICAL — USE SMART JUDGMENT):
+You are equipped with a client-side **Intelligent UI Engine** (similar to ChatGPT Canvas & Artifacts). You must autonomously decide when a user's prompt benefits from rich UI components, interactive sandboxes, visuals, or follow-up options:
+
+1. **LIVE INTERACTIVE SANDBOX & CODE PLAYGROUND (\`\`\`sandbox or \`\`\`html or \`\`\`javascript)**:
+   - **When to use**: Whenever the user asks you to build, prototype, demo, visualize, or experiment with a UI component, mini-app, calculator, game, animation, SVG graphic, or interactive concept.
+   - **How to use**: Wrap self-contained HTML/CSS/JS (Tailwind CSS is automatically preloaded in the sandbox!) inside a \`\`\`sandbox or \`\`\`html fenced block. The UI will automatically render a live interactive preview, a live code editor for the user to experiment with, and a split-screen Canvas workspace!
+   - For pure JavaScript algorithms/logic, use \`\`\`javascript — the UI automatically provides a "Run JS" console runner for the user.
+
+2. **WEB VISUALS & PORTFOLIO GALLERY CARDS (\`[VISUAL: ...]\`)**:
+   - **When to use**: When discussing visual topics, landmarks/places (e.g., Cambodia, Angkor Wat, Tokyo), scientific/architectural concepts, or when showcasing Kry's projects (Saku App, Orgi, Project Nebula, SakiKaraoke, Charm Store, AI MemoryPorter, Discover Cambodia).
+   - **Syntax**: Place on its own line:
+     \`[VISUAL: query="search keyword" | title="Card Title" | caption="Brief visual explanation"]\`
+   - **Rule**: Only include when a visual genuinely enriches the answer (0 or 1 per response). Do NOT use on trivial greetings.
+
+3. **KEY METRICS & BENTO STAT CARDS (\`[STATS: ...]\`)**:
+   - **When to use**: When highlighting performance benchmarks, project footprint stats (e.g., Saku App's 20MB APK / <25MB RAM), or key numerical comparisons.
+   - **Syntax**: Place on its own line:
+     \`[STATS: label="RAM Usage", value="<25 MB", sub="0 when idle", icon="cpu" | label="APK Size", value="20 MB", sub="100% Offline", icon="zap"]\`
+   - **Valid icons**: \`cpu\`, \`zap\`, \`code\`, \`globe\`, \`database\`, \`shield\`, \`terminal\`, \`layers\`, \`mobile\`, \`server\`, \`book\`, \`music\`, \`cart\`, \`map\`, \`sparkles\`, \`rocket\`, \`game\`, \`package\`, \`clock\`, \`activity\`, \`star\`.
+
+4. **INTERACTIVE MINI-QUIZ WIDGET (\`[QUIZ: ...]\`)**:
+   - **When to use**: When the user asks to be quizzed, wants to test their understanding of a coding concept, or asks "quiz me".
+   - **Syntax**: Place on its own line (use semicolons \`;\` between options, and 0-based index for \`answer\`):
+     \`[QUIZ: question="Your question?" | options="Option A;Option B;Option C;Option D" | answer="0" | explanation="Why Option A is correct."]\`
+
+5. **CHATGPT-STYLE INTERACTIVE OPTION BUILDER CARD (\`[OPTIONS: ...]\`)**:
+   - **When to use**: Whenever the user is building something, exploring what to build/learn next, choosing project features/architecture, or when you want to give the user a structured multi-choice configuration card (just like ChatGPT's interactive option selector!).
+   - **Syntax** (place on its own line; use \`|\` between groups, \`;\` between options within a group, and \` — \` to separate each option's title from its description):
+     \`[OPTIONS: button="Build this calculator" | group="Choose your calculator type": "Command-line calculator — improve the one above"; "GUI calculator — buttons and a display, like Windows Calculator"; "Web calculator — interactive browser interface"; "Scientific calculator — powers, roots, and trigonometry" | group="Your experience level": "Beginner — explain the code step by step"; "Intermediate — cleaner architecture"]\`
+   - **Rule**: Use 1 or 2 groups per \`[OPTIONS: ...]\` card, with 2 to 4 choices per group, and a clear action \`button="..."\` label.
+
+**MORE COMPONENTS** (use at most 1–2 per reply, only when they clearly beat plain text; put each on its own line):
+   - \`[STEPS: title="Get it running" | "Install — run npm install" | "Start — npm run dev"]\` — an ordered how-to (2–8 steps, written "Label — short note").
+   - \`[CHECKLIST: title="Before you deploy" | "Env vars set" | "✓ Build passes"]\` — a tick-able list; start an item with ✓ to pre-check it.
+   - \`[CALLOUT: type="tip" | title="Quick tip" | text="One short sentence."]\` — type is tip, info, warning, success or danger.
+   - \`[COMPARE: title="React vs Vue" | columns="React;Vue" | "Learning curve: Medium; Easy" | "Ecosystem: Huge; Large"]\` — 2–4 columns, up to 8 rows written "Row label: cell; cell".
+   - \`[PROSCONS: title="Next.js" | pros="Fast;Great SEO" | cons="Heavier;More setup"]\`
+   - \`[TABS: "Overview": short text | "Setup": short text]\` — 2–5 tabs; **bold** and \`code\` are allowed inside.
+   - \`[FAQ: "Is it free? — Yes, completely." | "Needs a login? — No."]\`
+   - \`[TIMELINE: title="My journey" | "2023 — Learned React" | "2024 — Shipped Charm Store"]\`
+   - \`[PROGRESS: title="Skills" | "React: 90" | "Node.js: 80"]\` — values from 0 to 100 (or "3/4").
+   - \`[CHART: type="bar" | title="Bundle size" | unit="KB" | "React: 42" | "Vue: 34" | "Svelte: 2"]\` — type is bar, donut or line (line needs 3+ points).
+   - \`[CARDS: title="I can help with" | label="Projects", text="See what I built", icon="code", prompt="Show me your projects" | label="Skills", text="Stack and tools", icon="layers", prompt="What is your tech stack?"]\` — tap-to-ask cards (up to 6).
+   - \`[LINKS: label="GitHub", url="https://github.com/LiebeandSkye"]\` — ONLY use URLs that appear in this prompt or that the user gave you. Never invent links.
+   - \`[PICK: title="What do you want to learn?" | options="React;Node;CSS;Python" | multi="true" | button="Plan my path"]\` — chip picker; the choice is sent back to you.
+   - \`[ASK: title="What are you building?" | placeholder="e.g. a todo app" | button="Suggest a stack"]\` — one text box; the answer is sent back to you.
+   - \`[PROJECT: id="7"]\` or \`[PROJECT: ids="7;8"]\` — portfolio project cards (ids 2–8, max 3). Prefer this over describing a project at length.
+   - **Style rules for every component**: labels are 1–4 words in normal sentence case (never ALL CAPS); keep each note to one short line; do not repeat a component's content in the text around it; never put square brackets inside a component; extra \`icon\` names you can use: \`idea\`, \`user\`, \`mail\`, \`link\`, \`calendar\`, \`search\`, \`tool\`, \`target\`, \`trophy\`, \`heart\`, \`cloud\`, \`lock\`, \`chat\`, \`github\`.
+
+6. **INLINE SEMANTIC ICONS (\`[ICON:name]\`)**:
+   - You may optionally sprinkle \`[ICON:sparkles]\`, \`[ICON:rocket]\`, \`[ICON:code]\`, \`[ICON:shield]\`, or \`[ICON:zap]\` inline in headings or callouts for visual polish.
+
+7. **NEXT-MESSAGE FOLLOW-UP OPTIONS (\`[SUGGEST: ...]\`)**:
+   - **When to use**: At the VERY END of substantive answers (if you didn't already include an \`[OPTIONS: ...]\` card), provide 2 to 3 smart, clickable follow-up prompts the user is most likely to want next. Skip on simple "hi" / "thanks" replies.
+   - **Syntax** (MUST be the final line of your response):
+     \`[SUGGEST: "First follow-up option" | "Second follow-up option" | "Third follow-up option"]\`
+   - Make suggestions specific and actionable (e.g., \`"Build an interactive demo of this"\`, \`"How does Saku sync with AnkiDroid?"\`, \`"Compare this with Next.js"\`).
 ${isImmersive ? `
 ### IMMERSIVE CHAT MODE:
 - This is the full-page SakuPilot experience, so responses can be deeper, structured, and more polished.
 - Provide comprehensive context, clean headings, comparative tables, and full code examples where appropriate.
 - Be precise, developer-centric, and premium.
-- When users attach files, analyze the provided extracted text. If an image or PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can see it.
+- When users attach files, analyze the provided extracted text. If an image is attached and you can actually see it, analyze it directly. If a PDF has no readable extracted text, ask for a description or pasted excerpt instead of pretending you can read it.
 ` : ''}
 
 ---
@@ -274,8 +346,10 @@ Current context: ${projectContext
             content: typeof msg.content === 'string' ? msg.content : String(msg.content || '')
         }));
 
+        const wantsStream = body.stream === true && typeof res.write === 'function' && typeof res.setHeader === 'function';
+
         if (activeModel === 'gemini') {
-            const geminiModelCandidates = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash'];
+            const geminiModelCandidates = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash-lite'];
             let lastGeminiError = null;
             let responseText = null;
 
@@ -297,10 +371,31 @@ Current context: ${projectContext
                         },
                     });
 
-                    const result = await chat.sendMessage(userInput);
-                    const response = await result.response;
-                    responseText = response.text();
-                    if (responseText) break;
+                    if (wantsStream) {
+                        const streamResult = await chat.sendMessageStream(imageParts.length ? [userInput, ...imageParts] : userInput);
+                        res.status(200);
+                        res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+                        res.setHeader('Cache-Control', 'no-cache, no-transform');
+                        res.setHeader('Connection', 'keep-alive');
+
+                        let streamedAny = false;
+                        for await (const chunk of streamResult.stream) {
+                            const chunkText = chunk.text();
+                            if (chunkText) {
+                                streamedAny = true;
+                                res.write(`data: ${JSON.stringify({ delta: chunkText })}\n\n`);
+                            }
+                        }
+                        if (streamedAny) {
+                            res.write('data: [DONE]\n\n');
+                            return res.end();
+                        }
+                    } else {
+                        const result = await chat.sendMessage(imageParts.length ? [userInput, ...imageParts] : userInput);
+                        const response = await result.response;
+                        responseText = response.text();
+                        if (responseText) break;
+                    }
                 } catch (err) {
                     lastGeminiError = err;
                     console.warn(`Gemini model ${geminiModelId} failed, trying fallback:`, err.message);
@@ -312,26 +407,59 @@ Current context: ${projectContext
             }
             throw lastGeminiError || new Error("Failed to get response from Gemini.");
         } else {
-            // Default to Groq (GPT-OSS 120B with resilient fallbacks)
-            const groqModelCandidates = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'groq/compound-mini'];
+            // Fast Groq LPU models — llama-3.3-70b-versatile streams at 300+ tok/sec with instant first token
+            const groqModelCandidates = ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
             let lastGroqError = null;
             let responseContent = null;
 
             for (const groqModelId of groqModelCandidates) {
                 try {
-                    const chatCompletion = await groq.chat.completions.create({
-                        messages: [
-                            { role: "system", content: systemMessage },
-                            ...sanitizedHistory,
-                            { role: "user", content: userInput },
-                        ],
-                        model: groqModelId,
-                        temperature: isImmersive ? 0.72 : 0.75,
-                        max_tokens: isImmersive ? 4096 : 2048,
-                        top_p: 0.92,
-                    });
-                    responseContent = chatCompletion.choices?.[0]?.message?.content;
-                    if (responseContent) break;
+                    if (wantsStream) {
+                        const stream = await groq.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemMessage },
+                                ...sanitizedHistory,
+                                { role: "user", content: userInput },
+                            ],
+                            model: groqModelId,
+                            temperature: isImmersive ? 0.72 : 0.75,
+                            max_tokens: isImmersive ? 4096 : 2048,
+                            top_p: 0.92,
+                            stream: true,
+                        });
+
+                        res.status(200);
+                        res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+                        res.setHeader('Cache-Control', 'no-cache, no-transform');
+                        res.setHeader('Connection', 'keep-alive');
+
+                        let streamedAny = false;
+                        for await (const chunk of stream) {
+                            const delta = chunk.choices?.[0]?.delta?.content;
+                            if (delta) {
+                                streamedAny = true;
+                                res.write(`data: ${JSON.stringify({ delta })}\n\n`);
+                            }
+                        }
+                        if (streamedAny) {
+                            res.write('data: [DONE]\n\n');
+                            return res.end();
+                        }
+                    } else {
+                        const chatCompletion = await groq.chat.completions.create({
+                            messages: [
+                                { role: "system", content: systemMessage },
+                                ...sanitizedHistory,
+                                { role: "user", content: userInput },
+                            ],
+                            model: groqModelId,
+                            temperature: isImmersive ? 0.72 : 0.75,
+                            max_tokens: isImmersive ? 4096 : 2048,
+                            top_p: 0.92,
+                        });
+                        responseContent = chatCompletion.choices?.[0]?.message?.content;
+                        if (responseContent) break;
+                    }
                 } catch (error) {
                     lastGroqError = error;
                     console.warn(`Groq model ${groqModelId} failed, trying fallback:`, error.message);
